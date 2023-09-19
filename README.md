@@ -1,5 +1,5 @@
 # PicoBETH
-PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項目，讓喜歡穿線，但只有機械式穿線機（重錘式、手搖式）的業餘穿線師可以自行製作電子拉線機頭，如果你有一些基本的程式能力，這個項目會很容易完成。
+PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的項目，讓喜歡穿線，但只有機械式穿線機（重錘式、手搖式）的業餘穿線師可以自行製作電子拉線機頭，如果你有一些基本的程式能力，這個項目會很容易完成。
 
 ![images1-1](docs/images1-1.jpg)
 
