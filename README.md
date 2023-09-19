@@ -32,7 +32,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 ![images1-4](docs/images1-4.png)
 
 > [!WARNING]
-> 微調幅度如太高或太低，可自行調整 FT_ADD 及 FT_ADD 變數
+> 微調幅度如太高或太低，可自行調整 FT_ADD 及 FT_SUB 變數
 
 ## 設定畫面
 1. TS: 待機張力歸 0
