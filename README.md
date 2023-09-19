@@ -47,6 +47,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 
 ## 接線圖
 ![images2-2](docs/images2-2.png)
+> [!WARNING]
+> 請適時增加安全措施，例如增加按鍵的上拉電阻、步進馬達的保險絲之類
 
 ## TB6600 步進馬達電機參數
 ![images2-3](docs/images2-3.png)
