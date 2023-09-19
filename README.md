@@ -6,7 +6,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 ![images1-2](docs/images1-2.jpg)
 
 15磅、25磅、30磅展示影片
-<youtube>
+[<youtube>](https://youtu.be/82X5WgdFZp8)
 
 ## 原由
 一年前因為公司社團的關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想購買電子拉線機頭，後來想想我可以用我會的知識，在 Raspberry Pico 上使用壓力傳感器、幾個微動開關和按鈕製作了這個項目。
