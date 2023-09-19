@@ -21,7 +21,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 6. 張力校正
 
 ## 待機畫面
-1. 使用左右鍵可選擇設定指定調整磅、公斤及預拉十位數、個位數、小數
+1. 使用左右鍵可選擇設定指定調整磅、公斤及預拉的十位數、個位數、小數
 2. 使用上下鍵調整選擇的設定
 ![images1-3](docs/images1-3.png)
 
