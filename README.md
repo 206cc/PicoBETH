@@ -58,9 +58,9 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 將程式碼使用 Thonny 儲存到 Raspberry PICO中，其中 src 資料夾是 hx711 及 2004 LCD 用到的相關函式庫
 > [!NOTE]
 > 感謝 [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) 提供 hx711 for pico 的函式庫
+
 > [!NOTE]
 > 感謝 [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) 提供 2004 LCD for pico 的函式庫
-
 
 # 第一次開機
 
