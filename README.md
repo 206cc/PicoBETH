@@ -21,10 +21,10 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項
 6. 張力校正
 
 ## 張緊畫面
-![images1-3](docs/images1-3.jpg)
+![images1-3](docs/images1-3.png)
 
 ## 設定畫面
-![images1-4](docs/images1-4.jpg)
+![images1-4](docs/images1-4.png)
  
 ## 硬體
 
@@ -43,10 +43,10 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項
 12 蜂鳴器
 
 ## 接線圖
-![images2-1](docs/images2-1.jpg)
+![images2-1](docs/images2-1.png)
 
 ## 步進馬達參數
-![images2-2](docs/images2-2.jpg)
+![images2-2](docs/images2-2.png)
 
 
 # 軟體安裝
