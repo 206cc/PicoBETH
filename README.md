@@ -9,7 +9,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項
 <youtube>
 
 ## 原由
-一年前因為公司社團的關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想購買電子拉線機頭，後來想想我可以用我會的知識，在Raspberry Pico上使用稱壓力傳感器、幾個微動開關和按鈕製作了這個項目。
+一年前因為公司社團的關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想購買電子拉線機頭，後來想想我可以用我會的知識，在 Raspberry Pico 上使用壓力傳感器、幾個微動開關和按鈕製作了這個項目。
 
 ## 現有主要功能如下：
 
@@ -29,18 +29,18 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項
 ## 硬體
 
 主要材料
-1 Raspberry Pico H	
-2 1605 200MM滑台
-3 57步進馬達
-4 步進馬達驅動器
-5 NJ5 20KG壓力傳感器
-6 HX711模塊
-7 2004 i2c LCD 液晶螢幕
-8 WISE 2086 珠夾頭
-9 5向按鍵模組
-10 按鈕
-11 微控開關
-12 蜂鳴器
+1. Raspberry Pico H	
+2. 1605 200MM 滑台 / 1605 Sliding Table 200MM 
+3. 57步進馬達 / 57 Stepper Motor 
+4. 步進馬達驅動器 / Stepper Motor Driver
+5. NJ5 20KG 壓力傳感器 / NJ5 20KG load cell
+6. HX711 模塊 / HX711 IC
+7. 2004 i2c LCD 
+8. WISE 2086 珠夾頭 / WISE 2086 Head
+9. 5向按鍵模組 / Five-way key
+10. 按鈕 / Button
+11. 微控開關 / Micro Switch
+12. 有源蜂鳴器 / Active buzzer
 
 ## 接線圖
 ![images2-1](docs/images2-1.png)
@@ -50,7 +50,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項
 
 
 # 軟體安裝
-將程式碼使用Thonny儲存到Raspberry PICO中，其中src資料夾是hx711及2004 LCD用到的相關函式庫
+將程式碼使用 Thonny 儲存到 Raspberry PICO中，其中 src 資料夾是 hx711 及 2004 LCD 用到的相關函式庫
 
 
 # 第一次開機
