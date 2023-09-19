@@ -26,9 +26,13 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 ![images1-3](docs/images1-3.png)
 
 ## 張緊畫面
-1. 達到設定張力時進入微調程序，直到按下珠夾按鍵或離開鍵結束張緊程序
+1. 達到設定張力時進入微調程序，磅數不足加磅、過高減磅，直到按下珠夾按鍵或離開鍵結束張緊程序
 2. 按下左右鍵進入手動微調程序，此時自動微調程序會被取消
+3. 達到指定張力後會開始出現計算秒數
 ![images1-4](docs/images1-4.png)
+
+> [!WARNING]
+> 微調幅度如太高或太低，可自行調整 FT_ADD 及 FT_ADD 變數
 
 ## 設定畫面
 1. TS: 待機張力歸 0
