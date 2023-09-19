@@ -104,7 +104,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 > [!IMPORTANT]
 > 此參數以設定存檔為主(config.cfg)
 
-參考影片: https://youtube.com/xxxx
+參考影片: [https://youtube.com/xxxx](https://youtu.be/KuisR6eKiwk)
 
 ## 校正 HX 參數
 
@@ -122,7 +122,7 @@ HX711 壓力感應器校正系數，第一次使用或有更換壓力傳感器�
 > [!IMPORTANT]
 > 此參數以設定存檔為主(config.cfg)
 
-參考影片: https://youtube.com/xxxx
+參考影片: [https://youtube.com/xxxx](https://youtu.be/JaplgmXzbjY)
 
 # 待機時的張力校正
 正常來說待機時顯示器的張力會顯為 0±3G，如不穩定或偏差太大，請檢查是否受到干擾或接錯線；如固定在某個超過 0 太多的數值請重新開機校正，或至設定頁面 TS 欄位點選 RESET 校正
