@@ -6,7 +6,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 ![images1-2](docs/images1-2.jpg)
 
 15磅、30磅 預拉10% 展示影片
-[<youtube>](https://youtu.be/82X5WgdFZp8)
+[https://youtu.be/82X5WgdFZp8](https://youtu.be/82X5WgdFZp8)
 
 ## 原由
 一年前因為公司社團的關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想購買電子拉線機頭，後來想想我可以用我會的知識，在 Raspberry Pico 上使用壓力傳感器、幾個微動開關和按鈕製作了這個項目。
@@ -104,7 +104,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 > [!IMPORTANT]
 > 此參數以設定存檔為主(config.cfg)
 
-參考影片: [https://youtube.com/xxxx](https://youtu.be/KuisR6eKiwk)
+參考影片: [https://youtu.be/KuisR6eKiwk](https://youtu.be/KuisR6eKiwk)
 
 ## 校正 HX 參數
 
@@ -122,7 +122,7 @@ HX711 壓力感應器校正系數，第一次使用或有更換壓力傳感器�
 > [!IMPORTANT]
 > 此參數以設定存檔為主(config.cfg)
 
-參考影片: [https://youtube.com/xxxx](https://youtu.be/JaplgmXzbjY)
+參考影片: [https://youtu.be/JaplgmXzbjY](https://youtu.be/JaplgmXzbjY)
 
 # 待機時的張力校正
 正常來說待機時顯示器的張力會顯為 0±3G，如不穩定或偏差太大，請檢查是否受到干擾或接錯線；如固定在某個超過 0 太多的數值請重新開機校正，或至設定頁面 TS 欄位點選 RESET 校正
