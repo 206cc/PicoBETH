@@ -5,7 +5,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 
 ![images1-2](docs/images1-2.jpg)
 
-15磅、25磅、30磅展示影片
+15磅、30磅 預拉10% 展示影片
 [<youtube>](https://youtu.be/82X5WgdFZp8)
 
 ## 原由
