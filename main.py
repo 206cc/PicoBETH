@@ -100,7 +100,7 @@ BOTTON_DOWN = Pin(12, Pin.IN, Pin.PULL_DOWN)    # 下按鍵
 BOTTON_LEFT = Pin(11, Pin.IN, Pin.PULL_DOWN)    # 左按鍵
 BOTTON_RIGHT = Pin(10, Pin.IN, Pin.PULL_DOWN)   # 右按鍵
 BOTTON_SETTING = Pin(14, Pin.IN, Pin.PULL_DOWN) # 設定按鍵
-BOTTON_EXIT = Pin(15, Pin.IN, Pin.PULL_DOWN)    # 離開按鍵
+BOTTON_EXIT = Pin(15, Pin.IN, Pin.PULL_DOWN)  # 取消按鍵
 BOTTON_LIST = {"BOTTON_HEAD":0, "BOTTON_SETTING":0, "BOTTON_EXIT":0} # 非阻塞按鈕列表
 BOTTON_CLICK_US = 300000 # 非阻塞按鈕點擊微秒
 
