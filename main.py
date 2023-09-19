@@ -506,7 +506,7 @@ def setting_ts():
             CURSOR_XY_TS_TMP = i
             lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
             lcd.blink_cursor_on()
-        #    beepbeep(0.1)
+            beepbeep(0.1)
             cursor_xy = TS_ARR[i][0],TS_ARR[i][1]
             time.sleep(BOTTON_SLEEP)
 
@@ -528,6 +528,7 @@ def setting():
     cursor_xy = MENU_ARR[i][0],MENU_ARR[i][1]
     lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
     lcd.blink_cursor_on()
+    time.sleep(BOTTON_SLEEP)
     while True:
         # 按下上下鍵動作
         if BOTTON_UP.value() or BOTTON_DOWN.value():
