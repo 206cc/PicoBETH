@@ -1,9 +1,9 @@
 # PicoBETH
 PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項目，讓喜歡穿線，但只有機械式穿線機（重錘式、手搖式）的業餘穿線師可以自行製作電子拉線機頭，如果你有一些基本的程式能力，這個項目會很容易完成。
 
-(docs/images1-1.jpg)
+![images1-1](docs/images1-1.jpg)
 
-(docs/images1-2.jpg)
+![images1-2](docs/images1-2.jpg)
 
 15磅、25磅、30磅展示影片
 <youtube>
@@ -21,10 +21,10 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項
 6. 張力校正
 
 ## 張緊畫面
-(docs/images1-3.jpg)
+![images1-3](docs/images1-3.jpg)
 
 ## 設定畫面
-(docs/images1-4.jpg)
+![images1-4](docs/images1-4.jpg)
  
 ## 硬體
 
@@ -43,10 +43,10 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項
 12 蜂鳴器
 
 ## 接線圖
-(docs/images2-1.jpg)
+![images2-1](docs/images2-1.jpg)
 
 ## 步進馬達參數
-(docs/images2-2.jpg)
+![images2-2](docs/images2-2.jpg)
 
 
 # 軟體安裝
@@ -64,11 +64,13 @@ HX711壓力感應器校正系數，第一次使用或有更換壓力傳感器、
 3. 跳回主選單設定拉力為20磅
 4. 按上或下鍵開始拉線，當LCD顯示20磅時，抄下張力計顯示數值
 5. 至設定頁面上填入剛抄下張力計的數值
-註: 
+
 [!WARNING]
 如不做此校正，實際張力會與LCD上的張力會有誤差
+
 [!IMPORTANT]
 此參數以設定存檔為主
+
 參考影片: https://youtube.com/xxxx
 
 
@@ -80,13 +82,16 @@ HX711壓力感應器校正系數，第一次使用或有更換壓力傳感器、
 3. AUTO會自動填入參考的CC值
 4. 使用此值拉線測式，最佳的結果是預拉為0時達到指定張力不會進行微調動作 (你也許會在馬達停止時看見LCD張力持續變化超過指定張力，這為正常物理現象，最佳的參數在於張力平衡後會線剛好在指定張力不會進行微調的動作)
 5. 如果自動的CC值不理想，可至設定頁面手動微調CC值後，重覆4的步驟，找到最佳的值
-註： 
+
 [!WARNING]
 如果有開預拉，會進行退磅的徵調，所以測試時請將預拉設為0
+
 [!IMPORTANT]
 更換HX711電路板、滑台螺距、馬達的電機會影響此系數，如果覺得在預拉為0時頻繁微調可校正此值
+
 [!IMPORTANT]
 此參數以設定存檔為主
+
 參考影片: https://youtube.com/xxxx
 
 ## 待機時張力校正
