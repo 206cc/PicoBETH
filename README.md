@@ -41,6 +41,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head)是一個開源的項
 10. 按鈕 / Button
 11. 微控開關 / Micro Switch
 12. 有源蜂鳴器 / Active buzzer
+13. 三色 LED / Tri-Color LEDs
 
 ![images2-1](docs/images2-1.jpg)
 
