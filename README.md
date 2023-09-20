@@ -47,7 +47,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 主要材料
 1. Raspberry Pico H
 2. 1605 200MM 滑台 / 1605 Sliding Table 200MM 
-3. 57步進馬達 / 57 Stepper Motor 
+3. 57步進馬達(2相4線 1.8°) / 57 Stepper Motor (1.8° Step Angle 2 Phase 4 Line)
 4. TB6600 步進馬達驅動器 / TB6600 Stepper Motor Driver
 5. NJ5 20KG 壓力傳感器 / NJ5 20KG load cell
 6. HX711 模塊 / HX711 IC
