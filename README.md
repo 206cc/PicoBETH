@@ -88,6 +88,24 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 
 # 第一次開機
 
+## 校正 HX 參數
+
+HX711 壓力感應器校正系數，第一次使用或有更換壓力傳感器、HX711 電路板時務必重新校正一次
+校正方法：
+1.	將外接式張力計，一端綁在拉線機上，另一端綁上羽毛球線
+2. 先將 LCD 設定頁面中HX參數設為 20.00
+3. 跳回主選單設定拉力為 20 磅
+4. 按上或下鍵開始拉線，當 LCD 顯示 20 磅時，抄下張力計顯示數值
+5. 至設定頁面上填入剛抄下張力計的數值
+
+> [!WARNING]
+> 如不做此校正，實際張力會與 LCD 上的張力會有誤差
+
+> [!IMPORTANT]
+> 此參數以設定存檔為主(config.cfg)
+
+參考影片: [https://youtu.be/JaplgmXzbjY](https://youtu.be/JaplgmXzbjY)
+
 ## 設定 CC 參數
 當達到指定張力馬達停止時實際張力還會持續變化，另設此需除此係數校正，可手動設設也可自動在設定頁面校正
 校正方法:
@@ -107,24 +125,6 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 > 此參數以設定存檔為主(config.cfg)
 
 參考影片: [https://youtu.be/KuisR6eKiwk](https://youtu.be/KuisR6eKiwk)
-
-## 校正 HX 參數
-
-HX711 壓力感應器校正系數，第一次使用或有更換壓力傳感器、HX711 電路板時務必重新校正一次
-校正方法：
-1.	將外接式張力計，一端綁在拉線機上，另一端綁上羽毛球線
-2. 先將 LCD 設定頁面中HX參數設為 20.00
-3. 跳回主選單設定拉力為 20 磅
-4. 按上或下鍵開始拉線，當 LCD 顯示 20 磅時，抄下張力計顯示數值
-5. 至設定頁面上填入剛抄下張力計的數值
-
-> [!WARNING]
-> 如不做此校正，實際張力會與 LCD 上的張力會有誤差
-
-> [!IMPORTANT]
-> 此參數以設定存檔為主(config.cfg)
-
-參考影片: [https://youtu.be/JaplgmXzbjY](https://youtu.be/JaplgmXzbjY)
 
 # 待機時的張力校正
 正常來說待機時顯示器的張力會顯為 0±3G，如不穩定或偏差太大，請檢查是否受到干擾或接錯線；如固定在某個超過 0 太多的數值請重新開機校正，或至設定頁面 TS 欄位點選 RESET 校正
