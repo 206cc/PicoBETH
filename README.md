@@ -41,7 +41,10 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 2. CC: 微調參數(詳見第一次開機章節)
 3. HX: HX711 的壓力傳感器校正(詳見第一次開機章節)
 ![images1-5](docs/images1-5.png)
- 
+  
+> [!NOTE]
+> 一般來說設定好後此頁面就不太需要再進來設定了
+
 ## 硬體
 
 主要材料
