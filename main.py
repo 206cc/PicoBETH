@@ -60,8 +60,8 @@ CORR_MAX = 1.5       # 張力校正參數最大值
 CORR_MIN = 0.5       # 張力校正參數最小值
 PU_PRECISE = 300     # (G)如超過設定張力加此值，則進入釋放微調
 PU_STAY = 1          # (Second)預拉暫留秒數，秒數過後退回原設定磅數
-FT_ADD = 40          # 增加磅數微調時步進馬達的步數(建議調成微調一次增加0.3磅左右)
-FT_SUB = 70          # 減少磅數微調時步進馬達的步數
+FT_ADD = 20          # 增加磅數微調時步進馬達的步數(1610螺桿參數)(建議調成微調一次增加0.3磅左右)
+FT_SUB = 30          # 減少磅數微調時步進馬達的步數(1610螺桿參數)
 BOTTON_SLEEP = 0.1   # (Second)按鍵等待秒數
 MOTO_RS_STEPS = 2000 # 滑台復位時感應到前限位開關時退回的步數，必需退回到未按壓前限位開關的程度
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
@@ -72,8 +72,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數
-VERSION = "1.0"
-VER_DATE = "2023-09-19"
+VERSION = "1.1"
+VER_DATE = "2023-09-30"
 CFG_NAME = "config.cfg" # 存檔檔名
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS'] # 存檔變數
 MENU_ARR = [[11,0],[5,1],[7,1],[8,1],[11,1],[4,2],[5,2],[7,2],[8,2]] # 選單陣列
@@ -90,8 +90,8 @@ IN3 = machine.Pin(2, machine.Pin.OUT) # 接 DIR-
 IN4 = machine.Pin(3, machine.Pin.OUT) # 接 DIR+
 
 # 滑軌限位前後限位感應開關
-MOTO_BOTTON_FRONT = Pin(6, Pin.IN, Pin.PULL_DOWN)  # 滑軌前限位感應開關
-MOTO_BOTTON_BACK = Pin(7, Pin.IN, Pin.PULL_DOWN)   # 滑軌後限位感應開關
+MOTO_SW_FRONT = Pin(6, Pin.IN, Pin.PULL_DOWN)  # 滑軌前限位感應開關
+MOTO_SW_REAR = Pin(7, Pin.IN, Pin.PULL_DOWN)   # 滑軌後限位感應開關
 
 # 功能按鍵
 BOTTON_HEAD = Pin(8, Pin.IN, Pin.PULL_DOWN)     # 啟動按鍵(珠夾頭)
@@ -203,7 +203,7 @@ def forward(delay, steps, check, init):
                 return(0)
             
             # 停止條件
-            if MOTO_BOTTON_BACK.value() or BOTTON_LIST['BOTTON_HEAD'] or BOTTON_LIST['BOTTON_EXIT']:
+            if MOTO_SW_REAR.value() or BOTTON_LIST['BOTTON_HEAD'] or BOTTON_LIST['BOTTON_EXIT']:
                 show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
                 moto_goto_standby(init, 0)
                 MOTO_MOVE = 0
@@ -233,7 +233,7 @@ def backward(delay, steps, check, init):
     MOTO_BACK = 1
     for i in range(0, steps):
         if check == 1:
-            if MOTO_BOTTON_FRONT.value():
+            if MOTO_SW_FRONT.value():
                 if init == 1:
                     MOTO_STEPS = i
                     
@@ -380,6 +380,11 @@ def start_tensioning():
         if BOTTON_UP.value():
             manual_flag = 1
             forward(MOTO_SPEED, FT_ADD, 0, 0)
+            beepbeep(0.05)
+            
+        # 手動改自動微調
+        if BOTTON_LIST['BOTTON_SETTING']:
+            manual_flag = 0
             beepbeep(0.05)
         
         # 夾線頭按鈕取消按鈕或斷線(張力小於5磅2267克)
