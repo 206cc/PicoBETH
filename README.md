@@ -79,12 +79,6 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 > [!WARNING]
 > 請適時增加安全措施，例如增加按鍵的上拉電阻、步進馬達的保險絲、LED 限流電阻之類保護樹梅派 Pico 及馬達電機
 
-## TB6600 步進馬達電機參數
-![images2-3](docs/images2-3.png)
-
-> [!WARNING]
-> 如修改此電機參數，程式碼可能會有許多要修正的參數
-
 ## PCB 電路板
 ![images2-3](docs/images2-4.svg)
 
@@ -93,6 +87,12 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 
 > [!NOTE]
 > 此電路板四周的鎖點比照 2004 LCD 鎖點位置，可堆疊減少體積
+
+## TB6600 步進馬達電機參數
+![images2-3](docs/images2-3.png)
+
+> [!WARNING]
+> 如修改此電機參數，程式碼可能會有許多要修正的參數
 
 # 軟體安裝
 使用 Thonny 將以下程式碼檔案儲存到 Raspberry PICO 中，其中 src 資料夾內是 hx711 及 2004 LCD 的相關函式庫
