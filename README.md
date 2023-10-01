@@ -4,11 +4,21 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 重錘式與改裝零件
 ![images1-1](docs/images1-1.jpg)
 
-改裝完成
+改裝完成（原型機）
 ![images1-2](docs/images1-2.jpg)
 
 15磅、30磅 預拉10% 展示影片
 [https://youtu.be/82X5WgdFZp8](https://youtu.be/82X5WgdFZp8)
+
+正式機
+![images1-2](docs/images1-6.jpg)
+
+正式機的改進
+1. 增加螺杆防塵罩
+2. 螺杆改使用1610規格，增加張力速度
+3. 更合理的硬體佈局，各零件可單獨拆裝不需全拆
+4. 使用堆疊方式減少體積，不會擋到置物槽
+5. 改使用自行設計PCB電路板
 
 ## 原由
 一年前因為公司社團的關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想購買電子拉線機頭，後來想想我可以用我會的知識，在 Raspberry Pico 上使用壓力傳感器、幾個微動開關和按鈕製作了這個項目。
@@ -49,7 +59,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 
 主要材料
 1. Raspberry Pico H
-2. 1605 200MM 滑台 / 1605 Sliding Table 200MM 
+2. 1610 200MM 滑台 / 1610 Sliding Table 200MM 
 3. 57步進馬達(2相4線 1.8°) / 57 Stepper Motor (1.8° Step Angle 2 Phase 4 Line)
 4. TB6600 步進馬達驅動器 / TB6600 Stepper Motor Driver
 5. NJ5 20KG 壓力傳感器 / NJ5 20KG load cell
@@ -75,6 +85,14 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 > [!WARNING]
 > 如修改此電機參數，程式碼可能會有許多要修正的參數
 
+## PCB 電路板
+![images2-3](docs/images2-4.svg)
+
+> [!NOTE]
+> 您可以自行下載上圖洗電路板，減少接線的麻煩
+> [!NOTE]
+> 此電路板四周的鎖點比照 2004 LCD 鎖點位置，可堆疊減少體積
+
 # 軟體安裝
 使用 Thonny 將以下程式碼檔案儲存到 Raspberry PICO 中，其中 src 資料夾內是 hx711 及 2004 LCD 的相關函式庫
 
@@ -96,7 +114,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 HX711 壓力感應器校正系數，第一次使用或有更換壓力傳感器、HX711 電路板時務必重新校正一次
 
 校正方法：
-1.	將外接式張力計，一端綁在拉線機上，另一端綁上羽毛球線
+1. 將外接式張力計，一端綁在拉線機上，另一端綁上羽毛球線
 2. 先將 LCD 設定頁面中HX參數設為 20.00
 3. 跳回主選單設定拉力為 20 磅
 4. 按上或下鍵開始拉線，當 LCD 顯示 20 磅時，抄下張力計顯示數值
