@@ -58,22 +58,23 @@ HX711_MAX = 25.00    # HX711校正參數最大值
 HX711_MIN = 15.00    # HX711校正參數最小值
 CORR_MAX = 1.5       # 張力校正參數最大值
 CORR_MIN = 0.5       # 張力校正參數最小值
-PU_PRECISE = 300     # (G)如超過設定張力加此值，則進入釋放微調
+PU_PRECISE = 200     # (G)如超過設定張力加此值，則進入釋放微調
 PU_STAY = 1          # (Second)預拉暫留秒數，秒數過後退回原設定磅數
 FT_ADD = 20          # 增加磅數微調時步進馬達的步數(1610螺桿參數)(建議調成微調一次增加0.3磅左右)
 FT_SUB = 30          # 減少磅數微調時步進馬達的步數(1610螺桿參數)
 BOTTON_SLEEP = 0.1   # (Second)按鍵等待秒數
 MOTO_RS_STEPS = 2000 # 滑台復位時感應到前限位開關時退回的步數，必需退回到未按壓前限位開關的程度
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
+AUTO_SAVE_SEC = 1.5  # (Second)自動儲存設定張力秒數
                     
-import time, utime, _thread, machine
+import time, _thread, machine
 from machine import I2C, Pin
 from src.hx711 import hx711          # from https://github.com/endail/hx711-pico-mpy
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數
-VERSION = "1.1"
-VER_DATE = "2023-09-30"
+VERSION = "1.2"
+VER_DATE = "2023-10-15"
 CFG_NAME = "config.cfg" # 存檔檔名
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS'] # 存檔變數
 MENU_ARR = [[11,0],[5,1],[7,1],[8,1],[11,1],[4,2],[5,2],[7,2],[8,2]] # 選單陣列
@@ -81,7 +82,8 @@ TS_ARR = [[4,0],[5,0],[7,0],[4,1],[5,1],[7,1],[17,0],[18,0]] # 張力調整陣�
 MOTO_FORW_W = [[1, 0, 1, 0],[0, 1, 0, 0],[0, 1, 1, 1],[1, 0, 1, 0]] # 步進馬達正轉參數
 MOTO_BACK_W = [[0, 1, 0, 1],[1, 0, 0, 1],[1, 0, 1, 0],[0, 1, 1, 0]] # 步進馬達反轉參數
 MOTO_MAX_STEPS = 1000000
-MOTO_SPEED = 0.0001  # (Second)步進馬達速度(越小越快)
+MOTO_SPEED = 0.0001 # (Second)步進馬達速度(越小越快)
+TS_INFO_MS = 100 # (MS)主畫面張力更新顯示毫秒
 
 ## 步進馬達
 IN1 = machine.Pin(4, machine.Pin.OUT) # 接 PUL-
@@ -101,8 +103,8 @@ BOTTON_LEFT = Pin(11, Pin.IN, Pin.PULL_DOWN)    # 左按鍵
 BOTTON_RIGHT = Pin(10, Pin.IN, Pin.PULL_DOWN)   # 右按鍵
 BOTTON_SETTING = Pin(14, Pin.IN, Pin.PULL_DOWN) # 設定按鍵
 BOTTON_EXIT = Pin(15, Pin.IN, Pin.PULL_DOWN)  # 取消按鍵
-BOTTON_LIST = {"BOTTON_HEAD":0, "BOTTON_SETTING":0, "BOTTON_EXIT":0} # 非阻塞按鈕列表
-BOTTON_CLICK_US = 300000 # 非阻塞按鈕點擊微秒
+BOTTON_LIST = {"BOTTON_HEAD":0, "BOTTON_SETTING":0, "BOTTON_EXIT":0, "BOTTON_UP":0, "BOTTON_DOWN":0, "BOTTON_LEFT":0, "BOTTON_RIGHT":0} # 按鈕列表
+BOTTON_CLICK_MS = 300 # (MS)按鈕點擊毫秒
 
 # LED參數
 LED_GREEN = Pin(19, machine.Pin.OUT)  # 綠
@@ -203,7 +205,7 @@ def forward(delay, steps, check, init):
                 return(0)
             
             # 停止條件
-            if MOTO_SW_REAR.value() or BOTTON_LIST['BOTTON_HEAD'] or BOTTON_LIST['BOTTON_EXIT']:
+            if MOTO_SW_REAR.value() or botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT'):
                 show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
                 moto_goto_standby(init, 0)
                 MOTO_MOVE = 0
@@ -267,6 +269,16 @@ def show_lcd(text, x, y, length):
     lcd.move_to(x, y)
     lcd.putstr(text)
 
+# 按鈕偵測
+def botton_list(key):
+    global BOTTON_LIST
+    if BOTTON_LIST[key]:
+        BOTTON_LIST[key] = 0
+        return True
+    else:
+        return False
+    
+
 # 張力監控
 def tension_monitoring():
     global TENSION_MON, MOTO_WAIT, HX711_I, BOTTON_LIST
@@ -291,9 +303,9 @@ def tension_monitoring():
         # 按鍵偵測
         for key in BOTTON_LIST:
             if globals()[key].value() == 1:
-                BOTTON_LIST[key] = utime.ticks_us()
+                BOTTON_LIST[key] = time.ticks_ms()
             elif BOTTON_LIST[key]:
-                if (utime.ticks_us() - BOTTON_LIST[key]) > BOTTON_CLICK_US:
+                if (time.ticks_ms() - BOTTON_LIST[key]) > BOTTON_CLICK_MS:
                     BOTTON_LIST[key] = 0
 
         time.sleep(0.02)
@@ -383,12 +395,12 @@ def start_tensioning():
             beepbeep(0.05)
             
         # 手動改自動微調
-        if BOTTON_LIST['BOTTON_SETTING']:
+        if botton_list('BOTTON_SETTING'):
             manual_flag = 0
             beepbeep(0.05)
         
         # 夾線頭按鈕取消按鈕或斷線(張力小於5磅2267克)
-        if BOTTON_LIST['BOTTON_HEAD'] or BOTTON_LIST['BOTTON_EXIT'] or TENSION_MON < 2267:
+        if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT') or TENSION_MON < 2267:
             show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
             moto_goto_standby(init, 0)
             show_lcd("Ready", 0, 2, I2C_NUM_COLS)
@@ -408,10 +420,11 @@ def start_tensioning():
 # 主畫面張力及預拉設定
 def setting_ts():
     global DEFAULT_LB, PRE_STRECH, LB_CONV_G, CURSOR_XY_TS_TMP
+    last_set_time = time.ticks_ms()
     set_count = len(TS_ARR)
     i = CURSOR_XY_TS_TMP
-    cursor_xy = TS_ARR[i][0],TS_ARR[i][1]
-    lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
+    cursor_xy = TS_ARR[i][0], TS_ARR[i][1]
+    lcd.move_to(TS_ARR[i][0], TS_ARR[i][1])
     lcd.blink_cursor_on()
     while True:
         # 按下上下鍵動作
@@ -492,6 +505,7 @@ def setting_ts():
             lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
             LB_CONV_G = int(DEFAULT_LB * 453.59237)
             LB_CONV_G = int(LB_CONV_G * ((PRE_STRECH + 100)/100))
+            last_set_time = time.ticks_ms()
             beepbeep(0.1)
             time.sleep(BOTTON_SLEEP)
 
@@ -510,13 +524,13 @@ def setting_ts():
             
             CURSOR_XY_TS_TMP = i
             lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
-            lcd.blink_cursor_on()
-            beepbeep(0.1)
             cursor_xy = TS_ARR[i][0],TS_ARR[i][1]
+            last_set_time = time.ticks_ms()
+            beepbeep(0.1)
             time.sleep(BOTTON_SLEEP)
 
         # 按下離開鍵動作
-        if BOTTON_LIST['BOTTON_EXIT']:
+        if botton_list('BOTTON_EXIT') or ((time.ticks_ms() - last_set_time) > (AUTO_SAVE_SEC * 1000)):
             config_save()
             lcd.blink_cursor_off()
             beepbeep(0.1)
@@ -530,13 +544,13 @@ def setting():
     show_lcd("{: >5d}T".format(TENSION_COUNTS), 14, 3, 6)
     set_count = len(MENU_ARR)
     i = CURSOR_XY_TMP
-    cursor_xy = MENU_ARR[i][0],MENU_ARR[i][1]
-    lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
+    cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
+    lcd.move_to(MENU_ARR[i][0], MENU_ARR[i][1])
     lcd.blink_cursor_on()
     time.sleep(BOTTON_SLEEP)
     while True:
         # 按下上下鍵動作
-        if BOTTON_UP.value() or BOTTON_DOWN.value():
+        if BOTTON_UP.value() or BOTTON_DOWN.value() or botton_list('BOTTON_HEAD'):
             # 張力校正系數個位數
             if cursor_xy == (5, 1):
                 if BOTTON_UP.value():
@@ -560,7 +574,9 @@ def setting():
                     
             # 張力校正系數自動測試
             elif cursor_xy == (11, 1):
-                if BOTTON_UP.value() or BOTTON_DOWN.value():
+                if BOTTON_UP.value() or BOTTON_DOWN.value() or BOTTON_HEAD.value():
+                    beepbeep(0.1)
+                    time.sleep(0.5)
                     tmp_CORR_COEF = CORR_COEF
                     CORR_COEF = 1
                     ret = forward(MOTO_SPEED, MOTO_MAX_STEPS, 1, 0)
@@ -575,7 +591,8 @@ def setting():
             
             # 張力計歸零
             elif cursor_xy == (11, 0):
-                if BOTTON_UP.value() or BOTTON_DOWN.value():
+                if BOTTON_UP.value() or BOTTON_DOWN.value() or BOTTON_HEAD.value():
+                    beepbeep(0.1)
                     show_lcd(" ***G", 4, 0, 6)
                     moto_goto_standby(init, 1)
                     show_lcd(" *  G", 4, 0, 6)
@@ -647,14 +664,13 @@ def setting():
                     i = set_count - 1
             
             CURSOR_XY_TMP = i
-            lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
-            lcd.blink_cursor_on()
+            lcd.move_to(MENU_ARR[i][0], MENU_ARR[i][1])
+            cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
             beepbeep(0.1)
-            cursor_xy = MENU_ARR[i][0],MENU_ARR[i][1]
             time.sleep(BOTTON_SLEEP)
 
         # 按下離開鍵動作
-        if BOTTON_LIST['BOTTON_EXIT']:
+        if botton_list('BOTTON_EXIT'):
             config_save()
             lcd.blink_cursor_off()
             beepbeep(0.1)
@@ -680,13 +696,14 @@ def main_interface():
 
 init()
 
+ts_info_time = time.ticks_ms()
 while True:
     # 開始拉線
-    if BOTTON_LIST['BOTTON_HEAD']:
+    if botton_list('BOTTON_HEAD'):
         start_tensioning()
     
     # 設定模式
-    if BOTTON_LIST['BOTTON_SETTING']:
+    if botton_list('BOTTON_SETTING'):
         beepbeep(0.1)
         setting_interface()
         setting()
@@ -694,14 +711,19 @@ while True:
         show_lcd("Ready", 0, 2, I2C_NUM_COLS)
     
     # 滑台復位重置
-    if BOTTON_LIST['BOTTON_EXIT']:
+    if botton_list('BOTTON_EXIT'):
         beepbeep(0.1)
         show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
         moto_goto_standby(0, 0)
         show_lcd("Ready", 0, 2, I2C_NUM_COLS)
     
     # 加減磅設定
-    if BOTTON_UP.value() or BOTTON_DOWN.value() or BOTTON_LEFT.value() or BOTTON_RIGHT.value():
+    if botton_list('BOTTON_UP') or botton_list('BOTTON_DOWN') or botton_list('BOTTON_LEFT') or botton_list('BOTTON_RIGHT'):
         setting_ts()
-
-    tension_info()
+    
+    # 張力顯示更新
+    if (time.ticks_ms() - ts_info_time) > TS_INFO_MS:
+        tension_info()
+        lcd.move_to(TS_ARR[CURSOR_XY_TS_TMP][0],TS_ARR[CURSOR_XY_TS_TMP][1])
+        lcd.show_cursor()
+        ts_info_time = time.ticks_ms()
