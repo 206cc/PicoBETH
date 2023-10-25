@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 # 基本參數
-HX711_CAL = 20.00    # HX711拉力感應器校正系數，第一次使用或有更換拉力棒、HX711電路板時務必重新校正一次
+HX711_CAL = 20.00    # HX711拉力感應器校正系數，第一次使用或有更換壓力傳感器、HX711電路板時務必重新校正一次
                      # 校正方法:
                      #   1. 將外接式張力計，一端綁在拉線機上，另一端綁上羽毛球線
                      #   2. 先將LCD設定頁面中HX參數設為20.00
@@ -56,13 +56,11 @@ LB_MIN = 15.0        # (LB)設定可拉的最低磅數
 PS_MAX = 30          # (LB)設定預拉的最高%數
 HX711_MAX = 25.00    # HX711校正參數最大值
 HX711_MIN = 15.00    # HX711校正參數最小值
-CORR_MAX = 1.5       # 張力校正參數最大值
-CORR_MIN = 0.5       # 張力校正參數最小值
+CORR_MAX = 1.7       # 張力校正參數最大值
+CORR_MIN = 0.3       # 張力校正參數最小值
 PU_PRECISE = 200     # (G)如超過設定張力加此值，則進入釋放微調
 PU_STAY = 1          # (Second)預拉暫留秒數，秒數過後退回原設定磅數
 FT_ADD = 20          # 增加磅數微調時步進馬達的步數(1610螺桿參數)(建議調成微調一次增加0.3磅左右)
-FT_SUB = 30          # 減少磅數微調時步進馬達的步數(1610螺桿參數)
-BOTTON_SLEEP = 0.1   # (Second)按鍵等待秒數
 MOTO_RS_STEPS = 2000 # 滑台復位時感應到前限位開關時退回的步數，必需退回到未按壓前限位開關的程度
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
 AUTO_SAVE_SEC = 1.5  # (Second)自動儲存設定張力秒數
@@ -73,8 +71,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數
-VERSION = "1.2"
-VER_DATE = "2023-10-15"
+VERSION = "1.3"
+VER_DATE = "2023-10-25"
 CFG_NAME = "config.cfg" # 存檔檔名
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS'] # 存檔變數
 MENU_ARR = [[11,0],[5,1],[7,1],[8,1],[11,1],[4,2],[5,2],[7,2],[8,2]] # 選單陣列
@@ -82,8 +80,11 @@ TS_ARR = [[4,0],[5,0],[7,0],[4,1],[5,1],[7,1],[17,0],[18,0]] # 張力調整陣�
 MOTO_FORW_W = [[1, 0, 1, 0],[0, 1, 0, 0],[0, 1, 1, 1],[1, 0, 1, 0]] # 步進馬達正轉參數
 MOTO_BACK_W = [[0, 1, 0, 1],[1, 0, 0, 1],[1, 0, 1, 0],[0, 1, 1, 0]] # 步進馬達反轉參數
 MOTO_MAX_STEPS = 1000000
-MOTO_SPEED = 0.0001 # (Second)步進馬達速度(越小越快)
-TS_INFO_MS = 100 # (MS)主畫面張力更新顯示毫秒
+MOTO_SPEED = 0.0001  # (Second)步進馬達速度(越小越快)
+TS_INFO_MS = 100     # (MS)主畫面張力更新顯示毫秒
+FT_SUB_COEF = 1.5    # 減少磅數微調時步進馬達的步數
+FT_LB = 1            # (LB)進入連續微調的相差磅數
+BOTTON_SLEEP = 0.1   # (Second)按鍵等待秒數
 
 ## 步進馬達
 IN1 = machine.Pin(4, machine.Pin.OUT) # 接 PUL-
@@ -102,9 +103,15 @@ BOTTON_DOWN = Pin(12, Pin.IN, Pin.PULL_DOWN)    # 下按鍵
 BOTTON_LEFT = Pin(11, Pin.IN, Pin.PULL_DOWN)    # 左按鍵
 BOTTON_RIGHT = Pin(10, Pin.IN, Pin.PULL_DOWN)   # 右按鍵
 BOTTON_SETTING = Pin(14, Pin.IN, Pin.PULL_DOWN) # 設定按鍵
-BOTTON_EXIT = Pin(15, Pin.IN, Pin.PULL_DOWN)  # 取消按鍵
-BOTTON_LIST = {"BOTTON_HEAD":0, "BOTTON_SETTING":0, "BOTTON_EXIT":0, "BOTTON_UP":0, "BOTTON_DOWN":0, "BOTTON_LEFT":0, "BOTTON_RIGHT":0} # 按鈕列表
-BOTTON_CLICK_MS = 300 # (MS)按鈕點擊毫秒
+BOTTON_EXIT = Pin(15, Pin.IN, Pin.PULL_DOWN)    # 取消按鍵
+BOTTON_LIST = {"BOTTON_HEAD":0,
+               "BOTTON_SETTING":0,
+               "BOTTON_EXIT":0,
+               "BOTTON_UP":0,
+               "BOTTON_DOWN":0,
+               "BOTTON_LEFT":0,
+               "BOTTON_RIGHT":0}                # 按鈕列表
+BOTTON_CLICK_MS = 400                           # (MS)按鈕點擊毫秒
 
 # LED參數
 LED_GREEN = Pin(19, machine.Pin.OUT)  # 綠
@@ -125,6 +132,9 @@ CURSOR_XY_TMP = 0
 CURSOR_XY_TS_TMP = 1
 HX711_I = 0
 TENSION_COUNTS = 0
+TIMER = 0
+ERR_MSG = ""
+ABORT_LM = 0
 
 # 2004 i2c LCD 螢幕參數設定
 I2C_ADDR     = 0x27
@@ -182,9 +192,9 @@ def beepbeep(run_time):
 # 張力顯示
 def tension_info():
     show_lcd("{: >5d}G".format(TENSION_MON), 14, 3, 6)
-    show_lcd("{: >4.1f}".format(TENSION_MON*0.0022), 9, 0, 4)
-    show_lcd("{: >4.1f}".format(TENSION_MON/1000), 9, 1, 4)    
-
+    show_lcd("{: >4.1f}".format(TENSION_MON * 0.0022), 9, 0, 4)
+    show_lcd("{: >4.1f}".format(TENSION_MON / 1000), 9, 1, 4)
+    
 # 步進馬達旋轉
 def setStep(in_w):
     IN1.value(in_w[0])
@@ -205,17 +215,34 @@ def forward(delay, steps, check, init):
                 return(0)
             
             # 停止條件
-            if MOTO_SW_REAR.value() or botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT'):
+            if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT'):
                 show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
                 moto_goto_standby(init, 0)
                 MOTO_MOVE = 0
                 MOTO_WAIT = 0
-                return(1)
+                return("Abort")
+            
+            # 壓力傳感器異常、無夾線(行程已過ABORT_LM時張力小於5磅)
+            if i > ABORT_LM and TENSION_MON < 2267:
+                show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
+                moto_goto_standby(init, 0)
+                MOTO_MOVE = 0
+                MOTO_WAIT = 0
+                return("No String?")
+        
+        # 後限位SW
+        if MOTO_SW_REAR.value():
+            show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
+            moto_goto_standby(init, 0)
+            if init:
+                return i
+            MOTO_MOVE = 0
+            MOTO_WAIT = 0
+            return(1)
         
         # 超過最大指定張力後復位
         if ABORT_GRAM < TENSION_MON:
             show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
-            beepbeep(1)
             moto_goto_standby(init, 0)
             show_lcd("Exceeding "+ str(ABORT_GRAM) +"G, Abort.", 0, 2, I2C_NUM_COLS)
             MOTO_MOVE = 0
@@ -241,7 +268,7 @@ def backward(delay, steps, check, init):
                     
                 forward(MOTO_SPEED, MOTO_RS_STEPS, 0, 0)
                 MOTO_BACK = 0
-                return(0)
+                return 0 
             
         setStep(MOTO_BACK_W[0])
         setStep(MOTO_BACK_W[1])
@@ -278,7 +305,6 @@ def botton_list(key):
     else:
         return False
     
-
 # 張力監控
 def tension_monitoring():
     global TENSION_MON, MOTO_WAIT, HX711_I, BOTTON_LIST
@@ -292,13 +318,14 @@ def tension_monitoring():
                     v0_arr = sorted(v0_arr)
                     v0 = v0_arr[5]
                     v0_arr = []
+                    
+                HX711_I = HX711_I + 1
+                
             else:
                 TENSION_MON = int((val-(v0))/100*(HX711_CAL/20))
                 if MOTO_MOVE == 1:
                     if LB_CONV_G < (TENSION_MON * CORR_COEF):
                         MOTO_WAIT = 1
-            
-            HX711_I = HX711_I + 1
         
         # 按鍵偵測
         for key in BOTTON_LIST:
@@ -312,7 +339,7 @@ def tension_monitoring():
 
 # 開機初始化
 def init():
-    global LB_CONV_G, TS_ARR
+    global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM
     config_read()
     if LB_KG_SELECT == 1:
         TS_ARR.remove([4,1])
@@ -327,28 +354,30 @@ def init():
     show_lcd("Version: " + VERSION, 0, 1, I2C_NUM_COLS)
     show_lcd("Date: " + str(VER_DATE), 0, 2, I2C_NUM_COLS)
     LED_RED.on()
-    time.sleep(1)
     LED_YELLOW.on()
-    time.sleep(1)
     LED_GREEN.on()
-    time.sleep(1)
-    LED_RED.off()
-    LED_YELLOW.off()
-    LED_GREEN.off()    
-    main_interface()
-    show_lcd("Initializing...", 0, 2, I2C_NUM_COLS)
-    LB_CONV_G = int(DEFAULT_LB * 453.59237)
-    LB_CONV_G = int(LB_CONV_G * ((PRE_STRECH + 100)/100))
     time.sleep(0.5)
+    LED_YELLOW.off()
+    LED_GREEN.off()
+    moto_goto_standby(0, 0)
+    show_lcd("Checking motor...", 0, 2, I2C_NUM_COLS)
+    max_lm = forward(MOTO_SPEED, MOTO_MAX_STEPS, 0, 1)
+    ABORT_LM = (max_lm * 0.3)
+    main_interface()
+    LB_CONV_G = int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100))
     show_lcd("Tension monitoring...", 0, 2, I2C_NUM_COLS)
     _thread.start_new_thread(tension_monitoring, ())
     time.sleep(0.5)
-    moto_goto_standby(0, 0)
-    show_lcd("Checking the motor...", 0, 2, I2C_NUM_COLS)
-#    forward(MOTO_SPEED, MOTO_MAX_STEPS, 1, 1)  # 開機滑台檢查先PASS
+    if abs(TENSION_MON) > 10:
+        show_lcd("Reset Tension Sensor", 0, 2, I2C_NUM_COLS)
+        moto_goto_standby(init, 1)
+        time.sleep(1)
+        if abs(TENSION_MON) > 10:
+            ERR_MSG = "Tension Sensor Error"
+            show_lcd("{: >5d}G".format(TENSION_MON), 14, 3, 6)
+        
     LED_RED.off()
     show_lcd("Ready", 0, 2, I2C_NUM_COLS)
-    return 0
 
 # 開始增加張力
 def start_tensioning():
@@ -357,36 +386,41 @@ def start_tensioning():
     LED_YELLOW.on()
     beepbeep(0.1)
     rel = forward(MOTO_SPEED, MOTO_MAX_STEPS, 1, 0)
-    if rel == 1:
-        show_lcd("Abort", 0, 2, I2C_NUM_COLS)
-        return(0)
+    if rel:
+        show_lcd(str(rel), 0, 2, I2C_NUM_COLS)
+        return 0
     
+    MOTO_MOVE = 0
     beepbeep(0.3)
     tension_info()
-    MOTO_MOVE = 0
     show_lcd("Target Tension", 0, 2, I2C_NUM_COLS)
     time.sleep(PU_STAY)
     check_g = int(DEFAULT_LB * 453.59237)
     manual_flag = 0
+    ft_flag = 0
+    abort_flag = 0
     t0 = time.time()
     # 到達指定張力，等待
     while True:  
-        LED_YELLOW.on()
-        # 張力超過減磅
-        if (check_g + PU_PRECISE) < TENSION_MON and manual_flag == 0:
-            backward(MOTO_SPEED, FT_SUB, 1, 0)
-            beepbeep(0.02)
-
         # 張力不足加磅
         if check_g > TENSION_MON and manual_flag == 0:
-            forward(MOTO_SPEED, FT_ADD, 0 ,0)
-            beepbeep(0.02)
-                        
-        # 手動減磅
-        if BOTTON_DOWN.value():
-            manual_flag = 1
-            backward(MOTO_SPEED, FT_SUB, 1, 0)
-            beepbeep(0.05)
+            diff_g = check_g - TENSION_MON
+            if diff_g < (FT_LB * 453):
+                ft_flag = 0
+            else:
+                ft_flag = 1
+            
+            abort_flag = forward(MOTO_SPEED, FT_ADD, 0 ,0)
+        
+        # 張力超過減磅
+        if (check_g + PU_PRECISE) < TENSION_MON and manual_flag == 0:
+            diff_g =  TENSION_MON - check_g
+            if diff_g < (FT_LB * 453):
+                ft_flag = 0
+            else:
+                ft_flag = 1
+            
+            backward(MOTO_SPEED, FT_ADD * FT_SUB_COEF, 1, 0)
                         
         # 手動加磅
         if BOTTON_UP.value():
@@ -394,28 +428,48 @@ def start_tensioning():
             forward(MOTO_SPEED, FT_ADD, 0, 0)
             beepbeep(0.05)
             
+        # 手動減磅
+        if BOTTON_DOWN.value():
+            manual_flag = 1
+            backward(MOTO_SPEED, FT_ADD * FT_SUB_COEF, 1, 0)
+            beepbeep(0.05)
+            
         # 手動改自動微調
         if botton_list('BOTTON_SETTING'):
             manual_flag = 0
             beepbeep(0.05)
         
-        # 夾線頭按鈕取消按鈕或斷線(張力小於5磅2267克)
-        if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT') or TENSION_MON < 2267:
+        # 夾線頭按鈕取消按鈕
+        if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT'):
             show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
             moto_goto_standby(init, 0)
             show_lcd("Ready", 0, 2, I2C_NUM_COLS)
             show_lcd("     ", 15, 1, 5)
-            MOTO_MOVE = 0
             MOTO_WAIT = 0
             TENSION_COUNTS = TENSION_COUNTS + 1
             config_save()
-            return(0)
-            
-        tension_info()
-        t1 = time.time() - t0
-        show_lcd("S:{: >3d}".format(t1), 15, 1, 5)
+            return 0
         
-    LED_GREEN.on()
+        # 斷線(已達指定張力突然小於5磅)
+        if TENSION_MON < 2267:
+            show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
+            moto_goto_standby(init, 0)
+            show_lcd("String Broken?", 0, 2, I2C_NUM_COLS)
+            show_lcd("     ", 15, 1, 5)
+            MOTO_WAIT = 0
+            return 0
+        
+        if abort_flag == 1:
+            return 0
+        
+        if ft_flag:
+            time.sleep(0.1)
+        else:
+            tension_info()
+            t1 = time.time() - t0
+            show_lcd("{: >3d}".format(t1), 17, 1, 3)
+
+
 
 # 主畫面張力及預拉設定
 def setting_ts():
@@ -429,7 +483,7 @@ def setting_ts():
     while True:
         # 按下上下鍵動作
         if BOTTON_UP.value() or BOTTON_DOWN.value():
-            kg = round(DEFAULT_LB*0.45359237, 1)
+            kg = round(DEFAULT_LB * 0.45359237, 1)
             # LB 10位數設定
             if cursor_xy == (4, 0):
                 if BOTTON_UP.value():
@@ -457,7 +511,7 @@ def setting_ts():
                     kg = kg + 10
                 elif BOTTON_DOWN.value():
                     kg = kg - 10
-                DEFAULT_LB = round(kg*2.20462262, 1)
+                DEFAULT_LB = round(kg * 2.20462262, 1)
 
             # KG 個位數設定
             elif cursor_xy == (5, 1):
@@ -465,7 +519,7 @@ def setting_ts():
                     kg = kg + 1
                 elif BOTTON_DOWN.value():
                     kg = kg - 1
-                DEFAULT_LB = round(kg*2.20462262, 1)
+                DEFAULT_LB = round(kg * 2.20462262, 1)
             
             # KG 小數設定
             elif cursor_xy == (7, 1):
@@ -473,7 +527,7 @@ def setting_ts():
                     kg = kg + 0.1
                 elif BOTTON_DOWN.value():
                     kg = kg - 0.1
-                DEFAULT_LB = round(kg*2.20462262, 1)
+                DEFAULT_LB = round(kg * 2.20462262, 1)
                 
             # 預拉10位數設定
             elif cursor_xy == (17, 0):
@@ -500,11 +554,10 @@ def setting_ts():
                 PRE_STRECH = 0
             
             show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
-            show_lcd("{: >4.1f}".format(DEFAULT_LB*0.45359237), 4, 1, 4)
+            show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
             show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
             lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
-            LB_CONV_G = int(DEFAULT_LB * 453.59237)
-            LB_CONV_G = int(LB_CONV_G * ((PRE_STRECH + 100)/100))
+            LB_CONV_G = int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100))
             last_set_time = time.ticks_ms()
             beepbeep(0.1)
             time.sleep(BOTTON_SLEEP)
@@ -523,8 +576,8 @@ def setting_ts():
                     i = set_count - 1
             
             CURSOR_XY_TS_TMP = i
-            lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
-            cursor_xy = TS_ARR[i][0],TS_ARR[i][1]
+            lcd.move_to(TS_ARR[i][0], TS_ARR[i][1])
+            cursor_xy = TS_ARR[i][0], TS_ARR[i][1]
             last_set_time = time.ticks_ms()
             beepbeep(0.1)
             time.sleep(BOTTON_SLEEP)
@@ -535,7 +588,7 @@ def setting_ts():
             lcd.blink_cursor_off()
             beepbeep(0.1)
             time.sleep(BOTTON_SLEEP)
-            return(0)
+            return 0
 
 # 設定頁面
 def setting():
@@ -595,11 +648,6 @@ def setting():
                     beepbeep(0.1)
                     show_lcd(" ***G", 4, 0, 6)
                     moto_goto_standby(init, 1)
-                    show_lcd(" *  G", 4, 0, 6)
-                    time.sleep(1)
-                    show_lcd("  * G", 4, 0, 6)
-                    time.sleep(1)
-                    show_lcd("   *G", 4, 0, 6)
                     time.sleep(1)
                     beepbeep(0.1)
                     show_lcd("{: >5d}G".format(TENSION_MON), 3, 0, 7)
@@ -645,8 +693,7 @@ def setting():
             show_lcd("{: >1.2f}".format(CORR_COEF), 5, 1, 4)
             show_lcd("{: >2.2f}".format(HX711_CAL), 4, 2, 5)
             lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
-            LB_CONV_G = int(DEFAULT_LB * 453.59237)
-            LB_CONV_G = int(LB_CONV_G * ((PRE_STRECH + 100)/100))
+            LB_CONV_G = int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100))
             beepbeep(0.1)
             time.sleep(BOTTON_SLEEP)
 
@@ -675,7 +722,7 @@ def setting():
             lcd.blink_cursor_off()
             beepbeep(0.1)
             time.sleep(BOTTON_SLEEP)
-            return(0)
+            return 0
      
 # 設定介面顯示
 def setting_interface():
@@ -691,16 +738,19 @@ def main_interface():
     show_lcd("                    ", 0, 2, I2C_NUM_COLS)
     show_lcd("<PicoBETH>          ", 0, 3, I2C_NUM_COLS)
     show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
-    show_lcd("{: >4.1f}".format(DEFAULT_LB*0.45359237), 4, 1, 4)
+    show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
     show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
 
 init()
 
 ts_info_time = time.ticks_ms()
+timer_flag = 0
 while True:
     # 開始拉線
     if botton_list('BOTTON_HEAD'):
         start_tensioning()
+        if TIMER:
+            show_lcd("   m  ", 14, 1, 6)
     
     # 設定模式
     if botton_list('BOTTON_SETTING'):
@@ -709,13 +759,22 @@ while True:
         setting()
         main_interface()
         show_lcd("Ready", 0, 2, I2C_NUM_COLS)
+        if TIMER:
+            show_lcd("   m  ", 14, 1, 6)
     
-    # 滑台復位重置
+    # 計時器開關
     if botton_list('BOTTON_EXIT'):
-        beepbeep(0.1)
-        show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
-        moto_goto_standby(0, 0)
-        show_lcd("Ready", 0, 2, I2C_NUM_COLS)
+        beepbeep(0.5)
+        if TIMER:
+            if timer_flag:
+                TIMER = 0
+                timer_flag = 0
+                show_lcd("      ", 14, 1, 6)
+            else:
+                timer_flag = 1
+        else:
+            TIMER = time.time()
+            show_lcd("   m  ", 14, 1, 6)
     
     # 加減磅設定
     if botton_list('BOTTON_UP') or botton_list('BOTTON_DOWN') or botton_list('BOTTON_LEFT') or botton_list('BOTTON_RIGHT'):
@@ -724,6 +783,16 @@ while True:
     # 張力顯示更新
     if (time.ticks_ms() - ts_info_time) > TS_INFO_MS:
         tension_info()
-        lcd.move_to(TS_ARR[CURSOR_XY_TS_TMP][0],TS_ARR[CURSOR_XY_TS_TMP][1])
+        if TIMER:
+            if timer_flag == 0:
+                time_diff = time.time() - TIMER
+                show_lcd("{: >3d}".format(int(time_diff / 60)), 14, 1, 3)
+                show_lcd("{: >2d}".format(time_diff % 60), 18, 1, 2)
+
+        lcd.move_to(TS_ARR[CURSOR_XY_TS_TMP][0], TS_ARR[CURSOR_XY_TS_TMP][1])
         lcd.show_cursor()
         ts_info_time = time.ticks_ms()
+        
+    if ERR_MSG:
+        show_lcd(ERR_MSG, 0, 2, I2C_NUM_COLS)
+        break
