@@ -71,8 +71,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數
-VERSION = "1.3"
-VER_DATE = "2023-10-25"
+VERSION = "1.31"
+VER_DATE = "2023-10-28"
 CFG_NAME = "config.cfg" # 存檔檔名
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS'] # 存檔變數
 MENU_ARR = [[11,0],[5,1],[7,1],[8,1],[11,1],[4,2],[5,2],[7,2],[8,2]] # 選單陣列
@@ -383,6 +383,7 @@ def init():
 def start_tensioning():
     global MOTO_MOVE, MOTO_WAIT, TENSION_COUNTS
     show_lcd("Tensioning", 0, 2, I2C_NUM_COLS)
+    show_lcd("S:   ", 15, 1, 5)
     LED_YELLOW.on()
     beepbeep(0.1)
     rel = forward(MOTO_SPEED, MOTO_MAX_STEPS, 1, 0)
@@ -426,18 +427,16 @@ def start_tensioning():
         if BOTTON_UP.value():
             manual_flag = 1
             forward(MOTO_SPEED, FT_ADD, 0, 0)
-            beepbeep(0.05)
             
         # 手動減磅
         if BOTTON_DOWN.value():
             manual_flag = 1
             backward(MOTO_SPEED, FT_ADD * FT_SUB_COEF, 1, 0)
-            beepbeep(0.05)
             
         # 手動改自動微調
         if botton_list('BOTTON_SETTING'):
             manual_flag = 0
-            beepbeep(0.05)
+            beepbeep(0.1)
         
         # 夾線頭按鈕取消按鈕
         if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT'):
@@ -466,10 +465,9 @@ def start_tensioning():
             time.sleep(0.1)
         else:
             tension_info()
-            t1 = time.time() - t0
-            show_lcd("{: >3d}".format(t1), 17, 1, 3)
-
-
+        
+        t1 = time.time() - t0
+        show_lcd("{: >3d}".format(t1), 17, 1, 3)
 
 # 主畫面張力及預拉設定
 def setting_ts():
@@ -741,16 +739,21 @@ def main_interface():
     show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
     show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
 
-init()
+def show_timer():
+    if TIMER:
+        show_lcd("   m  ", 14, 1, 6)
+        time_diff = timer_flag - TIMER
+        show_lcd("{: >3d}".format(int(time_diff / 60)), 14, 1, 3)
+        show_lcd("{: >2d}".format(time_diff % 60), 18, 1, 2)
 
+init()
 ts_info_time = time.ticks_ms()
 timer_flag = 0
 while True:
     # 開始拉線
     if botton_list('BOTTON_HEAD'):
         start_tensioning()
-        if TIMER:
-            show_lcd("   m  ", 14, 1, 6)
+        show_timer()
     
     # 設定模式
     if botton_list('BOTTON_SETTING'):
@@ -759,22 +762,21 @@ while True:
         setting()
         main_interface()
         show_lcd("Ready", 0, 2, I2C_NUM_COLS)
-        if TIMER:
-            show_lcd("   m  ", 14, 1, 6)
+        show_timer()
     
     # 計時器開關
     if botton_list('BOTTON_EXIT'):
-        beepbeep(0.5)
         if TIMER:
             if timer_flag:
                 TIMER = 0
                 timer_flag = 0
                 show_lcd("      ", 14, 1, 6)
             else:
-                timer_flag = 1
+                timer_flag = time.time()
         else:
             TIMER = time.time()
             show_lcd("   m  ", 14, 1, 6)
+        beepbeep(0.5)
     
     # 加減磅設定
     if botton_list('BOTTON_UP') or botton_list('BOTTON_DOWN') or botton_list('BOTTON_LEFT') or botton_list('BOTTON_RIGHT'):
