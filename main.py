@@ -58,6 +58,8 @@ HX711_MAX = 25.00    # HX711校正參數最大值
 HX711_MIN = 15.00    # HX711校正參數最小值
 CORR_MAX = 1.7       # 張力校正參數最大值
 CORR_MIN = 0.3       # 張力校正參數最小值
+FT_ADD_MAX = 30      # 增加磅數微調參數最大值
+FT_ADD_MIN = 10      # 增加磅數微調參數最小值
 PU_PRECISE = 200     # (G)如超過設定張力加此值，則進入釋放微調
 PU_STAY = 1          # (Second)預拉暫留秒數，秒數過後退回原設定磅數
 FT_ADD = 20          # 增加磅數微調時步進馬達的步數(1610螺桿參數)(建議調成微調一次增加0.3磅左右)
@@ -71,12 +73,15 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數
-VERSION = "1.31"
+VERSION = "1.32"
 VER_DATE = "2023-10-28"
 CFG_NAME = "config.cfg" # 存檔檔名
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS'] # 存檔變數
-MENU_ARR = [[11,0],[5,1],[7,1],[8,1],[11,1],[4,2],[5,2],[7,2],[8,2]] # 選單陣列
-TS_ARR = [[4,0],[5,0],[7,0],[4,1],[5,1],[7,1],[17,0],[18,0]] # 張力調整陣列
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT'] # 存檔變數
+MENU_ARR = [[4,0],[4,1],[5,1],[7,1],[8,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0]] # 設定選單陣列
+UNIT_ARR = ['KG&LB', 'LB', 'KG']
+TS_LB_ARR = [[4,0],[5,0],[7,0]] # 磅調整陣列
+TS_KG_ARR = [[4,1],[5,1],[7,1]] # 公斤調整陣列
+TS_PS_ARR = [[17,0],[18,0]]     # 預拉調整陣列
 MOTO_FORW_W = [[1, 0, 1, 0],[0, 1, 0, 0],[0, 1, 1, 1],[1, 0, 1, 0]] # 步進馬達正轉參數
 MOTO_BACK_W = [[0, 1, 0, 1],[1, 0, 0, 1],[1, 0, 1, 0],[0, 1, 1, 0]] # 步進馬達反轉參數
 MOTO_MAX_STEPS = 1000000
@@ -135,6 +140,7 @@ TENSION_COUNTS = 0
 TIMER = 0
 ERR_MSG = ""
 ABORT_LM = 0
+TS_ARR = []
 
 # 2004 i2c LCD 螢幕參數設定
 I2C_ADDR     = 0x27
@@ -337,19 +343,20 @@ def tension_monitoring():
 
         time.sleep(0.02)
 
+def lb_kg_select():
+    global TS_ARR
+    if LB_KG_SELECT == 1:
+        TS_ARR = TS_LB_ARR + TS_PS_ARR
+    elif LB_KG_SELECT == 2:
+        TS_ARR = TS_KG_ARR + TS_PS_ARR
+    else:
+        TS_ARR = TS_LB_ARR + TS_KG_ARR + TS_PS_ARR
+
 # 開機初始化
 def init():
     global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM
     config_read()
-    if LB_KG_SELECT == 1:
-        TS_ARR.remove([4,1])
-        TS_ARR.remove([5,1])
-        TS_ARR.remove([7,1])
-    elif LB_KG_SELECT == 2:
-        TS_ARR.remove([4,0])
-        TS_ARR.remove([5,0])
-        TS_ARR.remove([7,0])
-    
+    lb_kg_select()
     show_lcd(" **** PicoBETH **** ", 0, 0, I2C_NUM_COLS)
     show_lcd("Version: " + VERSION, 0, 1, I2C_NUM_COLS)
     show_lcd("Date: " + str(VER_DATE), 0, 2, I2C_NUM_COLS)
@@ -383,7 +390,6 @@ def init():
 def start_tensioning():
     global MOTO_MOVE, MOTO_WAIT, TENSION_COUNTS
     show_lcd("Tensioning", 0, 2, I2C_NUM_COLS)
-    show_lcd("S:   ", 15, 1, 5)
     LED_YELLOW.on()
     beepbeep(0.1)
     rel = forward(MOTO_SPEED, MOTO_MAX_STEPS, 1, 0)
@@ -395,6 +401,7 @@ def start_tensioning():
     beepbeep(0.3)
     tension_info()
     show_lcd("Target Tension", 0, 2, I2C_NUM_COLS)
+    show_lcd("S:   ", 15, 1, 5)
     time.sleep(PU_STAY)
     check_g = int(DEFAULT_LB * 453.59237)
     manual_flag = 0
@@ -590,8 +597,7 @@ def setting_ts():
 
 # 設定頁面
 def setting():
-    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL
-    show_lcd("{: >5d}G".format(TENSION_MON), 3, 0, 7)
+    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP
     show_lcd("{: >5d}T".format(TENSION_COUNTS), 14, 3, 6)
     set_count = len(MENU_ARR)
     i = CURSOR_XY_TMP
@@ -624,7 +630,7 @@ def setting():
                     CORR_COEF = CORR_COEF - 0.01
                     
             # 張力校正系數自動測試
-            elif cursor_xy == (11, 1):
+            elif cursor_xy == (4, 1):
                 if BOTTON_UP.value() or BOTTON_DOWN.value() or BOTTON_HEAD.value():
                     beepbeep(0.1)
                     time.sleep(0.5)
@@ -636,19 +642,30 @@ def setting():
                         CORR_COEF = round(((TENSION_MON/((100+PRE_STRECH)/100))/(DEFAULT_LB*453.59)), 2)
                         moto_goto_standby(init, 0)
                     else:
-                        setting_interface()
-                        show_lcd("{: >5d}G".format(TENSION_MON), 3, 0, 7)
+                        show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL), 0, 2, I2C_NUM_COLS)
                         CORR_COEF = tmp_CORR_COEF
             
-            # 張力計歸零
-            elif cursor_xy == (11, 0):
-                if BOTTON_UP.value() or BOTTON_DOWN.value() or BOTTON_HEAD.value():
-                    beepbeep(0.1)
-                    show_lcd(" ***G", 4, 0, 6)
-                    moto_goto_standby(init, 1)
-                    time.sleep(1)
-                    beepbeep(0.1)
-                    show_lcd("{: >5d}G".format(TENSION_MON), 3, 0, 7)
+            # 磅、公斤設定選擇
+            elif cursor_xy == (4, 0):
+                if BOTTON_UP.value() or BOTTON_DOWN.value():
+                    CURSOR_XY_TS_TMP = 1
+                    LB_KG_SELECT = (LB_KG_SELECT + 1) % 3
+                    show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5)
+                    lb_kg_select()
+
+            # 張力微調步數十位數
+            elif cursor_xy == (15, 0):
+                if BOTTON_UP.value():
+                    FT_ADD = FT_ADD + 10
+                elif BOTTON_DOWN.value():
+                    FT_ADD = FT_ADD - 10
+
+            # 張力微調步數個位數
+            elif cursor_xy == (16, 0):
+                if BOTTON_UP.value():
+                    FT_ADD = FT_ADD + 1
+                elif BOTTON_DOWN.value():
+                    FT_ADD = FT_ADD - 1
 
             # HX711校正系數十位數
             if cursor_xy == (4, 2):
@@ -687,9 +704,15 @@ def setting():
                 HX711_CAL = HX711_MAX  
             elif HX711_CAL <= HX711_MIN:
                 HX711_CAL = HX711_MIN
+                
+            if FT_ADD >= FT_ADD_MAX:
+                FT_ADD = FT_ADD_MAX  
+            elif FT_ADD <= FT_ADD_MIN:
+                FT_ADD = FT_ADD_MIN
             
             show_lcd("{: >1.2f}".format(CORR_COEF), 5, 1, 4)
             show_lcd("{: >2.2f}".format(HX711_CAL), 4, 2, 5)
+            show_lcd("{: >2d}".format(FT_ADD), 15, 0, 2)
             lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
             LB_CONV_G = int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100))
             beepbeep(0.1)
@@ -724,10 +747,11 @@ def setting():
      
 # 設定介面顯示
 def setting_interface():
-    show_lcd("TS:     G [RESET]   ", 0, 0, I2C_NUM_COLS)
-    show_lcd("CC:  "+ "{: >1.2f}".format(CORR_COEF) +" [AUTO]   ", 0, 1, I2C_NUM_COLS)
-    show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL) +"           ", 0, 2, I2C_NUM_COLS)
-    show_lcd("<PicoBETH>          ", 0, 3, I2C_NUM_COLS)
+    show_lcd("UN:        FT: "+ "{: >2d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
+    show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
+    show_lcd("CC: A"+ "{: >1.2f}".format(CORR_COEF), 0, 1, I2C_NUM_COLS)
+    show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL), 0, 2, I2C_NUM_COLS)
+    show_lcd("<PicoBETH>", 0, 3, I2C_NUM_COLS)
 
 # 設定主畫面顯示
 def main_interface():
@@ -790,7 +814,7 @@ while True:
                 time_diff = time.time() - TIMER
                 show_lcd("{: >3d}".format(int(time_diff / 60)), 14, 1, 3)
                 show_lcd("{: >2d}".format(time_diff % 60), 18, 1, 2)
-
+        
         lcd.move_to(TS_ARR[CURSOR_XY_TS_TMP][0], TS_ARR[CURSOR_XY_TS_TMP][1])
         lcd.show_cursor()
         ts_info_time = time.ticks_ms()
