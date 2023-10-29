@@ -1,3 +1,5 @@
+[![cht](https://img.shields.io/badge/lang-cht-green.svg)](https://github.com/206cc/PicoBETH/blob/main/README.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/206cc/PicoBETH/blob/main/README.en.md)
 # PicoBETH
 PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的項目，讓喜歡穿線，但只有機械式穿線機（重錘式、手搖式）的業餘穿線師可以自行製作電子拉線機頭，如果你有一些基本的程式能力，這個項目會很容易完成。
 
@@ -154,9 +156,6 @@ HX711 壓力感應器校正系數，第一次使用或有更換壓力傳感器�
 > 此參數以設定存檔為主(config.cfg)
 
 參考影片: [https://youtu.be/KuisR6eKiwk](https://youtu.be/KuisR6eKiwk)
-
-# 待機時的張力校正
-正常來說待機時顯示器的張力會顯為 0±3G，如不穩定或偏差太大，請檢查是否受到干擾或接錯線；如固定在某個超過 0 太多的數值請重新開機校正，或至設定頁面 TS 欄位點選 RESET 校正
 
 # 最後
 目前功能方面已經滿足我穿線的需求，應不會再增加，但如有好的建議也可以反應給我。
