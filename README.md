@@ -25,13 +25,14 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 
 ## 現有主要功能如下：
 
-1. 使用磅或公斤的單位進行張力設定
-2. 預拉(Pre-Strech)功能
-3. 張緊後的自動微調補磅減磅功能
+1. 使用磅或公斤的張力設定
+2. 預拉(Pre-Strech)
+3. 張緊後的自動微調補磅減磅
 4. 張力歸零
 5. 張力系數設定
 6. 張力校正
-7. 穿線計時功能
+7. 穿線計時
+8. 張緊次數記錄
 
 ## 待機畫面
 1. 使用左右鍵可選擇設定指定調整磅、公斤及預拉的十位數、個位數、小數。
@@ -46,12 +47,13 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 ![images1-4](docs/images1-4.png)
 
 > [!WARNING]
-> 微調幅度如太高或太低，可自行調整 FT_ADD 及 FT_SUB 變數
+> 微調幅度如太高或太低，可自行調整 FT_ADD 參數
 
 ## 設定畫面
-1. TS: 待機張力歸 0
+1. UN: 選擇使用磅或公斤的單位
 2. CC: 微調參數(詳見第一次開機章節)
 3. HX: HX711 的壓力傳感器校正(詳見第一次開機章節)
+4. FT: 達到指定張力時微調的幅度
 ![images1-5](docs/images1-5.png)
   
 > [!NOTE]
@@ -79,7 +81,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 ## 接線圖
 ![images2-2](docs/images2-2.png)
 > [!WARNING]
-> 請適時增加安全措施，例如增加按鍵的上拉電阻、步進馬達的保險絲、LED 限流電阻之類保護樹梅派 Pico 及馬達電機
+> 請適時增加安全措施，例如增加按鍵的上拉電阻、步進馬達的保險絲、LED 限流電阻之類保護Raspberry Pi Pico 及馬達電機
 
 ## PCB 電路板
 ![images2-3](docs/images2-4.svg)
