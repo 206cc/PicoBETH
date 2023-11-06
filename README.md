@@ -50,7 +50,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 ![images1-4](docs/images1-4.png)
 
 > [!WARNING]
-> 微調幅度如太高或太低，可自行調整 FT_ADD 參數
+> 微調幅度如太高或太低，可自行調整 FT 參數
 
 ## 設定畫面
 1. UN: 選擇使用磅或公斤的單位
@@ -63,13 +63,13 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 > 一般來說設定好後此頁面就不太需要再進來設定了
 
 ## 張緊LOG的詳細記錄
-在設定畫面下，使用左右鍵選到張緊次數，點下中鍵進入張緊LOG記錄頁面
-在頁面下使用左右鍵瀏覽LOG記錄
-TIMER: 如果有開啟計時功能，顯示此張緊時的時間
-LB: 設定張力/停止張力
-PS: 設定預拉值
-FT: 增加張力微調次數/減少張力微調次數/微調參數
-ST: CC參數/HX參數
+在設定畫面下，使用左右鍵選到張緊次數，點下中鍵進入張緊LOG記錄頁面  
+在頁面下使用左右鍵瀏覽LOG記錄  
+TIMER: 如果有開啟計時功能，顯示此張緊時的時間  
+LB: 設定張力/停止張力  
+PS: 設定預拉值  
+FT: 增加張力微調次數/減少張力微調次數/微調參數  
+ST: CC參數/HX參數  
 
 ![images1-7](docs/images1-7.png)
   
