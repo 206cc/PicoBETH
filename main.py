@@ -33,7 +33,7 @@ HX711_CAL = 20.00    # HX711拉力感應器校正系數，第一次使用或有�
                      #   2 .此參數以設定存檔為主
                      # 參考影片: https://youtu.be/JaplgmXzbjY
                      
-CORR_COEF = 1.13     # 當達到指定張力馬達停止時實際張力還會持續變化，另設此需除此係數校正，可手動設設也可自動在設定頁面校正
+CORR_COEF = 1.30     # 當達到指定張力馬達停止時實際張力還會持續變化，另設此需除此係數校正，可手動設設也可自動在設定頁面校正
                      # 校正方法:
                      #   1. 將羽球線固定好，一端綁在拉線機上，另一端在珠夾上
                      #   2. 至LCD設定頁面中CC欄位中AUTO按鍵上按上或下鍵開始拉線
@@ -66,6 +66,7 @@ FT_ADD = 20          # 增加磅數微調時步進馬達的步數(1610螺桿參�
 MOTO_RS_STEPS = 2000 # 滑台復位時感應到前限位開關時退回的步數，必需退回到未按壓前限位開關的程度
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
 AUTO_SAVE_SEC = 1.5  # (Second)自動儲存設定張力秒數
+LOG_MAX = 50         # 最大LOG保留記錄
                     
 import time, _thread, machine
 from machine import I2C, Pin
@@ -73,12 +74,13 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數
-VERSION = "1.32"
-VER_DATE = "2023-10-28"
-CFG_NAME = "config.cfg" # 存檔檔名
+VERSION = "1.40"
+VER_DATE = "2023-11-05"
+CFG_NAME = "config.cfg" # 設定存檔檔名
+LOG_NAME = "logs.txt"   # LOG存檔檔名
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT'] # 存檔變數
-MENU_ARR = [[4,0],[4,1],[5,1],[7,1],[8,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0]] # 設定選單陣列
-UNIT_ARR = ['KG&LB', 'LB', 'KG']
+MENU_ARR = [[4,0],[4,1],[5,1],[7,1],[8,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[19,3]] # 設定選單陣列
+UNIT_ARR = ['LB&KG', 'LB', 'KG']
 TS_LB_ARR = [[4,0],[5,0],[7,0]] # 磅調整陣列
 TS_KG_ARR = [[4,1],[5,1],[7,1]] # 公斤調整陣列
 TS_PS_ARR = [[17,0],[18,0]]     # 預拉調整陣列
@@ -116,7 +118,7 @@ BOTTON_LIST = {"BOTTON_HEAD":0,
                "BOTTON_DOWN":0,
                "BOTTON_LEFT":0,
                "BOTTON_RIGHT":0}                # 按鈕列表
-BOTTON_CLICK_MS = 400                           # (MS)按鈕點擊毫秒
+BOTTON_CLICK_MS = 450                           # (MS)按鈕點擊毫秒
 
 # LED參數
 LED_GREEN = Pin(19, machine.Pin.OUT)  # 綠
@@ -138,9 +140,12 @@ CURSOR_XY_TS_TMP = 1
 HX711_I = 0
 TENSION_COUNTS = 0
 TIMER = 0
+TIMER_DIFF = 0
 ERR_MSG = ""
 ABORT_LM = 0
 TS_ARR = []
+LOGS = []
+TENSION_MON_TMP = 0
 
 # 2004 i2c LCD 螢幕參數設定
 I2C_ADDR     = 0x27
@@ -186,6 +191,40 @@ def config_save():
 
         file.write(save_cfg)
         file.close()
+    except OSError:  # failed
+       pass
+
+# LOG儲存
+def logs_save(log_str, flag):
+    try:
+        file = open(LOG_NAME, flag)
+        for element in reversed(log_str):
+            save_log = ""
+            for val in element:
+                save_log = save_log + str(val) + ","
+
+            file.write(save_log[:-1] + "\n") 
+        file.close()
+    except OSError:  # failed
+       pass
+    
+
+# LOG讀取
+def logs_read():
+    global LOGS
+    try:
+        fp = open(LOG_NAME, "r")
+        line = fp.readline()
+        while line:
+            log_list = line.strip().split(",")
+            LOGS.insert(0, log_list)
+            line = fp.readline()
+         
+        fp.close()
+        if len(LOGS) > LOG_MAX:
+            LOGS = LOGS[:LOG_MAX]
+            logs_save(LOGS, "w")
+        
     except OSError:  # failed
        pass
 
@@ -313,7 +352,7 @@ def botton_list(key):
     
 # 張力監控
 def tension_monitoring():
-    global TENSION_MON, MOTO_WAIT, HX711_I, BOTTON_LIST
+    global TENSION_MON, MOTO_WAIT, HX711_I, BOTTON_LIST, TENSION_MON_TMP
     v0_arr = []
     HX711_I = 0
     while True:
@@ -331,6 +370,7 @@ def tension_monitoring():
                 TENSION_MON = int((val-(v0))/100*(HX711_CAL/20))
                 if MOTO_MOVE == 1:
                     if LB_CONV_G < (TENSION_MON * CORR_COEF):
+                        TENSION_MON_TMP = TENSION_MON
                         MOTO_WAIT = 1
         
         # 按鍵偵測
@@ -356,6 +396,7 @@ def lb_kg_select():
 def init():
     global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM
     config_read()
+    logs_read()
     lb_kg_select()
     show_lcd(" **** PicoBETH **** ", 0, 0, I2C_NUM_COLS)
     show_lcd("Version: " + VERSION, 0, 1, I2C_NUM_COLS)
@@ -388,13 +429,20 @@ def init():
 
 # 開始增加張力
 def start_tensioning():
-    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNTS
+    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNTS, LOGS
     show_lcd("Tensioning", 0, 2, I2C_NUM_COLS)
+    show_lcd("A", 11, 3, 1)
     LED_YELLOW.on()
     beepbeep(0.1)
+    if TIMER:
+        TIMER_DEFF = time.time() - TIMER
+    else:
+        TIMER_DEFF = 0
     rel = forward(MOTO_SPEED, MOTO_MAX_STEPS, 1, 0)
+    log_lb_max = int(TENSION_MON_TMP * CORR_COEF)
     if rel:
         show_lcd(str(rel), 0, 2, I2C_NUM_COLS)
+        show_lcd(" ", 11, 3, 1)
         return 0
     
     MOTO_MOVE = 0
@@ -407,6 +455,8 @@ def start_tensioning():
     manual_flag = 0
     ft_flag = 0
     abort_flag = 0
+    count_add = 0
+    count_sub = 0
     t0 = time.time()
     # 到達指定張力，等待
     while True:  
@@ -419,6 +469,7 @@ def start_tensioning():
                 ft_flag = 1
             
             abort_flag = forward(MOTO_SPEED, FT_ADD, 0 ,0)
+            count_add = count_add + 1
         
         # 張力超過減磅
         if (check_g + PU_PRECISE) < TENSION_MON and manual_flag == 0:
@@ -429,31 +480,50 @@ def start_tensioning():
                 ft_flag = 1
             
             backward(MOTO_SPEED, FT_ADD * FT_SUB_COEF, 1, 0)
+            count_sub = count_sub + 1
                         
         # 手動加磅
-        if BOTTON_UP.value():
+        if botton_list('BOTTON_UP'):
             manual_flag = 1
             forward(MOTO_SPEED, FT_ADD, 0, 0)
+            show_lcd("M", 11, 3, 1)
+            count_add = count_add + 1
             
         # 手動減磅
-        if BOTTON_DOWN.value():
+        if botton_list('BOTTON_DOWN'):
             manual_flag = 1
             backward(MOTO_SPEED, FT_ADD * FT_SUB_COEF, 1, 0)
+            show_lcd("M", 11, 3, 1)
+            count_sub = count_sub + 1
             
         # 手動改自動微調
         if botton_list('BOTTON_SETTING'):
-            manual_flag = 0
+            if manual_flag == 1:
+                manual_flag = 0
+                show_lcd("A", 11, 3, 1)
+            else:
+                manual_flag = 1
+                show_lcd("M", 11, 3, 1)
+            
             beepbeep(0.1)
         
         # 夾線頭按鈕取消按鈕
         if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT'):
+            log_s = time.time() - t0
             show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
             moto_goto_standby(init, 0)
             show_lcd("Ready", 0, 2, I2C_NUM_COLS)
             show_lcd("     ", 15, 1, 5)
+            show_lcd(" ", 11, 3, 1)
             MOTO_WAIT = 0
             TENSION_COUNTS = TENSION_COUNTS + 1
             config_save()
+            #LOG寫入
+            LOGS.insert(0, [TENSION_COUNTS, TIMER_DEFF, LB_KG_SELECT, DEFAULT_LB, log_lb_max, PRE_STRECH, log_s, count_add, count_sub, CORR_COEF, HX711_CAL, FT_ADD])
+            logs_save([LOGS[0]], "a")
+            if len(LOGS) > LOG_MAX:
+                LOGS = LOGS[:LOG_MAX]
+            
             return 0
         
         # 斷線(已達指定張力突然小於5磅)
@@ -466,7 +536,7 @@ def start_tensioning():
             return 0
         
         if abort_flag == 1:
-            return 0
+            return 0  
         
         if ft_flag:
             time.sleep(0.1)
@@ -598,7 +668,6 @@ def setting_ts():
 # 設定頁面
 def setting():
     global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP
-    show_lcd("{: >5d}T".format(TENSION_COUNTS), 14, 3, 6)
     set_count = len(MENU_ARR)
     i = CURSOR_XY_TMP
     cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
@@ -607,7 +676,7 @@ def setting():
     time.sleep(BOTTON_SLEEP)
     while True:
         # 按下上下鍵動作
-        if BOTTON_UP.value() or BOTTON_DOWN.value() or botton_list('BOTTON_HEAD'):
+        if BOTTON_UP.value() or BOTTON_DOWN.value() or botton_list('BOTTON_HEAD') or botton_list('BOTTON_SETTING'):
             # 張力校正系數個位數
             if cursor_xy == (5, 1):
                 if BOTTON_UP.value():
@@ -695,6 +764,37 @@ def setting():
                 elif BOTTON_DOWN.value():
                     HX711_CAL = HX711_CAL - 0.01
 
+            # LOG顯示
+            elif cursor_xy == (19, 3):
+                if BOTTON_SETTING.value():
+                    beepbeep(0.1)
+                    if len(LOGS) != 0:
+                        logs_idx = 0
+                        lcd.hide_cursor()
+                        logs_interface("init")
+                        logs_interface(logs_idx)
+                        log_flag = 0
+                        while True:
+                            if BOTTON_RIGHT.value():
+                                logs_idx = (logs_idx + 1) % len(LOGS)
+                                beepbeep(0.1)
+                            elif BOTTON_LEFT.value():
+                                logs_idx = logs_idx - 1
+                                if logs_idx < 0:
+                                    logs_idx = len(LOGS) - 1
+                                beepbeep(0.1)
+                            elif BOTTON_EXIT.value():
+                                beepbeep(0.1)
+                                break
+                            
+                            if log_flag != logs_idx:
+                                logs_interface(logs_idx)
+                                log_flag = logs_idx
+                            
+                        setting_interface()
+                        lcd.show_cursor()
+                        lcd.blink_cursor_on()
+
             if CORR_COEF >= CORR_MAX:
                 CORR_COEF = CORR_MAX  
             elif CORR_COEF <= CORR_MIN:
@@ -751,7 +851,37 @@ def setting_interface():
     show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
     show_lcd("CC: A"+ "{: >1.2f}".format(CORR_COEF), 0, 1, I2C_NUM_COLS)
     show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL), 0, 2, I2C_NUM_COLS)
-    show_lcd("<PicoBETH>", 0, 3, I2C_NUM_COLS)
+    show_lcd("<PicoBETH>    "+ "{: >5d}".format(TENSION_COUNTS) +"T", 0, 3, I2C_NUM_COLS)
+    
+# LOG介面顯示
+def logs_interface(idx):
+    if idx=="init":
+        show_lcd("  LOG  TIMER:   m  s", 0, 0, I2C_NUM_COLS)
+        show_lcd("LB:    /      PS:  %", 0, 1, I2C_NUM_COLS)
+        show_lcd("FT:  /  /      S:   ", 0, 2, I2C_NUM_COLS)
+        show_lcd("ST:    /           T", 0, 3, I2C_NUM_COLS)
+    else:
+        show_lcd("{:0>2d}".format((idx + 1)), 0, 0, 2)
+        if int(LOGS[idx][1]):
+            show_lcd("{: >3d}".format(int(int(LOGS[idx][1]) / 60)) +"m"+ "{: >2d}".format(int(int(LOGS[idx][1]) % 60)) +"s", 13, 0, 7)
+        else:
+            show_lcd(" ------", 13, 0, 7)
+            
+        if int(LOGS[idx][2]) == 2:
+            show_lcd("KG:" + "{: >4.1f}".format(int(LOGS[idx][3]) * 0.45359237), 0, 1, 7)
+            show_lcd("{: >4.1f}".format(int(LOGS[idx][4]) * 0.001), 8, 1, 4)
+        else:
+            show_lcd("LB:" + str(LOGS[idx][3]), 0, 1, 7)
+            show_lcd("{: >4.1f}".format(int(LOGS[idx][4]) * 0.0022046), 8, 1, 4)
+        
+        show_lcd(str(LOGS[idx][5]), 17, 1, 2)
+        show_lcd("{: >3d}".format(int(LOGS[idx][6])), 17, 2, 3)
+        show_lcd("{: >2d}".format(int(LOGS[idx][7])), 3, 2, 2)
+        show_lcd("{: >2d}".format(int(LOGS[idx][8])), 6, 2, 2)
+        show_lcd(str(LOGS[idx][11]), 9, 2, 2)
+        show_lcd(str(LOGS[idx][9]), 3, 3, 4)
+        show_lcd(str(LOGS[idx][10]), 8, 3, 5)
+        show_lcd("{: >5d}".format(int(LOGS[idx][0])), 14, 3, 5)
 
 # 設定主畫面顯示
 def main_interface():
@@ -766,9 +896,12 @@ def main_interface():
 def show_timer():
     if TIMER:
         show_lcd("   m  ", 14, 1, 6)
-        time_diff = timer_flag - TIMER
-        show_lcd("{: >3d}".format(int(time_diff / 60)), 14, 1, 3)
-        show_lcd("{: >2d}".format(time_diff % 60), 18, 1, 2)
+        TIMER_DEFF = timer_flag - TIMER
+        if TIMER_DEFF < 0:
+            return 0
+        
+        show_lcd("{: >3d}".format(int(TIMER_DEFF / 60)), 14, 1, 3)
+        show_lcd("{: >2d}".format(TIMER_DEFF % 60), 18, 1, 2)
 
 init()
 ts_info_time = time.ticks_ms()
@@ -811,9 +944,9 @@ while True:
         tension_info()
         if TIMER:
             if timer_flag == 0:
-                time_diff = time.time() - TIMER
-                show_lcd("{: >3d}".format(int(time_diff / 60)), 14, 1, 3)
-                show_lcd("{: >2d}".format(time_diff % 60), 18, 1, 2)
+                TIMER_DEFF = time.time() - TIMER
+                show_lcd("{: >3d}".format(int(TIMER_DEFF / 60)), 14, 1, 3)
+                show_lcd("{: >2d}".format(TIMER_DEFF % 60), 18, 1, 2)
         
         lcd.move_to(TS_ARR[CURSOR_XY_TS_TMP][0], TS_ARR[CURSOR_XY_TS_TMP][1])
         lcd.show_cursor()
