@@ -1,3 +1,5 @@
+[![cht](https://img.shields.io/badge/lang-cht-green.svg)](https://github.com/206cc/PicoBETH/blob/main/README.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/206cc/PicoBETH/blob/main/README.en.md)
 # PicoBETH
 PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的項目，讓喜歡穿線，但只有機械式穿線機（重錘式、手搖式）的業餘穿線師可以自行製作電子拉線機頭，如果你有一些基本的程式能力，這個項目會很容易完成。
 
@@ -25,13 +27,14 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 
 ## 現有主要功能如下：
 
-1. 使用磅或公斤的單位進行張力設定
-2. 預拉(Pre-Strech)功能
-3. 張緊後的自動微調補磅減磅功能
+1. 使用磅或公斤的張力設定
+2. 預拉(Pre-Strech)
+3. 張緊後的自動微調補磅減磅
 4. 張力歸零
 5. 張力系數設定
 6. 張力校正
-7. 穿線計時功能
+7. 穿線計時
+8. 張緊次數記錄
 
 ## 待機畫面
 1. 使用左右鍵可選擇設定指定調整磅、公斤及預拉的十位數、個位數、小數。
@@ -46,12 +49,13 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 ![images1-4](docs/images1-4.png)
 
 > [!WARNING]
-> 微調幅度如太高或太低，可自行調整 FT_ADD 及 FT_SUB 變數
+> 微調幅度如太高或太低，可自行調整 FT_ADD 參數
 
 ## 設定畫面
-1. TS: 待機張力歸 0
+1. UN: 選擇使用磅或公斤的單位
 2. CC: 微調參數(詳見第一次開機章節)
 3. HX: HX711 的壓力傳感器校正(詳見第一次開機章節)
+4. FT: 達到指定張力時微調的幅度
 ![images1-5](docs/images1-5.png)
   
 > [!NOTE]
@@ -79,7 +83,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 ## 接線圖
 ![images2-2](docs/images2-2.png)
 > [!WARNING]
-> 請適時增加安全措施，例如增加按鍵的上拉電阻、步進馬達的保險絲、LED 限流電阻之類保護樹梅派 Pico 及馬達電機
+> 請適時增加安全措施，例如增加按鍵的上拉電阻、步進馬達的保險絲、LED 限流電阻之類保護Raspberry Pi Pico 及馬達電機
 
 ## PCB 電路板
 ![images2-3](docs/images2-4.svg)
@@ -152,9 +156,6 @@ HX711 壓力感應器校正系數，第一次使用或有更換壓力傳感器�
 > 此參數以設定存檔為主(config.cfg)
 
 參考影片: [https://youtu.be/KuisR6eKiwk](https://youtu.be/KuisR6eKiwk)
-
-# 待機時的張力校正
-正常來說待機時顯示器的張力會顯為 0±3G，如不穩定或偏差太大，請檢查是否受到干擾或接錯線；如固定在某個超過 0 太多的數值請重新開機校正，或至設定頁面 TS 欄位點選 RESET 校正
 
 # 最後
 目前功能方面已經滿足我穿線的需求，應不會再增加，但如有好的建議也可以反應給我。
