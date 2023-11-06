@@ -1,81 +1,96 @@
+以下是您提供的文本的英文翻譯：
+
 [![cht](https://img.shields.io/badge/lang-cht-green.svg)](https://github.com/206cc/PicoBETH/blob/main/README.md)
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/206cc/PicoBETH/blob/main/README.en.md)
+
 # PicoBETH
-PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source project that allows amateur stringers who enjoy stringing but only have access to mechanical stringing machines (e.g., drop-weight or manual machines) to create their own electronic tensioning head. If you have some basic programming skills, this project should be relatively straightforward to complete.
 
-![images1-1](docs/images1-1.jpg)
+PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source project that allows amateur stringers who enjoy stringing but only have mechanical stringing machines (drop weight, crank) to create their own electronic tension head. If you have some basic programming skills, this project can be easily completed.
 
-Modification with Weight and Components
+Modified Prototype
 ![images1-2](docs/images1-2.jpg)
 
-15lb and 30lb 10% Pre-Stretch Demonstration Video
-[https://youtu.be/82X5WgdFZp8](https://youtu.be/82X5WgdFZp8)
+Stringing Demonstration Video
+[https://youtu.be/uSFNzvQrzLI](https://youtu.be/uSFNzvQrzLI)
 
-Production Model
+Final Machine
 ![images1-2](docs/images1-6.jpg)
 
-Improvements on the Production Model Include:
-1. Added screw dust cover.
-2. Switched to 1610 specification for the screw, increasing tensioning speed.
-3. More reasonable hardware layout, allowing individual parts to be disassembled without full disassembly.
-4. Reduced size by stacking components, avoiding interference with storage trays.
-5. Used a custom-designed PCB.
+Improvements to the Final Machine
+1. Added screw dust cover
+2. Switched to 1610 specification screws for increased tensioning speed
+3. More reasonable hardware layout, parts can be disassembled individually without a full teardown
+4. Used a stacking design to reduce size and avoid blocking the storage slot
+5. Used a self-designed PCB circuit board
 
 ## Motivation
-About a year ago, due to a company social club, I began playing badminton. Despite not being very skilled, I became passionate about stringing. I bought a drop-weight stringing machine and initially planned to purchase an electronic tensioning head. However, I realized that I could use my knowledge to create this project with a Raspberry Pico, pressure sensors, microswitches, and buttons.
+A year ago, due to my company's badminton club, I started playing badminton. Despite not being very skilled, I became fascinated with stringing. I bought a drop-weight stringing machine and originally wanted to purchase an electronic tension head. However, I realized I could use my knowledge to create this project on the Raspberry Pico using a pressure sensor, several microswitches, and buttons.
 
-## Key Features
-The main features of PicoBETH include:
+## Current Key Features:
 
-1. Tension setting in pounds or kilograms.
-2. Pre-Stretch function.
-3. Automatic fine-tuning after tensioning.
-4. Tension zeroing on startup.
-5. Tension coefficient setting.
-6. Tension calibration.
-7. Stringing timer.
-8. Tensioning counter.
+1. Tension settings in pounds or kilograms
+2. Pre-Stretch
+3. Automatic fine-tuning of pounds after tensioning
+4. Tension zeroing
+5. Tension coefficient setting
+6. Tension calibration
+7. Stringing timer
+8. Tensioning count records
+9. Detailed tensioning log records
 
-## Standby Screen
-1. Use the left and right keys to select the settings for adjusting pounds, kilograms, tens, units, and decimals.
-2. Use the up and down keys to adjust the selected settings.
-3. Stringing timer function: Press the exit key to start the timer, press it again to stop the timer, and press it a third time to reset the timer.
+## Standby Screen:
+1. Use left and right keys to select tens and ones digits and decimals for adjusting pounds, kilograms, and pre-stretch.
+2. Use up and down keys to adjust the selected settings.
+3. Stringing timer functionality starts counting when the exit key is pressed, stops when pressed again, and resets on the third press.
 ![images1-3](docs/images1-3.png)
 
-## Tensioning Screen
-1. When the set tension is reached, the fine-tuning process begins. If the tension is too low, it adds pounds; if it's too high, it reduces pounds until you press the clamp key or exit key to end the tensioning process.
-2. You can also enter manual fine-tuning mode by pressing the up and down keys, which cancels the automatic fine-tuning process. Press the center key on the five-way key to re-enter automatic fine-tuning mode.
-3. Once the set tension is reached, a timer starts counting.
-
-![images1-4](docs/images1-4.png)
+## Tensioning Screen:
+1. When the set tension is reached, the fine-tuning program begins. It adds pounds if the tension is too low or reduces pounds if it's too high, until the pearl clamp button or exit button is pressed to end the tensioning process.
+2. You can also enter manual fine-tuning mode by pressing the up and down keys, at which point the automatic fine-tuning program will be canceled. Press the center key of the five-way key to re-enter automatic fine-tuning mode.
+3. When the specified tension is reached, the timer starts counting.
 
 > [!WARNING]
-> If the fine-tuning range is too high or too low, you can adjust the FT_ADD parameter.
+> If the fine-tuning range is too high or too low, you can adjust the FT_ADD parameter yourself.
 
-## Setting Screen
-1. UN: Choose between pounds or kilograms as the unit.
-2. CC: Fine-tuning parameter (see the First Startup section for details).
-3. HX: Calibration of the HX711 pressure sensor (see the First Startup section for details).
-4. FT: The amount of fine-tuning to perform when the specified tension is reached.
+## Settings Screen:
+1. UN: Choose between pounds or kilograms as the unit of measurement.
+2. CC: Fine-tuning parameters (see the first boot chapter for details).
+3. HX: HX711 pressure sensor calibration (see the first boot chapter for details).
+4. FT: Range of fine-tuning when the specified tension is reached.
 ![images1-5](docs/images1-5.png)
-  
+
 > [!NOTE]
-> In general, once you've configured the settings, you won't need to revisit this screen frequently.
+> In general, once you've set these parameters, you won't need to come back to this page often.
 
-## Hardware
+## Detailed Tensioning Log Records
+On the settings screen, use the left and right keys to select tensioning count, and press the center key to enter the tensioning log record page.
+On this page, use the left and right keys to browse the log records.
+TIMER: If the timer function is activated, it will display the time for this tensioning.
+LB: Set tension/stop tension
+PS: Set pre-stretch value
+FT: Increase tension fine-tuning count/reduce tension fine-tuning count/fine-tuning parameter
+S: The number of seconds from this tensioning to release
+ST: CC parameter/HX parameter
 
-Primary Materials:
+![images1-7](docs/images1-7.png)
+
+> [!NOTE]
+> By default, it displays 1-50 log records. If you need more, you can modify the LOG_MAX parameter.
+
+## Hardware:
+
+Main Materials
 1. Raspberry Pico H
 2. 1610 200MM Sliding Table
-3. 57 Stepper Motor (1.8° Step Angle, 2 Phase, 4 Wire)
+3. 57 Stepper Motor (1.8° Step Angle 2 Phase 4 Line)
 4. TB6600 Stepper Motor Driver
 5. NJ5 20KG Load Cell
-6. HX711 IC
-7. 2004 I2C LCD
+6. HX711 Module (Red)
+7. 2004 i2c LCD
 8. WISE 2086 Head
 9. Five-way Key Module
-10. Button
-11. Micro Switch
+10. Buttons
+11. Micro Switches
 12. Active Buzzer
 13. Tri-Color LEDs
 
@@ -83,26 +98,27 @@ Primary Materials:
 
 ## Wiring Diagram
 ![images2-2](docs/images2-2.png)
+
 > [!WARNING]
-> Be sure to incorporate safety measures, such as pull-up resistors for the buttons, fuses for the stepper motor, and current-limiting resistors for the LEDs to protect the Raspberry Pi Pico and the motor.
+> Please add safety measures as needed, such as pull-up resistors for the buttons, fuses for the stepper motor, current-limiting resistors for the LEDs, to protect the Raspberry Pi Pico and the motors.
 
 ## PCB Circuit Board
 ![images2-3](docs/images2-4.svg)
 
 > [!NOTE]
-> You can download the circuit board to avoid the hassle of hand-soldering.
+> You can download the PCB layout in the image above to avoid the hassle of hand-soldering the circuit board.
 
 > [!NOTE]
-> The locking points around the circuit board correspond to the locations of a 2004 LCD, allowing for stacking to reduce the overall size.
+> The locking points around this circuit board are based on the 2004 LCD locking point locations, allowing for stacking to reduce size.
 
 ## TB6600 Stepper Motor Parameters
 ![images2-3](docs/images2-3.png)
 
 > [!WARNING]
-> Modifying the parameters of this stepper motor may require adjusting many other parameters in the code.
+> Modifying these motor parameters may require adjusting many parameters in the code.
 
 # Software Installation
-Use Thonny to save the following code files to your Raspberry Pico. The `src` folder contains the relevant libraries for HX711 and the 2004 LCD.
+Use Thonny to save the following code files to the Raspberry PICO. The "src" folder contains relevant libraries for hx711 and the 2004 LCD.
 
 1. main.py
 2. src\hx711.py
@@ -110,53 +126,54 @@ Use Thonny to save the following code files to your Raspberry Pico. The `src` fo
 4. src\pico_i2c_lcd.py
 
 > [!NOTE]
-> Special thanks to [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) for providing the hx711 library for the Raspberry Pi Pico.
+> Special thanks to [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) for providing the hx711 library for Pico.
 
 > [!NOTE]
-> Special thanks to [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) for providing the 2004 LCD library for the Raspberry Pi Pico.
+> Special thanks to [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) for providing the 2004 LCD library for Pico.
 
-# First Startup
+# First Boot
 
-## Calibrating the HX Parameters
+## Calibrate the HX Parameters
 
-Calibrate the HX711 pressure sensor coefficient when using it for the first time or when replacing the pressure sensor or HX711 circuit board. Calibration process:
+Calibrate the HX711 pressure sensor
 
-1. Attach the external tension gauge, securing one end to the stringing machine and the other end to the badminton string.
-2. Set the HX parameter in the LCD settings to 20.00.
+ calibration factor. It is essential to recalibrate when using it for the first time or when replacing the load cell or HX711 circuit board.
+
+Calibration method:
+1. Attach one end of an external tension gauge to the stringing machine and the other end to a badminton string.
+2. Set the HX parameter in the LCD settings page to 20.00.
 3. Return to the main menu and set the tension to 20 pounds.
-4. Use the up or down keys to start the stringing process. When the LCD displays 20 pounds, record the tension gauge reading.
-5. Enter the recorded tension gauge value in the settings page.
+4. Press the up or down key to start stringing. When the LCD displays 20 pounds, write down the value displayed on the tension gauge.
+5. Enter the recorded tension gauge value in the HX parameter in the settings page.
 
 > [!WARNING]
-> Failure to perform this calibration may result in discrepancies between the actual tension and the tension displayed on the LCD.
+> If you skip this calibration, there may be discrepancies between the actual tension and the tension displayed on the LCD.
 
 > [!IMPORTANT]
-> This parameter is primarily saved in the configuration file (config.cfg).
+> This parameter is saved in the configuration file (config.cfg).
 
 Reference Video: [https://youtu.be/JaplgmXzbjY](https://youtu.be/JaplgmXzbjY)
 
-## Setting CC Parameters
+## Set the CC Parameter
+When the motor stops at the specified tension, the actual tension may continue to change. Therefore, this coefficient is set for calibration. You can manually set it or automatically calibrate it in the settings page.
 
-
-When the set tension is reached, the actual tension may continue to change. This CC coefficient should be calibrated manually or automatically from the settings page. Calibration process:
-
-1. Secure the badminton string, with one end attached to the stringing machine and the other end in the clamp.
-2. In the LCD settings page, select AUTO in the CC field and use the up or down keys to start the stringing process.
-3. AUTO will automatically fill in the reference CC value.
-4. Use this value to conduct a stringing test. The optimal result is achieving the specified tension without any fine-tuning when the pre-stretch is set to 0.
-   (You may observe that the tension on the LCD continues to change beyond the specified tension when the motor stops. This is a normal physical phenomenon. The best parameter is one where the tension balances once reached, and no fine-tuning is required.)
-5. If the automatically determined CC value is not ideal, manually fine-tune the CC value from the settings page and repeat step 4 to find the best value.
+Calibration method:
+1. Secure the badminton string, with one end tied to the stringing machine and the other to the pearl clamp.
+2. In the LCD settings page, select "AUTO" for the CC field and press the up or down key to start stringing.
+3. "AUTO" will automatically fill in the reference CC value.
+4. Use this value to test stringing. The optimal result is when the pre-stretch is set to 0, the specified tension is reached without fine-tuning. (You may see the tension continue to change beyond the specified tension when the motor stops; this is a normal physical phenomenon. The best parameters ensure that the tension stabilizes, and no fine-tuning is performed after reaching the specified tension.)
+5. If the automatic CC value is not ideal, manually fine-tune the CC value in the settings page and repeat step 4 to find the best value.
 
 > [!WARNING]
-> If the pre-stretch is enabled, it will perform a pound-back check, so set the pre-stretch to 0 when testing.
+> If pre-stretch is applied, it will perform a pound reduction calibration. Therefore, set the pre-stretch to 0 for testing.
 
 > [!IMPORTANT]
-> Changing the HX711 circuit board, lead screw pitch, or motor can impact this coefficient. If you find frequent fine-tuning when the pre-stretch is set to 0, consider calibrating this value.
+> Changing the HX711 circuit board, sliding table screw pitch, or motor will affect this coefficient. If you notice frequent fine-tuning when the pre-stretch is set to 0, you may need to calibrate this value.
 
 > [!IMPORTANT]
-> This parameter is primarily saved in the configuration file (config.cfg).
+> This parameter is saved in the configuration file (config.cfg).
 
 Reference Video: [https://youtu.be/KuisR6eKiwk](https://youtu.be/KuisR6eKiwk)
 
 # Conclusion
-The current functionality of the machine meets my stringing needs, and there are no plans to add more features at this time. However, if you have any valuable suggestions, please feel free to share them with me.
+At present, the project already fulfills my stringing needs in terms of functionality, and I do not plan to add more features. However, if you have any suggestions, please feel free to share them with me.

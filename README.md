@@ -9,8 +9,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 改裝完成（原型機）
 ![images1-2](docs/images1-2.jpg)
 
-15磅、30磅 預拉10% 展示影片
-[https://youtu.be/82X5WgdFZp8](https://youtu.be/82X5WgdFZp8)
+穿線展示影片
+[https://youtu.be/uSFNzvQrzLI](https://youtu.be/uSFNzvQrzLI)
 
 正式機
 ![images1-2](docs/images1-6.jpg)
@@ -35,6 +35,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 6. 張力校正
 7. 穿線計時
 8. 張緊次數記錄
+9. 張緊LOG的詳細記錄
 
 ## 待機畫面
 1. 使用左右鍵可選擇設定指定調整磅、公斤及預拉的十位數、個位數、小數。
@@ -61,6 +62,20 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 > [!NOTE]
 > 一般來說設定好後此頁面就不太需要再進來設定了
 
+## 張緊LOG的詳細記錄
+在設定畫面下，使用左右鍵選到張緊次數，點下中鍵進入張緊LOG記錄頁面
+在頁面下使用左右鍵瀏覽LOG記錄
+TIMER: 如果有開啟計時功能，顯示此張緊時的時間
+LB: 設定張力/停止張力
+PS: 設定預拉值
+FT: 增加張力微調次數/減少張力微調次數/微調參數
+ST: CC參數/HX參數
+
+![images1-7](docs/images1-7.png)
+  
+> [!NOTE]
+> 預設顯示1-50筆LOG記錄，如要需更多請修改 LOG_MAX 參數
+
 ## 硬體
 
 主要材料
@@ -69,7 +84,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源的�
 3. 57步進馬達(2相4線 1.8°) / 57 Stepper Motor (1.8° Step Angle 2 Phase 4 Line)
 4. TB6600 步進馬達驅動器 / TB6600 Stepper Motor Driver
 5. NJ5 20KG 壓力傳感器 / NJ5 20KG load cell
-6. HX711 模塊 / HX711 IC
+6. HX711 模塊(紅色抗干擾版本) / Load Cell Amplifier(Red)
 7. 2004 i2c LCD 
 8. WISE 2086 珠夾頭 / WISE 2086 Head
 9. 5向按鍵模組 / Five-way key
