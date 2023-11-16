@@ -1,5 +1,3 @@
-以下是您提供的文本的英文翻譯：
-
 [![cht](https://img.shields.io/badge/lang-cht-green.svg)](https://github.com/206cc/PicoBETH/blob/main/README.md)
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/206cc/PicoBETH/blob/main/README.en.md)
 
@@ -50,7 +48,7 @@ A year ago, due to my company's badminton club, I started playing badminton. Des
 3. When the specified tension is reached, the timer starts counting.
 
 > [!WARNING]
-> If the fine-tuning range is too high or too low, you can adjust the FT_ADD parameter yourself.
+> If the fine-tuning range is too high or too low, you can adjust the FT parameter yourself.
 
 ## Settings Screen:
 1. UN: Choose between pounds or kilograms as the unit of measurement.
@@ -63,14 +61,14 @@ A year ago, due to my company's badminton club, I started playing badminton. Des
 > In general, once you've set these parameters, you won't need to come back to this page often.
 
 ## Detailed Tensioning Log Records
-On the settings screen, use the left and right keys to select tensioning count, and press the center key to enter the tensioning log record page.
-On this page, use the left and right keys to browse the log records.
-TIMER: If the timer function is activated, it will display the time for this tensioning.
-LB: Set tension/stop tension
-PS: Set pre-stretch value
-FT: Increase tension fine-tuning count/reduce tension fine-tuning count/fine-tuning parameter
-S: The number of seconds from this tensioning to release
-ST: CC parameter/HX parameter
+On the settings screen, use the left and right keys to select tensioning count, and press the center key to enter the tensioning log record page.  
+On this page, use the left and right keys to browse the log records.  
+TIMER: If the timer function is activated, it will display the time for this tensioning.  
+LB: Set tension/stop tension  
+PS: Set pre-stretch value  
+FT: Increase tension fine-tuning count/reduce tension fine-tuning count/fine-tuning parameter  
+S: The number of seconds from this tensioning to release  
+ST: CC parameter/HX parameter  
 
 ![images1-7](docs/images1-7.png)
 
