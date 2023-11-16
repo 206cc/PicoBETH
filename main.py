@@ -66,7 +66,7 @@ FT_ADD = 20          # 增加磅數微調時步進馬達的步數(1610螺桿參�
 MOTO_RS_STEPS = 2000 # 滑台復位時感應到前限位開關時退回的步數，必需退回到未按壓前限位開關的程度
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
 AUTO_SAVE_SEC = 1.5  # (Second)自動儲存設定張力秒數
-LOG_MAX = 50         # 最大LOG保留記錄
+LOG_MAX = 50         # 最大LOG保留記錄(請勿太大，以免無法開機)
                     
 import time, _thread, machine
 from machine import I2C, Pin
@@ -74,8 +74,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數
-VERSION = "1.40"
-VER_DATE = "2023-11-05"
+VERSION = "1.41"
+VER_DATE = "2023-11-17"
 CFG_NAME = "config.cfg" # 設定存檔檔名
 LOG_NAME = "logs.txt"   # LOG存檔檔名
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT'] # 存檔變數
@@ -219,12 +219,11 @@ def logs_read():
             log_list = line.strip().split(",")
             LOGS.insert(0, log_list)
             line = fp.readline()
-         
-        fp.close()
-        if len(LOGS) > LOG_MAX:
-            LOGS = LOGS[:LOG_MAX]
-            logs_save(LOGS, "w")
+            if len(LOGS) > LOG_MAX:
+                LOGS = LOGS[:LOG_MAX]
         
+        fp.close()
+        logs_save(LOGS, "w")
     except OSError:  # failed
        pass
 
