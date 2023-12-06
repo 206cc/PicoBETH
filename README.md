@@ -20,6 +20,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 5. 改使用自行設計PCB電路板
 
 穿線展示影片
+
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
 
 ## 原由
