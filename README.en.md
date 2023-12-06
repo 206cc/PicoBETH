@@ -24,7 +24,8 @@ Improvements in the final machine:
 5. Switched to a custom-designed PCB circuit board
 
 Stringing demonstration video
-[https://youtu.be/uSFNzvQrzLI](https://youtu.be/uSFNzvQrzLI)
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
 
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a tension sensor, several microswitches, and buttons.
@@ -114,7 +115,7 @@ Main materials
 ![images2-3](docs/images2-4.svg)
 
 > [!NOTE]
-> You can download the circuit board for the above image to avoid the trouble of hand-soldering the circuit board. If you don't know how to make a board, you can search for PicoBETH on the Taiwanese online marketplace Ruten.
+> You can download the circuit board for the above image to avoid the trouble of hand-soldering the circuit board.
 
 > [!NOTE]
 > The lock points around this circuit board are based on the lock point positions of the 2004 LCD, allowing stacking to reduce volume.
