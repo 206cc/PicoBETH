@@ -1,129 +1,133 @@
-[![cht](https://img.shields.io/badge/lang-cht-green.svg)](https://github.com/206cc/PicoBETH/blob/main/README.md)
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/206cc/PicoBETH/blob/main/README.en.md)
-# PicoBETH
-PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項目，讓喜歡穿線，但只有機械式穿線機（重錘式、手搖式）的業餘穿線師可以自行製作電子拉線機頭，如果你有一些基本的程式能力，這個項目會很容易完成。
+[![cht](https://img.shields.io/badge/lang-cht-green.svg)](https://github.com/206cc/PicoBETH/blob/main/README.cht.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/206cc/PicoBETH/blob/main/README.md)
 
-重錘式穿線機與改裝零件
+> [!TIP]
+> Translated by ChatGPT 3.5
+
+# PicoBETH
+PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source project that allows hobbyist stringers who enjoy stringing but only have mechanical stringing machines (drop-weight, manual crank) to create their own electronic tensioning head. If you have basic programming skills, this project can be easily completed.
+
+Drop-weight stringing machine and modification parts
 ![images1-1](docs/images1-1.jpg)
 
-改裝完成（原型機）
+Modified prototype machine
 ![images1-2](docs/images1-2.jpg)
 
-正式機
+Final machine
 ![images1-2](docs/images1-6.jpg)
 
-正式機的改進
-1. 增加螺杆防塵罩
-2. 螺杆改使用1610規格，增加張力速度
-3. 更合理的硬體佈局，各零件可單獨拆裝不需全拆
-4. 使用堆疊方式減少體積，不會擋到置物槽
-5. 改使用自行設計PCB電路板
+Improvements in the final machine:
+1. Added screw dust cover
+2. Upgraded to a 1610 specification screw for increased tensioning speed
+3. More rational hardware layout, allowing individual disassembly without the need for complete disassembly
+4. Reduced volume by using a stacking approach, avoiding interference with the storage slot
+5. Switched to a custom-designed PCB circuit board
 
-穿線展示影片
+Stringing demonstration video
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
 
-## 原由
-一年前因為公司社團關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想再購買電子拉線機頭，但後來想想我可以用我會的知識，在 Raspberry Pico 上使用張力傳感器、幾個微動開關、按鈕製作了這個專案。
+## Background
+A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a tension sensor, several microswitches, and buttons.
 
-## 現有主要功能如下：
+## Current main features:
 
-1. 使用磅或公斤單位設定張力
-2. 預拉(Pre-Strech)
-3. 張緊後的自動張力微調
-4. 張力歸零
-5. 張力系數設定
-6. 張力校正
-7. 穿線計時
-8. 張緊次數記錄
-9. 張緊LOG的詳細記錄
+1. Set tension in pounds or kilograms
+2. Pre-Stretch function
+3. Automatic tension fine-tuning after tensioning
+4. Tension zeroing
+5. Tension coefficient setting
+6. Tension calibration
+7. Stringing timer
+8. Tensioning count recording
+9. Detailed recording of tensioning logs
 
-## 待機畫面
-1. 使用左右鍵可設定磅、公斤及預拉的十位數、個位數、小數。
-2. 使用上下鍵調整選擇的設定。
-3. 穿線計時功能，在按下離開鍵開始計時，再按一下停止計時，按第三下計時器歸零。
+## Standby screen
+1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
+2. Use up and down keys to adjust the selected settings.
+3. Stringing timer function: Start timing by pressing the exit key, stop timing by pressing it again, and reset the timer on the third press.
 ![images1-3](docs/images1-3.png)
 
-## 張緊畫面
-1. 達到設定張力時自動進入張力微調模式，張力不足增加張力、過高減少張力，直到按下珠夾頭上的按鍵或離開按鍵結束張緊模式。
-2. 按五向鍵的中鍵進入手動微調模式，此時自動微調模式會被取消，可按上下鍵手動微調張力；再次按下五向鍵的中鍵後可重新進入自動微調模式。
-3. 達到指定張力後會開始出現計算秒數。
+## Tensioning screen
+1. When the set tension is reached, automatically enter the tension fine-tuning mode. Increase tension if it's insufficient, decrease tension if it's too high, until pressing the button on the clamp or exit button to end the tensioning mode.
+2. Press the center button of the five-way key to enter manual fine-tuning mode. The automatic fine-tuning mode will be canceled at this time, and tension can be manually adjusted with the up and down keys. Press the center button of the five-way key again to re-enter automatic fine-tuning mode.
+3. When the specified tension is reached, the countdown timer will appear.
 ![images1-4](docs/images1-4.png)
 
 > [!WARNING]
-> 每次的張力微調幅度如太高或太低，可自行調整 FT 參數
+> If the tension fine-tuning amplitude is too high or too low, you can adjust the FT parameter yourself.
 
-## 設定畫面
-1. UN: 選擇設定時使用磅或公斤單位
-2. CC: 微調參數(詳見第一次開機章節)
-3. HX: HX711 的張力傳感器校正(詳見第一次開機章節)
-4. FT: 達到指定張力時微調的幅度
+## Settings screen
+1. UN: Select pounds or kilograms when setting.
+2. CC: Fine-tuning parameters (see the first boot chapter for details).
+3. HX: Calibration of the tension sensor for HX711 (see the first boot chapter for details).
+4. FT: Amplitude of fine-tuning when reaching the specified tension.
 ![images1-5](docs/images1-5.png)
-  
+
 > [!NOTE]
-> 一般來說這些參數設定好後就不需要再設定了
+> Once these parameters are set, there is usually no need to set them again.
 
-## 張緊LOG的詳細記錄
-在設定畫面下，使用左右鍵選到張緊次數，再點下五向建的中鍵進入張緊 LOG 記錄頁面  
-在頁面下使用左右鍵可瀏覽 LOG 記錄  
-TIMER: 如果有開啟計時功能，顯示此張緊時的時間  
-LB: 設定張力/停止張力  
-PS: 設定預拉值  
-FT: 增加張力微調次數/減少張力微調次數/微調參數  
-ST: CC參數/HX參數  
-
+## Detailed recording of tensioning logs
+On the settings screen, use the left and right keys to select the tensioning count, then press the center key of the five-way key to enter the tensioning log recording page.
+On the page, use the left and right keys to browse through the log records.
+TIMER: If the timing function is enabled, display the time of tensioning.
+LB: Set tension/stop tension.
+PS: Set pre-stretch value.
+FT: Increase tension fine-tuning count/decrease tension fine-tuning count/fine-tuning parameters.
+ST: CC parameter/HX parameter.
 ![images1-7](docs/images1-7.png)
-  
+
 > [!NOTE]
-> 預設顯示 1-50 筆 LOG 記錄，如要需調整請修改 LOG_MAX 參數
+> The default display is 1-50 log records. If you need to adjust, please modify the LOG_MAX parameter.
 
 > [!WARNING]
-> LOG_MAX 參數請勿設定過大，開機時如載入過多 LOG 會導致記憶體不足會無開機
+> Do not set the LOG_MAX parameter too large, as loading too many logs during startup will cause insufficient memory and result in failure to boot.
 
-## 硬體
+## Hardware
 
-主要材料
+Main materials
 1. Raspberry Pico H
-2. 1610 200MM 滑台 / 1610 Sliding Table 200MM 
-3. 57步進馬達(2相4線 1.8°) / 57 Stepper Motor (1.8° Step Angle 2 Phase 4 Line)
-4. TB6600 步進馬達驅動器 / TB6600 Stepper Motor Driver
-5. NJ5 20KG 張力傳感器 / NJ5 20KG load cell
-6. HX711 模塊(紅色抗干擾版本) / Load Cell Amplifier(Red PCB, Anti-Interference Version)
-7. 2004 i2c LCD 
-8. WISE 2086 珠夾頭 / WISE 2086 Head
-9. 5向按鍵模組 / Five-way key
-10. 按鈕 / Button
-11. 微控開關 / Micro Switch
-12. 有源蜂鳴器 / Active buzzer
-13. 三色 LED / Tri-Color LEDs
+2. 1610 200MM sliding table
+3. 57 stepper motor (2-phase 4-wire 1.8°)
+4. TB6600 stepper motor driver
+5. NJ5 20KG tension sensor
+6. HX711 module (red anti-interference version)
+7. 2004 i2c LCD
+8. WISE 2086 head
+9. Five-way key module
+10. Button
+11. Micro switch
+12. Active buzzer
+13. Tri-color LEDs
 
 > [!WARNING]
-> 除非您有自行修改程式的能力，否則請照指的的型號或規格購買材料
+> Unless you have the ability to modify the code yourself, please purchase materials according to the specified models or specifications.
 
 ![images2-1](docs/images2-1.jpg)
 
-## 接線圖
+## Wiring diagram
 ![images2-2](docs/images2-2.png)
-> [!WARNING]
-> 請適時增加安全措施，例如增加按鍵的上拉電阻、步進馬達的保險絲、LED 限流電阻之類保護 Raspberry Pi Pico 及馬達電機
 
-## PCB 電路板
+> [!WARNING]
+> Please add safety measures as needed, such as adding pull-up resistors to buttons, fuses to stepper motors, limiting resistors to LEDs, etc., to protect the Raspberry Pi Pico and motors.
+
+## PCB circuit board
 ![images2-3](docs/images2-4.svg)
 
 > [!NOTE]
-> 您可以自行下載上圖洗電路板，避免手焊電路板的麻煩，如果不會洗板的可上露天拍賣搜尋 PicoBETH
+> You can download the circuit board for the above image to avoid the trouble of hand-soldering the circuit board.
 
 > [!NOTE]
-> 此電路板四周的鎖點比照 2004 LCD 鎖點位置，可堆疊減少體積
+> The lock points around this circuit board are based on the lock point positions of the 2004 LCD, allowing stacking to reduce volume.
 
-## TB6600 步進馬達電機參數
+## TB6600 stepper motor parameters
 ![images2-3](docs/images2-3.png)
 
 > [!WARNING]
-> 如更改此TB6600電機參數，程式碼可能會有許多要修正的地方
+> Changing these TB6600 motor parameters may require many modifications in the code.
 
-# 軟體安裝
-使用 Thonny 將以下程式碼檔案儲存到 Raspberry Pico 中，其中 src 資料夾內是 hx711 及 2004 LCD 的相關函式庫
+# Software Installation
+Use Thonny to save the following code files to the Raspberry Pico. The src folder contains relevant libraries for hx711 and 2004 LCD.
 
 1. main.py
 2. src\hx711.py
@@ -131,53 +135,53 @@ ST: CC參數/HX參數
 4. src\pico_i2c_lcd.py
 
 > [!NOTE]
-> 感謝 [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) 提供 hx711 for pico 的函式庫
+> Thanks to [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) for providing the hx711 library for Pico.
 
 > [!NOTE]
-> 感謝 [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) 提供 2004 LCD for pico 的函式庫
+> Thanks to [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) for providing the 2004 LCD library for Pico.
 
-# 第一次開機
+# First Boot
 
-## 校正 HX 參數
+## Calibrate the HX Parameter
 
-HX711 張力感應器校正系數，第一次使用或有更換張力傳感器、HX711 電路板時務必重新校正一次
+HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
 
-校正方法：
-1. 將外接式張力計，一端綁在拉線機上，另一端綁上羽毛球線
-2. 先將 LCD 設定頁面中HX參數設為 20.00
-3. 跳回主選單設定拉力為 20 磅
-4. 按上或下鍵開始拉線，當 LCD 顯示 20 磅時，抄下張力計顯示數值
-5. 至設定頁面上填入剛抄下張力計的數值
-
-> [!WARNING]
-> 如不做此校正，實際張力會與 LCD 上的張力會有誤差
-
-> [!IMPORTANT]
-> 此參數以設定存檔為主(config.cfg)
-
-參考影片: [https://youtu.be/JaplgmXzbjY](https://youtu.be/JaplgmXzbjY)
-
-## 設定 CC 參數
-當達到指定張力馬達停止時實際張力還會持續變化，另設此需除此係數校正，可手動設設也可自動在設定頁面校正
-
-校正方法:
-1. 將羽球線固定好，一端綁在拉線機上，另一端在珠夾上
-2. 至 LCD 設定頁面中 CC 欄位中 AUTO 按鍵上按上或下鍵開始拉線
-3. AUTO 會自動填入參考的 CC 值
-4. 使用此值拉線測式，最佳的結果是預拉為 0 時達到指定張力不會進行微調動作
-   (你也許會在馬達停止時看見 LCD 張力持續變化超過指定張力，這為正常物理現象，最佳的參數在於張力平衡後會線剛好在指定張力不會進行微調的動作)
-5. 如果自動的CC值不理想，可至設定頁面手動微調CC值後，重覆4的步驟，找到最佳的值
+Calibration method:
+1. Attach one end of an external tension gauge to the stringing machine and the other end to the badminton string.
+2. Set the HX parameter in the LCD setting page to 20.00.
+3. Return to the main menu and set the tension to 20 pounds.
+4. Press the up or down key to start stringing. When the LCD displays 20 pounds, note down the tension gauge reading.
+5. Enter the recorded tension gauge value in the HX parameter field on the settings page.
 
 > [!WARNING]
-> 如果有開預拉，會進行退磅的徵調，所以測試時請將預拉設為 0
+> If you skip this calibration, there may be a discrepancy between the actual tension and the tension displayed on the LCD.
 
 > [!IMPORTANT]
-> 更換 HX711 電路板、滑台螺距、馬達的電機會影響此系數，如果覺得在預拉為0時頻繁微調可校正此值
+> This parameter is mainly based on setting storage (config.cfg).
+
+Reference video: [https://youtu.be/JaplgmXzbjY](https://youtu.be/JaplgmXzbjY)
+
+## Set the CC Parameter
+When the motor stops at the specified tension, the actual tension will continue to change. Another coefficient needs to be set to correct this, which can be set manually or automatically on the settings page.
+
+Calibration method:
+1. Fix the badminton string, attach one end to the stringing machine and the other end to the clamp.
+2. On the LCD settings page, press the AUTO button in the CC field using the up or down key to start stringing.
+3. AUTO will automatically fill in the reference CC value.
+4. Use this value to string and test. The optimal result is when there is no fine-tuning action when reaching the specified tension with pre-stretch set to 0.
+   (You may see the tension on the LCD continue to change beyond the specified tension when the motor stops. This is a normal physical phenomenon. The best parameter is when the tension stabilizes after balancing and there is no fine-tuning action at the specified tension.)
+5. If the automatically calculated CC value is not ideal, manually fine-tune the CC value on the settings page and repeat step 4 to find the optimal value.
+
+> [!WARNING]
+> If pre-stretch is enabled, a detensioning test will be performed, so set pre-stretch to 0 during testing.
 
 > [!IMPORTANT]
-> 此參數以設定存檔為主(config.cfg)
+> Changing the HX711 circuit board, sliding table pitch, or motor will affect this coefficient. If you find frequent fine-tuning at pre-stretch 0, you can calibrate this value.
 
-參考影片: [https://youtu.be/KuisR6eKiwk](https://youtu.be/KuisR6eKiwk)
+> [!IMPORTANT]
+> This parameter is mainly based on setting storage (config.cfg).
 
-# 最後
-如果有製作上的問題，歡迎留言討論，也可以寫信給我詢問。
+Reference video: [https://youtu.be/KuisR6eKiwk](https://youtu.be/KuisR6eKiwk)
+
+# Conclusion
+If you encounter any issues during the manufacturing process, feel free to discuss them in the comments or send me an email with your inquiries.
