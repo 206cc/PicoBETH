@@ -199,4 +199,4 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 
 1. 使用 25磅預拉 10%穿好線後靜置 48小時後所量測出來的數值。
 2. 所量測是各弦線相對張力參考值，不是準確的絕對張力。
-3. 張力測試器校正方法: [https://youtu.be/xYqu03XBzFU(https://youtu.be/xYqu03XBzFU)
+3. 張力測試器校正方法: [https://youtu.be/xYqu03XBzFU](https://youtu.be/xYqu03XBzFU)
