@@ -186,3 +186,22 @@ Reference video: [https://youtu.be/KuisR6eKiwk](https://youtu.be/KuisR6eKiwk)
 
 # Conclusion
 If you encounter any issues during the manufacturing process, feel free to discuss them in the comments or send me an email with your inquiries.
+
+# Pico Sringing Pattern
+
+I also have my own stringing pattern, temporarily named the Pico Stringing Pattern. I'm not sure if anyone else is using it, so if there is a similar stringing pattern, please let me know the stringing pattern name.
+
+## Sringing Pattern
+![images2-2](docs/pico_stringing_pattern.png)
+
+1. The short side is approximately 5 racket lengths, and the long side is approximately 8 racket lengths.
+2. Follow the Yonex stringing pattern for main strings, pulling the two outermost main strings together for tension.
+3. The cross strings are first the bottom of the short side, tying knots at the bottom, and then strings on the long side, tying knots at the top.
+4. Increasing the tension of the cross strings will help the racquet maintain its original shape after stringing. Due to variations in stringing machine and individual techniques, you can experiment to find the tension increment that minimizes deformation.
+
+## Tension of Each String
+![images2-2](docs/pico_stringing_tension.png)
+
+1. The measured values were obtained after stringing with a 25lb tension, following a 10% pre-stretch, and allowing it to sit for 48 hours.
+2. The measurements represent relative tension reference values for each string, NOT the actual tension.
+3. Calibration method for the tension tester: [https://youtu.be/xYqu03XBzFU(https://youtu.be/xYqu03XBzFU)
