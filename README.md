@@ -204,4 +204,4 @@ I also have my own stringing pattern, temporarily named the Pico Stringing Patte
 
 1. The measured values were obtained after stringing with a 25lb tension, following a 10% pre-stretch, and allowing it to sit for 48 hours.
 2. The measurements represent relative tension reference values for each string, NOT the actual tension.
-3. Calibration method for the tension tester: [https://youtu.be/xYqu03XBzFU(https://youtu.be/xYqu03XBzFU)
+3. Calibration method for the tension tester: [https://youtu.be/xYqu03XBzFU](https://youtu.be/xYqu03XBzFU)
