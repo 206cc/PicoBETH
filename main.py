@@ -1,7 +1,8 @@
 # MIT License
 # 
 # Copyright (c) 2023 Kuo Yang-Yang <MAIL: 500119.cpc@gmail.com IG:206cc.tw>
-# 
+#                                  <WEB: https://github.com/206cc/PicoBETH>
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -20,25 +21,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# 基本參數
-HX711_CAL = 20.00    # HX711拉力感應器校正系數，第一次使用或有更換壓力傳感器、HX711電路板時務必重新校正一次
+# 基本參數(如CFG_NAME內有儲存參數值會以的存檔的設定為主)
+HX711_CAL = 20.00    # HX711張力感應器校正系數，第一次使用或有更換張力傳感器、HX711電路板時務必重新校正一次
                      # 校正方法:
                      #   1. 將外接式張力計，一端綁在拉線機上，另一端綁上羽毛球線
                      #   2. 先將LCD設定頁面中HX參數設為20.00
                      #   3. 跳回主選單設定拉力為20磅
-                     #   4. 按上或下鍵開始拉線，當LCD顯示20磅時，抄下張力計顯示數值
+                     #   4. 按上或下鍵開始張緊，當LCD顯示20磅時，抄下張力計顯示數值
                      #   5. 至設定頁面上填入剛抄下張力計的數值
                      # 註: 
                      #   1. 如不做此校正，實際張力會與LCD上的張力會有誤差
                      #   2 .此參數以設定存檔為主
                      # 參考影片: https://youtu.be/JaplgmXzbjY
                      
-CORR_COEF = 1.30     # 當達到指定張力馬達停止時實際張力還會持續變化，另設此需除此係數校正，可手動設設也可自動在設定頁面校正
+CORR_COEF = 1.00     # 當達到指定張力馬達停止時實際張力還會持續變化，另設此需除此係數校正，可手動設設也可自動在設定頁面校正
                      # 校正方法:
                      #   1. 將羽球線固定好，一端綁在拉線機上，另一端在珠夾上
-                     #   2. 至LCD設定頁面中CC欄位中AUTO按鍵上按上或下鍵開始拉線
+                     #   2. 至LCD設定頁面中CC欄位中AUTO按鍵上按上或下鍵開始張緊
                      #   3. AUTO會自動填入參考的CC值
-                     #   4. 使用此值拉線測式，最佳的結果是預拉為0時達到指定張力不會進行微調動作
+                     #   4. 使用此值張緊測式，最佳的結果是預拉為0時達到指定張力不會進行微調動作
                      #      (你也許會在馬達停止時看見LCD張力持續變化超過指定張力，這為正常物理現象，
                      #       最佳的參數在於張力平衡後會線剛好在指定張力不會進行微調的動作)
                      #   5. 如果自動的CC值不理想，可至設定頁面手動微調CC值後，重覆4的步驟，找到最佳的值
@@ -51,8 +52,8 @@ CORR_COEF = 1.30     # 當達到指定張力馬達停止時實際張力還會持
 LB_KG_SELECT = 0     # 磅或公斤的設定，0=皆可設定，1=只設定磅，2=只設定公斤
 DEFAULT_LB = 18.0    # (LB)預設磅數
 PRE_STRECH = 10      # (%)預拉Pre-Strech
-LB_MAX = 35.0        # (LB)設定可拉的最高磅數
-LB_MIN = 15.0        # (LB)設定可拉的最低磅數
+LB_MAX = 35.0        # (LB)設定張緊的最高磅數
+LB_MIN = 15.0        # (LB)設定張緊的最低磅數
 PS_MAX = 30          # (LB)設定預拉的最高%數
 HX711_MAX = 25.00    # HX711校正參數最大值
 HX711_MIN = 15.00    # HX711校正參數最小值
@@ -63,24 +64,27 @@ FT_ADD_MIN = 10      # 增加磅數微調參數最小值
 PU_PRECISE = 200     # (G)如超過設定張力加此值，則進入釋放微調
 PU_STAY = 1          # (Second)預拉暫留秒數，秒數過後退回原設定磅數
 FT_ADD = 20          # 增加磅數微調時步進馬達的步數(1610螺桿參數)(建議調成微調一次增加0.3磅左右)
+FT_AUTO = 1          # 自動微調加減張力 0=關閉，1=只設啟用
 MOTO_RS_STEPS = 2000 # 滑台復位時感應到前限位開關時退回的步數，必需退回到未按壓前限位開關的程度
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
 AUTO_SAVE_SEC = 1.5  # (Second)自動儲存設定張力秒數
-LOG_MAX = 50         # 最大LOG保留記錄(請勿太大，以免無法開機)
+LOG_MAX = 50         # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
                     
 import time, _thread, machine
 from machine import I2C, Pin
 from src.hx711 import hx711          # from https://github.com/endail/hx711-pico-mpy
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
-# 其它參數
-VERSION = "1.41"
-VER_DATE = "2023-11-17"
+# 其它參數(請勿更動)
+VERSION = "1.52"
+VER_DATE = "2024-02-22"
 CFG_NAME = "config.cfg" # 設定存檔檔名
 LOG_NAME = "logs.txt"   # LOG存檔檔名
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT'] # 存檔變數
-MENU_ARR = [[4,0],[4,1],[5,1],[7,1],[8,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[19,3]] # 設定選單陣列
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT','FT_AUTO'] # 存檔變數
+MENU_ARR = [[4,0],[4,1],[5,1],[7,1],[8,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[15,1],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
+ONOFF_ARR = ['Off', 'On']
+AM_ARR = ['M', 'A']
 TS_LB_ARR = [[4,0],[5,0],[7,0]] # 磅調整陣列
 TS_KG_ARR = [[4,1],[5,1],[7,1]] # 公斤調整陣列
 TS_PS_ARR = [[17,0],[18,0]]     # 預拉調整陣列
@@ -118,7 +122,7 @@ BOTTON_LIST = {"BOTTON_HEAD":0,
                "BOTTON_DOWN":0,
                "BOTTON_LEFT":0,
                "BOTTON_RIGHT":0}                # 按鈕列表
-BOTTON_CLICK_MS = 450                           # (MS)按鈕點擊毫秒
+BOTTON_CLICK_MS = 500                           # (MS)按鈕點擊毫秒
 
 # LED參數
 LED_GREEN = Pin(19, machine.Pin.OUT)  # 綠
@@ -154,7 +158,7 @@ I2C_NUM_COLS = 20
 i2c = I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
 lcd = I2cLcd(i2c, I2C_ADDR, I2C_NUM_ROWS, I2C_NUM_COLS)
 
-# HX711 壓力傳感器參數
+# HX711 張力傳感器參數
 hx = hx711(Pin(27), Pin(26))
 hx.set_power(hx711.power.pwr_up)
 hx.set_gain(hx711.gain.gain_128)
@@ -266,7 +270,7 @@ def forward(delay, steps, check, init):
                 MOTO_WAIT = 0
                 return("Abort")
             
-            # 壓力傳感器異常、無夾線(行程已過ABORT_LM時張力小於5磅)
+            # 張力傳感器異常、無夾線(行程已過ABORT_LM時張力小於5磅)
             if i > ABORT_LM and TENSION_MON < 2267:
                 show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
                 moto_goto_standby(init, 0)
@@ -280,6 +284,7 @@ def forward(delay, steps, check, init):
             moto_goto_standby(init, 0)
             if init:
                 return i
+                
             MOTO_MOVE = 0
             MOTO_WAIT = 0
             return(1)
@@ -364,7 +369,6 @@ def tension_monitoring():
                     v0_arr = []
                     
                 HX711_I = HX711_I + 1
-                
             else:
                 TENSION_MON = int((val-(v0))/100*(HX711_CAL/20))
                 if MOTO_MOVE == 1:
@@ -425,25 +429,30 @@ def init():
         
     LED_RED.off()
     show_lcd("Ready", 0, 2, I2C_NUM_COLS)
+    beepbeep(1)
 
 # 開始增加張力
 def start_tensioning():
     global MOTO_MOVE, MOTO_WAIT, TENSION_COUNTS, LOGS
     show_lcd("Tensioning", 0, 2, I2C_NUM_COLS)
-    show_lcd("A", 11, 3, 1)
     LED_YELLOW.on()
     beepbeep(0.1)
+    if FT_AUTO == 1:
+        manual_flag = 0
+    else:
+        manual_flag = 1
+    
     if TIMER:
         TIMER_DEFF = time.time() - TIMER
     else:
         TIMER_DEFF = 0
+        
     rel = forward(MOTO_SPEED, MOTO_MAX_STEPS, 1, 0)
     log_lb_max = int(TENSION_MON_TMP * CORR_COEF)
     if rel:
         show_lcd(str(rel), 0, 2, I2C_NUM_COLS)
-        show_lcd(" ", 11, 3, 1)
         return 0
-    
+
     MOTO_MOVE = 0
     beepbeep(0.3)
     tension_info()
@@ -451,7 +460,6 @@ def start_tensioning():
     show_lcd("S:   ", 15, 1, 5)
     time.sleep(PU_STAY)
     check_g = int(DEFAULT_LB * 453.59237)
-    manual_flag = 0
     ft_flag = 0
     abort_flag = 0
     count_add = 0
@@ -485,25 +493,24 @@ def start_tensioning():
         if botton_list('BOTTON_UP'):
             manual_flag = 1
             forward(MOTO_SPEED, FT_ADD, 0, 0)
-            show_lcd("M", 11, 3, 1)
+            show_lcd(AM_ARR[FT_AUTO], 11, 3, 1)
             count_add = count_add + 1
             
         # 手動減磅
         if botton_list('BOTTON_DOWN'):
             manual_flag = 1
             backward(MOTO_SPEED, FT_ADD * FT_SUB_COEF, 1, 0)
-            show_lcd("M", 11, 3, 1)
+            show_lcd(AM_ARR[FT_AUTO], 11, 3, 1)
             count_sub = count_sub + 1
             
         # 手動改自動微調
         if botton_list('BOTTON_SETTING'):
             if manual_flag == 1:
                 manual_flag = 0
-                show_lcd("A", 11, 3, 1)
             else:
                 manual_flag = 1
-                show_lcd("M", 11, 3, 1)
-            
+                
+            show_lcd(AM_ARR[FT_AUTO], 11, 3, 1)
             beepbeep(0.1)
         
         # 夾線頭按鈕取消按鈕
@@ -513,7 +520,6 @@ def start_tensioning():
             moto_goto_standby(init, 0)
             show_lcd("Ready", 0, 2, I2C_NUM_COLS)
             show_lcd("     ", 15, 1, 5)
-            show_lcd(" ", 11, 3, 1)
             MOTO_WAIT = 0
             TENSION_COUNTS = TENSION_COUNTS + 1
             config_save()
@@ -537,7 +543,9 @@ def start_tensioning():
         if abort_flag == 1:
             return 0  
         
-        if ft_flag:
+        if count_add == 0 and count_sub == 0:
+            tension_info()
+        elif ft_flag:
             time.sleep(0.1)
         else:
             tension_info()
@@ -585,6 +593,7 @@ def setting_ts():
                     kg = kg + 10
                 elif BOTTON_DOWN.value():
                     kg = kg - 10
+                    
                 DEFAULT_LB = round(kg * 2.20462262, 1)
 
             # KG 個位數設定
@@ -593,6 +602,7 @@ def setting_ts():
                     kg = kg + 1
                 elif BOTTON_DOWN.value():
                     kg = kg - 1
+                    
                 DEFAULT_LB = round(kg * 2.20462262, 1)
             
             # KG 小數設定
@@ -601,6 +611,7 @@ def setting_ts():
                     kg = kg + 0.1
                 elif BOTTON_DOWN.value():
                     kg = kg - 0.1
+                    
                 DEFAULT_LB = round(kg * 2.20462262, 1)
                 
             # 預拉10位數設定
@@ -666,7 +677,7 @@ def setting_ts():
 
 # 設定頁面
 def setting():
-    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP
+    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP, FT_AUTO
     set_count = len(MENU_ARR)
     i = CURSOR_XY_TMP
     cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
@@ -734,6 +745,16 @@ def setting():
                     FT_ADD = FT_ADD + 1
                 elif BOTTON_DOWN.value():
                     FT_ADD = FT_ADD - 1
+                    
+            # 張力微調開關
+            elif cursor_xy == (15, 1):
+                if BOTTON_UP.value() or BOTTON_DOWN.value():
+                    if FT_AUTO == 1:
+                        FT_AUTO = 0
+                    else:
+                        FT_AUTO = 1
+                        
+                    show_lcd(ONOFF_ARR[FT_AUTO], 15, 1, 3)
 
             # HX711校正系數十位數
             if cursor_xy == (4, 2):
@@ -848,7 +869,7 @@ def setting():
 def setting_interface():
     show_lcd("UN:        FT: "+ "{: >2d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
     show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
-    show_lcd("CC: A"+ "{: >1.2f}".format(CORR_COEF), 0, 1, I2C_NUM_COLS)
+    show_lcd("CC: A"+ "{: >1.2f}".format(CORR_COEF) + "  AT: " + ONOFF_ARR[FT_AUTO], 0, 1, I2C_NUM_COLS)
     show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL), 0, 2, I2C_NUM_COLS)
     show_lcd("<PicoBETH>    "+ "{: >5d}".format(TENSION_COUNTS) +"T", 0, 3, I2C_NUM_COLS)
     
@@ -887,7 +908,7 @@ def main_interface():
     show_lcd("LB:     /--.- PS:  %", 0, 0, I2C_NUM_COLS)
     show_lcd("KG:     /--.-       ", 0, 1, I2C_NUM_COLS)
     show_lcd("                    ", 0, 2, I2C_NUM_COLS)
-    show_lcd("<PicoBETH>          ", 0, 3, I2C_NUM_COLS)
+    show_lcd("<PicoBETH> "+ AM_ARR[FT_AUTO] +"        ", 0, 3, I2C_NUM_COLS)
     show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
     show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
     show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
@@ -906,7 +927,7 @@ init()
 ts_info_time = time.ticks_ms()
 timer_flag = 0
 while True:
-    # 開始拉線
+    # 開始張緊
     if botton_list('BOTTON_HEAD'):
         start_tensioning()
         show_timer()
@@ -932,6 +953,7 @@ while True:
         else:
             TIMER = time.time()
             show_lcd("   m  ", 14, 1, 6)
+            
         beepbeep(0.5)
     
     # 加減磅設定
@@ -954,3 +976,4 @@ while True:
     if ERR_MSG:
         show_lcd(ERR_MSG, 0, 2, I2C_NUM_COLS)
         break
+
