@@ -194,6 +194,10 @@ If you encounter any issues during the manufacturing process, feel free to discu
 
 I also have my own stringing pattern, temporarily named the Pico Stringing Pattern. I'm not sure if anyone else is using it, so if there is a similar stringing pattern, please let me know the stringing pattern name.
 
+The stringing pattern demo.
+
+[![stringing demo](https://img.youtube.com/vi/2QjT0JGiluk/0.jpg)](https://www.youtube.com/watch?v=2QjT0JGiluk)
+
 ## Sringing Pattern
 ![images2-2](docs/pico_stringing_pattern.png)
 
