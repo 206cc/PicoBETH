@@ -76,8 +76,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.53"
-VER_DATE = "2024-02-24"
+VERSION = "1.54"
+VER_DATE = "2024-02-25"
 CFG_NAME = "config.cfg" # 設定存檔檔名
 LOG_NAME = "logs.txt"   # LOG存檔檔名
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT','FT_AUTO'] # 存檔變數
@@ -438,9 +438,9 @@ def start_tensioning():
     LED_YELLOW.on()
     beepbeep(0.1)
     if FT_AUTO == 1:
-        manual_flag = 0
-    else:
         manual_flag = 1
+    else:
+        manual_flag = 0
     
     if TIMER:
         TIMER_DEFF = time.time() - TIMER
@@ -468,7 +468,7 @@ def start_tensioning():
     while True:
         ft_flag = 0
         # 張力不足加磅
-        if check_g > TENSION_MON and manual_flag == 0:
+        if check_g > TENSION_MON and manual_flag == 1:
             diff_g = check_g - TENSION_MON
             if diff_g < (FT_LB * 453):
                 ft_flag = 0
@@ -479,7 +479,7 @@ def start_tensioning():
             count_add = count_add + 1
         
         # 張力超過減磅
-        if (check_g + PU_PRECISE) < TENSION_MON and manual_flag == 0:
+        if (check_g + PU_PRECISE) < TENSION_MON and manual_flag == 1:
             diff_g =  TENSION_MON - check_g
             if diff_g < (FT_LB * 453):
                 ft_flag = 0
@@ -491,26 +491,26 @@ def start_tensioning():
                         
         # 手動加磅
         if botton_list('BOTTON_UP'):
-            manual_flag = 1
+            manual_flag = 0
             forward(MOTO_SPEED, FT_ADD, 0, 0)
-            show_lcd(AM_ARR[FT_AUTO], 11, 3, 1)
+            show_lcd(AM_ARR[manual_flag], 11, 3, 1)
             count_add = count_add + 1
             
         # 手動減磅
         if botton_list('BOTTON_DOWN'):
-            manual_flag = 1
+            manual_flag = 0
             backward(MOTO_SPEED, FT_ADD * FT_SUB_COEF, 1, 0)
-            show_lcd(AM_ARR[FT_AUTO], 11, 3, 1)
+            show_lcd(AM_ARR[manual_flag], 11, 3, 1)
             count_sub = count_sub + 1
             
         # 手動改自動微調
         if botton_list('BOTTON_SETTING'):
-            if manual_flag == 1:
-                manual_flag = 0
-            else:
+            if manual_flag == 0:
                 manual_flag = 1
+            else:
+                manual_flag = 0
                 
-            show_lcd(AM_ARR[FT_AUTO], 11, 3, 1)
+            show_lcd(AM_ARR[manual_flag], 11, 3, 1)
             beepbeep(0.1)
         
         # 夾線頭按鈕取消按鈕
