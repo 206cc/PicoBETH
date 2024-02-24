@@ -189,6 +189,10 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 
 我也有自已的線譜，暫時取名為Pico Stringing Pattern，我不知道是否已經有人在使用，如果有一樣的線譜請告訴我線譜的名子。
 
+此線譜穿線展示影片
+
+[![stringing demo](https://img.youtube.com/vi/2QjT0JGiluk/0.jpg)](https://www.youtube.com/watch?v=2QjT0JGiluk)
+
 ## 線譜圖
 ![images2-2](docs/pico_stringing_pattern.png)
 
