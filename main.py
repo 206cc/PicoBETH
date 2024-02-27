@@ -76,8 +76,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.54"
-VER_DATE = "2024-02-25"
+VERSION = "1.55"
+VER_DATE = "2024-02-28"
 CFG_NAME = "config.cfg" # 設定存檔檔名
 LOG_NAME = "logs.txt"   # LOG存檔檔名
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT','FT_AUTO'] # 存檔變數
@@ -384,8 +384,6 @@ def tension_monitoring():
                 if (time.ticks_ms() - BOTTON_LIST[key]) > BOTTON_CLICK_MS:
                     BOTTON_LIST[key] = 0
 
-        time.sleep(0.02)
-
 def lb_kg_select():
     global TS_ARR
     if LB_KG_SELECT == 1:
@@ -543,9 +541,7 @@ def start_tensioning():
         if abort_flag == 1:
             return 0  
         
-        if ft_flag:
-            time.sleep(0.1)
-        else:
+        if ft_flag == 0:
             tension_info()
             
         show_lcd("{: >3d}".format(time.time()-t0), 17, 1, 3)
