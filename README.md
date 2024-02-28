@@ -38,13 +38,14 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 
 1. Set tension in pounds or kilograms
 2. Pre-Stretch function
-3. Automatic tension fine-tuning after tensioning
+3. Constant-pull system
 4. Tension zeroing
 5. Tension coefficient setting
 6. Tension calibration
 7. Stringing timer
 8. Tensioning count recording
 9. Detailed recording of tensioning logs
+10. Pull speed of the string(Switch on the TB6600 stepper motor driver)
 
 ## Standby screen
 1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
@@ -53,8 +54,8 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 ![images1-3](docs/images1-3.png)
 
 ## Tensioning screen
-1. When the set tension is reached, automatically enter the tension fine-tuning mode. Increase tension if it's insufficient, decrease tension if it's too high, until pressing the button on the clamp or exit button to end the tensioning mode.
-2. Press the center button of the five-way key to enter manual fine-tuning mode. The automatic fine-tuning mode will be canceled at this time, and tension can be manually adjusted with the up and down keys. Press the center button of the five-way key again to re-enter automatic fine-tuning mode.
+1. When the set tension is reached, automatically enter the constant-pull mode. Increase tension if it's insufficient, decrease tension if it's too high, until pressing the button on the clamp or exit button to end the tensioning mode.
+2. Press the center button of the five-way key to enter manual fine-tuning mode. The constant-pull mode will be canceled at this time, and tension can be manually adjusted with the up and down keys. Press the center button of the five-way key again to re-enter constant-pull mode.
 3. When the specified tension is reached, the countdown timer will appear.
 ![images1-4](docs/images1-4.png)
 
@@ -66,6 +67,7 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 2. CC: Fine-tuning parameters (see the first boot chapter for details).
 3. HX: Calibration of the tension sensor for HX711 (see the first boot chapter for details).
 4. FT: Amplitude of fine-tuning when reaching the specified tension.
+5. AT: Default Constant-Pull Switch.
 ![images1-5](docs/images1-5.png)
 
 > [!NOTE]
