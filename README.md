@@ -23,6 +23,7 @@ Improvements in the final machine:
 3. More rational hardware layout, allowing individual disassembly without the need for complete disassembly
 4. Reduced volume by using a stacking approach, avoiding interference with the storage slot
 5. Switched to a custom-designed PCB circuit board
+6. HX711 module change red anti-interference version
 
 Stringing demonstration video
 
@@ -179,7 +180,7 @@ Calibration method:
 5. If the automatically calculated CC value is not ideal, manually fine-tune the CC value on the settings page and repeat step 4 to find the optimal value.
 
 > [!WARNING]
-> If pre-stretch is enabled, a detensioning test will be performed, so set pre-stretch to 0 during testing.
+> If pre-stretch is enabled, , fine adjustments will be made for poundage compensation, so set pre-stretch to 0 during testing.
 
 > [!IMPORTANT]
 > Changing the HX711 circuit board, sliding table pitch, or motor will affect this coefficient. If you find frequent fine-tuning at pre-stretch 0, you can calibrate this value.
