@@ -37,16 +37,19 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 
 ## Current main features:
 
+Function demonstration video
+
+[![DEMO VIDEO](https://img.youtube.com/vi/t-nlxYUoaV0/0.jpg)](https://www.youtube.com/watch?v=t-nlxYUoaV0)
+
 1. Set tension in pounds or kilograms
 2. Pre-Stretch function
 3. Constant-pull system
-4. Tension zeroing
-5. Tension coefficient setting
-6. Tension calibration
-7. Stringing timer
-8. Tensioning count recording
-9. Detailed recording of tensioning logs
-10. Pull speed of the string(Switch on the TB6600 stepper motor driver)
+4. Tension coefficient setting
+5. Tension calibration
+6. Stringing timer
+7. Tensioning count recording
+8. Detailed recording of tensioning logs
+9. Pull speed of the string(Switch on the TB6600 stepper motor driver)
 
 ## Standby screen
 1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
