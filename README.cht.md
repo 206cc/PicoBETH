@@ -32,6 +32,10 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 ## 現有主要功能如下：
 
+功能展示影片
+
+[![DEMO VIDEO](https://img.youtube.com/vi/t-nlxYUoaV0/0.jpg)](https://www.youtube.com/watch?v=t-nlxYUoaV0)
+
 1. 使用磅或公斤單位設定張力
 2. 預拉(Pre-Strech)
 3. 自動恆拉(Constant-pull)
