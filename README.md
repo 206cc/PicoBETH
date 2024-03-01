@@ -14,7 +14,7 @@ Drop-weight stringing machine and modification parts
 Modified prototype machine
 ![images1-2](docs/images1-2.jpg)
 
-Final machine
+Final machine [More detailed photos](https://github.com/206cc/PicoBETH/tree/main/Images)
 ![images1-2](docs/images1-6.jpg)
 
 Improvements in the final machine:
