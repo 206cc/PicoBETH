@@ -9,7 +9,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 改裝完成（原型機）
 ![images1-2](docs/images1-2.jpg)
 
-正式機
+正式機 [更多的詳細照片](https://github.com/206cc/PicoBETH/tree/main/Images)
 ![images1-2](docs/images1-6.jpg)
 
 正式機的改進
