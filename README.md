@@ -172,26 +172,10 @@ Calibration method:
 Reference video: [https://youtu.be/JaplgmXzbjY](https://youtu.be/JaplgmXzbjY)
 
 ## Set the CC Parameter
-When the motor stops at the specified tension, the actual tension will continue to change. Another coefficient needs to be set to correct this, which can be set manually or automatically on the settings page.
-
-Calibration method:
-1. Fix the badminton string, attach one end to the stringing machine and the other end to the clamp.
-2. On the LCD settings page, press the AUTO button in the CC field using the up or down key to start stringing.
-3. AUTO will automatically fill in the reference CC value.
-4. Use this value to string and test. The optimal result is when there is no fine-tuning action when reaching the specified tension with pre-stretch set to 0.
-   (You may see the tension on the LCD continue to change beyond the specified tension when the motor stops. This is a normal physical phenomenon. The best parameter is when the tension stabilizes after balancing and there is no fine-tuning action at the specified tension.)
-5. If the automatically calculated CC value is not ideal, manually fine-tune the CC value on the settings page and repeat step 4 to find the optimal value.
-
-> [!WARNING]
-> If pre-stretch is enabled, , fine adjustments will be made for poundage compensation, so set pre-stretch to 0 during testing.
+After version 1.70, an automatic learning function has been added. Stringing multiple times to stabilize the CC values. Alternatively, you can disable the learning function and manually configure the settings.
 
 > [!IMPORTANT]
-> Changing the HX711 circuit board, sliding table pitch, or motor will affect this coefficient. If you find frequent fine-tuning at pre-stretch 0, you can calibrate this value.
-
-> [!IMPORTANT]
-> This parameter is mainly based on setting storage (config.cfg).
-
-Reference video: [https://youtu.be/KuisR6eKiwk](https://youtu.be/KuisR6eKiwk)
+> Improper settings may lead to frequent fine-tuning.
 
 # Conclusion
 If you encounter any issues during the manufacturing process, feel free to discuss them in the comments or send me an email with your inquiries.
