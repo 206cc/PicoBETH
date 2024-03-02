@@ -1,6 +1,7 @@
 # MIT License
 # 
 # Copyright (c) 2023 Kuo Yang-Yang <MAIL: 500119.cpc@gmail.com IG:206cc.tw>
+#                                  <WEB: https://github.com/206cc/PicoBETH>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
