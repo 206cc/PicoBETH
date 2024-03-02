@@ -164,7 +164,9 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 > [!IMPORTANT]
 > 此參數以設定存檔為主(config.cfg)
 
-參考影片: [https://youtu.be/JaplgmXzbjY](https://youtu.be/JaplgmXzbjY)
+參考影片
+
+[![DEMO](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
 
 ## 設定 CC 參數
 在1.70版本已後新增自動學習功能，張緊多次後讓 CC 的數值趨於穩定即可。也可關閉學習功能自行手動設定。

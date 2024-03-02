@@ -169,7 +169,9 @@ Calibration method:
 > [!IMPORTANT]
 > This parameter is mainly based on setting storage (config.cfg).
 
-Reference video: [https://youtu.be/JaplgmXzbjY](https://youtu.be/JaplgmXzbjY)
+Reference video
+
+[![Reference video](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
 
 ## Set the CC Parameter
 After version 1.70, an automatic learning function has been added. Stringing multiple times to stabilize the CC values. Alternatively, you can disable the learning function and manually configure the settings.

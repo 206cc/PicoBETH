@@ -27,13 +27,10 @@ HX711_CAL = 20.00    # HX711張力感應器校正系數，第一次使用或有�
                      #   1. 將外接式張力計，一端綁在拉線機上，另一端綁上羽毛球線
                      #   2. 先將LCD設定頁面中HX參數設為20.00
                      #   3. 跳回主選單設定拉力為20磅
-                     #   4. 按上或下鍵開始張緊，當LCD顯示20磅時，抄下張力計顯示數值
+                     #   4. 開始張緊，當LCD顯示20磅時，抄下張力計顯示數值
                      #   5. 至設定頁面上填入剛抄下張力計的數值
-                     # 註: 
-                     #   1. 如不做此校正，實際張力會與LCD上的張力會有誤差
-                     #   2 .此參數以設定存檔為主
-                     # 參考影片: https://youtu.be/JaplgmXzbjY
-                     
+                     # 如不做此校正，實際張力會與LCD上的張力會有誤差
+                     # 參考影片: https://youtu.be/s3eXI36kEWM
 
 CORR_COEF_AUTO = 1   # 自動學習張力系數開關
 LB_KG_SELECT = 0     # 磅或公斤的設定，0=皆可設定，1=只設定磅，2=只設定公斤
@@ -63,7 +60,7 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.70"
+VERSION = "1.71"
 VER_DATE = "2024-03-02"
 CFG_NAME = "config.cfg" # 設定存檔檔名
 LOG_NAME = "logs.txt"   # LOG存檔檔名
