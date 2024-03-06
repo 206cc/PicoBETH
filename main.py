@@ -32,7 +32,7 @@ HX711_CAL = 20.00    # HX711張力感應器校正系數，第一次使用或有�
                      # 如不做此校正，實際張力會與LCD上的張力會有誤差
                      # 參考影片: https://youtu.be/s3eXI36kEWM
 
-CORR_COEF_AUTO = 1   # 自動學習張力系數開關
+CORR_COEF_AUTO = 1   # 自我學習CC張力系數開關
 LB_KG_SELECT = 0     # 磅或公斤的設定，0=皆可設定，1=只設定磅，2=只設定公斤
 DEFAULT_LB = 18.0    # (LB)預設磅數
 PRE_STRECH = 10      # (%)預拉Pre-Strech
@@ -43,13 +43,13 @@ HX711_MAX = 25.00    # HX711校正參數最大值
 HX711_MIN = 15.00    # HX711校正參數最小值
 CORR_MAX = 1.7       # 張力校正參數最大值
 CORR_MIN = 0.3       # 張力校正參數最小值
-FT_ADD_MAX = 15      # 增加恆拉微調參數最大值
-FT_ADD_MIN = 5       # 增加恆拉微調參數最小值
+FT_ADD_MAX = 20      # 增加恆拉微調參數最大值
+FT_ADD_MIN = 1       # 增加恆拉微調參數最小值
 PU_PRECISE = 100     # (G)如超過設定張力加此值，則進入恆拉微調
 PU_STAY = 0.3        # (Second)預拉暫留秒數使用(蜂鳴器)，秒數過後退回原設定磅數
 FT_ADD = 7           # 增加恆拉微調時步進馬達的步數
-FT_AUTO = 1          # 自動微調加減張力 0=關閉，1=只設啟用
-FT_AUTO_T = 50       # 觸發自動學習張力系數數值(FT_ADD*微調次數)
+CP_SW = 1            # 自動恆拉預設 0=關閉，1=只設啟用
+CP_SW_T = 50         # 觸發自動學習張力系數數值(FT_ADD*微調次數)
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
 AUTO_SAVE_SEC = 1.5  # (Second)自動儲存設定張力秒數
 LOG_MAX = 50         # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
@@ -60,14 +60,14 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.71"
-VER_DATE = "2024-03-02"
+VERSION = "1.80"
+VER_DATE = "2024-03-06"
 CFG_NAME = "config.cfg" # 設定存檔檔名
 LOG_NAME = "logs.txt"   # LOG存檔檔名
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT','FT_AUTO','FT_ADD','CORR_COEF_AUTO'] # 存檔變數
-MENU_ARR = [[4,0],[4,1],[5,1],[7,1],[8,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[15,1],[19,3]] # 設定選單陣列
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO'] # 存檔變數
+MENU_ARR = [[4,0],[4,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,2],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
-ONOFF_ARR = ['Off', 'On']
+ONOFF_ARR = ['Off', 'On ']
 AM_ARR = ['M', 'A']
 TS_LB_ARR = [[4,0],[5,0],[7,0]] # 磅調整陣列
 TS_KG_ARR = [[4,1],[5,1],[7,1]] # 公斤調整陣列
@@ -82,6 +82,7 @@ TS_INFO_MS = 100        # (MS)主畫面張力更新顯示毫秒
 FT_SUB_COEF = 0.5       # 減少磅數微調時步進馬達的補償系數
 BOTTON_SLEEP = 0.1      # (Second)按鍵等待秒數
 CORR_COEF = 1.00        # 張力系數
+SMART = 0               # 自我修正FT&CC參數
 
 ## 步進馬達
 IN1 = machine.Pin(4, machine.Pin.OUT) # 接 PUL-
@@ -249,7 +250,6 @@ def forward(delay, steps, check, init):
             
             # 停止條件
             if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT'):
-                show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
                 moto_goto_standby(0)
                 MOTO_MOVE = 0
                 MOTO_WAIT = 0
@@ -257,7 +257,6 @@ def forward(delay, steps, check, init):
             
             # 張力傳感器異常、無夾線(行程已過ABORT_LM時張力小於5磅)
             if i > ABORT_LM and TENSION_MON < 2267:
-                show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
                 moto_goto_standby(0)
                 MOTO_MOVE = 0
                 MOTO_WAIT = 0
@@ -265,14 +264,13 @@ def forward(delay, steps, check, init):
         
         # 後限位SW
         if MOTO_SW_REAR.value():
-            show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
             moto_goto_standby(0)
             if init:
                 return i
                 
             MOTO_MOVE = 0
             MOTO_WAIT = 0
-            return(1)
+            return("Over Limits")
         
         # 超過最大指定張力後復位
         if ABORT_GRAM < TENSION_MON:
@@ -420,11 +418,13 @@ def init():
 
 # 開始增加張力
 def start_tensioning():
-    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNTS, LOGS, CORR_COEF
-    show_lcd("Tensioning", 0, 2, I2C_NUM_COLS)
+    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNTS, LOGS, CORR_COEF, FT_ADD
+    if SMART == 0:
+        show_lcd("Tensioning", 0, 2, I2C_NUM_COLS)
+    
     LED_YELLOW.on()
     beepbeep(0.1)
-    if FT_AUTO == 1:
+    if CP_SW == 1:
         manual_flag = 1
     else:
         manual_flag = 0
@@ -437,14 +437,21 @@ def start_tensioning():
     rel = forward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 1, 0)
     log_lb_max = int(TENSION_MON_TMP * CORR_COEF)
     if rel:
-        show_lcd(str(rel), 0, 2, I2C_NUM_COLS)
-        return 0
+        if SMART == 0:
+            show_lcd(str(rel), 0, 2, I2C_NUM_COLS)
+            return 0
+        else:
+            return False
 
     MOTO_MOVE = 0
     abort_flag = 0
     count_add = 0
     count_sub = 0
     over_flag = 0
+    ft_add_flag = 0
+    ft_add_time = 0
+    ft_add_max = 0
+    smart_ft_flag = 0
     tmp_LB_CONV_G = LB_CONV_G
     t0 = time.time()
     # 到達指定張力，等待
@@ -453,79 +460,136 @@ def start_tensioning():
         # 到磅偵測
         if over_flag == 0:
             if abs(tmp_LB_CONV_G - TENSION_MON) < PU_PRECISE:
-                tension_info()
+                if SMART == 0:
+                    tension_info()
+                else:
+                    time.sleep(0.5)
+                    
                 over_flag = 1
-                tmp_LB_CONV_G = int(DEFAULT_LB * 453.59237)
-                show_lcd("Target Tension", 0, 2, I2C_NUM_COLS)
-                show_lcd("S:   ", 15, 1, 5)
+                
+                if SMART == 0:
+                    tmp_LB_CONV_G = int(DEFAULT_LB * 453.59237)
+                    show_lcd("Target Tension", 0, 2, I2C_NUM_COLS)
+                    show_lcd("S:   ", 15, 1, 5)
+                else:
+                    time.sleep(0.84)
+                
                 beepbeep(PU_STAY)
                 t0 = time.time()
         
         # 張力不足加磅
         if tmp_LB_CONV_G > TENSION_MON and (manual_flag == 1 or over_flag == 0):
             diff_g = tmp_LB_CONV_G - TENSION_MON
+            abort_flag = forward(MOTO_SPEED_V2, FT_ADD, 0 ,0)
             if diff_g < PU_PRECISE:
                 ft_flag = 0
+                if SMART == 2:
+                    if smart_ft_flag == 0:
+                        t1 = time.time()
+                        smart_ft_flag = 1
+                    
+                    if time.ticks_ms() - ft_add_time < 1000:
+                        ft_add_flag = ft_add_flag + 1
+                    else:
+                        ft_add_max = max(ft_add_max, ft_add_flag)
+                        ft_add_flag = 0
+                
+                    ft_add_time = time.ticks_ms()
             else:
                 ft_flag = 1
-            
-            abort_flag = forward(MOTO_SPEED_V2, FT_ADD, 0 ,0)
-            if over_flag == 0:
-                count_add = count_add + 1
+                if over_flag == 0:
+                    count_add = count_add + 1
         
         # 張力超過減磅
         if (tmp_LB_CONV_G + PU_PRECISE) < TENSION_MON and (manual_flag == 1 or over_flag == 0):
             diff_g =  TENSION_MON - tmp_LB_CONV_G
+            abort_flag = backward(MOTO_SPEED_V2, FT_ADD * FT_SUB_COEF, 0, 0)
             if diff_g < PU_PRECISE:
                 ft_flag = 0
             else:
                 ft_flag = 1
             
-            abort_flag = backward(MOTO_SPEED_V2, FT_ADD * FT_SUB_COEF, 0, 0)
             if over_flag == 0:
                 count_sub = count_sub + 1
-                        
-        # 手動加磅
-        if botton_list('BOTTON_UP'):
-            manual_flag = 0
-            forward(MOTO_SPEED_V2, FT_ADD, 0, 0)
-            show_lcd(AM_ARR[manual_flag], 11, 3, 1)
-            count_add = count_add + 1
             
-        # 手動減磅
-        if botton_list('BOTTON_DOWN'):
-            manual_flag = 0
-            backward(MOTO_SPEED_V2, FT_ADD * FT_SUB_COEF, 1, 0)
-            show_lcd(AM_ARR[manual_flag], 11, 3, 1)
-            count_sub = count_sub + 1
-            
-        # 手動改自動微調
-        if botton_list('BOTTON_SETTING'):
-            if manual_flag == 0:
-                manual_flag = 1
-            else:
+        if SMART == 0:
+            # 手動加磅
+            if botton_list('BOTTON_UP'):
                 manual_flag = 0
+                forward(MOTO_SPEED_V2, FT_ADD, 0, 0)
+                show_lcd(AM_ARR[manual_flag], 11, 3, 1)
+                count_add = count_add + 1
                 
-            show_lcd(AM_ARR[manual_flag], 11, 3, 1)
-            beepbeep(0.1)
+            # 手動減磅
+            if botton_list('BOTTON_DOWN'):
+                manual_flag = 0
+                backward(MOTO_SPEED_V2, FT_ADD * FT_SUB_COEF, 1, 0)
+                show_lcd(AM_ARR[manual_flag], 11, 3, 1)
+                count_sub = count_sub + 1
+                
+            # 手動改自動微調
+            if botton_list('BOTTON_SETTING'):
+                if manual_flag == 0:
+                    manual_flag = 1
+                else:
+                    manual_flag = 0
+                    
+                show_lcd(AM_ARR[manual_flag], 11, 3, 1)
+                beepbeep(0.1)
+        
+            # 斷線(已達指定張力突然小於5磅)
+            if TENSION_MON < 2267:
+                show_lcd(AM_ARR[CP_SW], 11, 3, 1)
+                show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
+                moto_goto_standby(0)
+                show_lcd("String Broken?", 0, 2, I2C_NUM_COLS)
+                show_lcd("     ", 15, 1, 5)
+                MOTO_WAIT = 0
+                return 0
         
         # 夾線頭按鈕取消按鈕
-        if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT'):
+        if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT') or (smart_ft_flag == 1 and (time.time()-t1) > 5) or (SMART == 1 and count_add > CP_SW_T) or (SMART == 1 and over_flag == 1):
+            
+            #CC參數自動調整
+            cc_add_sub = 0
+            if CORR_COEF_AUTO == 1 or SMART == 1:
+                if count_add > count_sub:
+                    if count_add * FT_ADD > CP_SW_T:
+                        if SMART == 1:
+                            cc_add_sub = -0.1
+                        else:
+                            cc_add_sub = -0.01
+                else:
+                    cc_add_sub = 0.01
+                
+                CORR_COEF = CORR_COEF + cc_add_sub
+                if SMART == 1:
+                    moto_goto_standby(0)
+                    MOTO_WAIT = 0
+                    TENSION_COUNTS = TENSION_COUNTS + 1
+                    return True
+            
+            #FT參數自動調整
+            if SMART == 2:
+                ft_add_max = max(ft_add_max, ft_add_flag)
+                if ft_add_max >= 6 or ft_add_max == 0:
+                    FT_ADD = FT_ADD + 2
+                elif ft_add_max >= 3:
+                    FT_ADD = FT_ADD + 1
+                
+                moto_goto_standby(0)
+                MOTO_WAIT = 0
+                TENSION_COUNTS = TENSION_COUNTS + 1
+                return True
+            
             log_s = time.time() - t0
-            show_lcd(AM_ARR[FT_AUTO], 11, 3, 1)
+            show_lcd(AM_ARR[CP_SW], 11, 3, 1)
             show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
             moto_goto_standby(0)
             show_lcd("Ready", 0, 2, I2C_NUM_COLS)
             show_lcd("     ", 15, 1, 5)
             MOTO_WAIT = 0
             TENSION_COUNTS = TENSION_COUNTS + 1
-            #CC參數自動調整
-            if CORR_COEF_AUTO == 1:
-                if count_add > count_sub:
-                    if count_add * FT_ADD > FT_AUTO_T:
-                        CORR_COEF = CORR_COEF - 0.01
-                else:
-                    CORR_COEF = CORR_COEF + 0.01
             
             #LOG寫入
             LOGS.insert(0, [TENSION_COUNTS, TIMER_DEFF, LB_KG_SELECT, DEFAULT_LB, log_lb_max, PRE_STRECH, log_s, count_add, count_sub, CORR_COEF, HX711_CAL, FT_ADD])
@@ -536,22 +600,15 @@ def start_tensioning():
             config_save()
             return 0
         
-        # 斷線(已達指定張力突然小於5磅)
-        if TENSION_MON < 2267:
-            show_lcd(AM_ARR[FT_AUTO], 11, 3, 1)
-            show_lcd("Resetting...", 0, 2, I2C_NUM_COLS)
-            moto_goto_standby(0)
-            show_lcd("String Broken?", 0, 2, I2C_NUM_COLS)
-            show_lcd("     ", 15, 1, 5)
-            MOTO_WAIT = 0
-            return 0
-        
         if abort_flag == 1:
             return 0  
         
         if ft_flag == 0:
-            tension_info()
-            show_lcd("{: >3d}".format(time.time()-t0), 17, 1, 3)
+            if SMART == 0:
+                tension_info()
+                show_lcd("{: >3d}".format(time.time()-t0), 17, 1, 3)
+            else:
+                time.sleep(0.617)
         else:
             time.sleep(0.05)
 
@@ -679,7 +736,7 @@ def setting_ts():
 
 # 設定頁面
 def setting():
-    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP, FT_AUTO, CORR_COEF_AUTO
+    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP, CP_SW, CORR_COEF_AUTO, SMART, LB_CONV_G, PRE_STRECH
     set_count = len(MENU_ARR)
     i = CURSOR_XY_TMP
     cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
@@ -690,28 +747,28 @@ def setting():
         # 按下上下鍵動作
         if BOTTON_UP.value() or BOTTON_DOWN.value() or botton_list('BOTTON_SETTING'):
             # 張力校正系數個位數
-            if cursor_xy == (5, 1):
+            if cursor_xy == (16, 1):
                 if BOTTON_UP.value():
                     CORR_COEF = CORR_COEF + 1
                 elif BOTTON_DOWN.value():
                     CORR_COEF = CORR_COEF - 1
             
             # 張力校正系數小數第一位
-            elif cursor_xy == (7, 1):
+            elif cursor_xy == (18, 1):
                 if BOTTON_UP.value():
                     CORR_COEF = CORR_COEF + 0.1
                 elif BOTTON_DOWN.value():
                     CORR_COEF = CORR_COEF - 0.1
                     
             # 張力校正系數小數第二位
-            elif cursor_xy == (8, 1):
+            elif cursor_xy == (19, 1):
                 if BOTTON_UP.value():
                     CORR_COEF = CORR_COEF + 0.01
                 elif BOTTON_DOWN.value():
                     CORR_COEF = CORR_COEF - 0.01
                     
             # 張力校正系數自動調整
-            elif cursor_xy == (4, 1):
+            elif cursor_xy == (15, 1):
                 if BOTTON_UP.value() or BOTTON_DOWN.value():
                     beepbeep(0.1)
                     if CORR_COEF_AUTO == 0:
@@ -719,7 +776,7 @@ def setting():
                     else:
                         CORR_COEF_AUTO = 0
                     
-                    show_lcd(AM_ARR[CORR_COEF_AUTO], 4, 1, 1)
+                    show_lcd(AM_ARR[CORR_COEF_AUTO], 15, 1, 1)
             
             # 磅、公斤設定選擇
             elif cursor_xy == (4, 0):
@@ -743,15 +800,15 @@ def setting():
                 elif BOTTON_DOWN.value():
                     FT_ADD = FT_ADD - 1
                     
-            # 張力微調開關
-            elif cursor_xy == (15, 1):
+            # 恆拉開關
+            elif cursor_xy == (4, 1):
                 if BOTTON_UP.value() or BOTTON_DOWN.value():
-                    if FT_AUTO == 1:
-                        FT_AUTO = 0
+                    if CP_SW == 1:
+                        CP_SW = 0
                     else:
-                        FT_AUTO = 1
-                        
-                    show_lcd(ONOFF_ARR[FT_AUTO], 15, 1, 3)
+                        CP_SW = 1
+                    
+                    show_lcd(ONOFF_ARR[CP_SW], 4, 1, 3)
 
             # HX711校正系數十位數
             if cursor_xy == (4, 2):
@@ -780,6 +837,98 @@ def setting():
                     HX711_CAL = HX711_CAL + 0.01
                 elif BOTTON_DOWN.value():
                     HX711_CAL = HX711_CAL - 0.01
+            
+            # 自我FT&CC學習
+            elif cursor_xy == (11, 2):
+                if BOTTON_SETTING.value():
+                    SMART = 1
+                    smart_1_diff = 0.03
+                    beepbeep(0.1)
+                    show_lcd("sFT: ", 0, 0, 8)
+                    show_lcd("sCC: ", 0, 1, 8)
+                    show_lcd("TEST: ", 0, 2, 10)
+                    ori_LB_CONV_G = LB_CONV_G
+                    ori_PRE_STRECH = PRE_STRECH
+                    ori_FT_ADD = FT_ADD
+                    ori_CORR_COEF = CORR_COEF
+                    ori_CORR_COEF_AUTO = CORR_COEF_AUTO
+                    CORR_COEF_AUTO = 1
+                    FT_ADD = 1
+                    CORR_COEF = 1.3
+                    PRE_STRECH = 0
+                    LB_CONV_G = int(15 * 453.59237)
+                    t_pass = 0
+                    r_CORR_COEF = CORR_COEF
+                    r_FT_ADD = FT_ADD
+                    j = 0
+                    while True:
+                        if BOTTON_EXIT.value():
+                            beepbeep(0.1)
+                            break
+                        
+                        show_lcd(str(j+1), 6, 2, 2)
+                        ret = start_tensioning()
+                        if SMART == 1:
+                            if r_CORR_COEF > CORR_COEF and t_pass != 2:
+                                t_pass = 1
+                            elif CORR_COEF > r_CORR_COEF:
+                                t_pass = 2
+                            elif CORR_COEF <= r_CORR_COEF and t_pass == 2:
+                                t_pass = 3
+                                CORR_COEF = r_CORR_COEF
+                            
+                            r_CORR_COEF = CORR_COEF
+                            if t_pass == 3:
+                                CORR_COEF_AUTO = 0
+                                CORR_COEF = CORR_COEF + smart_1_diff
+                                show_lcd("v", 9, 1, 1)
+                                SMART = 2
+                                t_pass = 0
+                                
+                        elif SMART == 2:
+                            if r_FT_ADD == FT_ADD:
+                                t_pass = t_pass + 1
+                                if t_pass == 2:
+                                    show_lcd("v", 7, 0, 1)
+                                    show_lcd("OK", 6, 2, 2)
+                                    CORR_COEF = CORR_COEF - smart_1_diff
+                                    config_save()
+                                    while True:
+                                        if BOTTON_EXIT.value():
+                                            break
+                                    break
+                            else:
+                                r_FT_ADD = FT_ADD
+                        
+                        if ret == False:
+                            show_lcd("X", 5, 0, 4)
+                            show_lcd("X", 5, 1, 4)
+                            show_lcd("FAIL", 6, 2, 5)
+                            CORR_COEF = ori_CORR_COEF
+                            FT_ADD = ori_FT_ADD
+                            while True:
+                                if BOTTON_EXIT.value():
+                                    break
+                            moto_goto_standby(0)
+                            setting_interface()
+                            break
+                        else:
+                            show_lcd("{:02d}".format(FT_ADD), 5, 0, 4)
+                            if SMART == 2:
+                                show_lcd("{: >1.2f}".format(CORR_COEF - smart_1_diff), 5, 1, 4)
+                            else:
+                                show_lcd("{: >1.2f}".format(CORR_COEF), 5, 1, 4)
+                            
+                            show_lcd("{: >5d}".format(TENSION_COUNTS) +"T", 14, 3, 6)
+                        
+                        j = j + 1
+                        time.sleep(1)
+                    
+                    SMART = 0
+                    PRE_STRECH = ori_PRE_STRECH
+                    LB_CONV_G = ori_LB_CONV_G
+                    CORR_COEF_AUTO = ori_CORR_COEF_AUTO
+                    setting_interface()
 
             # LOG顯示
             elif cursor_xy == (19, 3):
@@ -827,9 +976,9 @@ def setting():
             elif FT_ADD <= FT_ADD_MIN:
                 FT_ADD = FT_ADD_MIN
             
-            show_lcd("{: >1.2f}".format(CORR_COEF), 5, 1, 4)
+            show_lcd("{: >1.2f}".format(CORR_COEF), 16, 1, 4)
             show_lcd("{: >2.2f}".format(HX711_CAL), 4, 2, 5)
-            show_lcd("{: >2d}".format(FT_ADD), 15, 0, 2)
+            show_lcd("{:02d}".format(FT_ADD), 15, 0, 2)
             lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
             LB_CONV_G = int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100))
             beepbeep(0.1)
@@ -864,10 +1013,10 @@ def setting():
      
 # 設定介面顯示
 def setting_interface():
-    show_lcd("UN:        FT: "+ "{: >2d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
+    show_lcd("UN:        FT: "+ "{:02d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
     show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
-    show_lcd("CC: "+ AM_ARR[CORR_COEF_AUTO] + "{: >1.2f}".format(CORR_COEF) + "  AT: " + ONOFF_ARR[FT_AUTO], 0, 1, I2C_NUM_COLS)
-    show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL), 0, 2, I2C_NUM_COLS)
+    show_lcd("AT: "+ ONOFF_ARR[CP_SW] +"    CC: "+ AM_ARR[CORR_COEF_AUTO] + "{: >1.2f}".format(CORR_COEF), 0, 1, I2C_NUM_COLS)
+    show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL) +"  SMART", 0, 2, I2C_NUM_COLS)
     show_lcd("<PicoBETH>    "+ "{: >5d}".format(TENSION_COUNTS) +"T", 0, 3, I2C_NUM_COLS)
     
 # LOG介面顯示
@@ -905,7 +1054,7 @@ def main_interface():
     show_lcd("LB:     /--.- PS:  %", 0, 0, I2C_NUM_COLS)
     show_lcd("KG:     /--.-       ", 0, 1, I2C_NUM_COLS)
     show_lcd("                    ", 0, 2, I2C_NUM_COLS)
-    show_lcd("<PicoBETH> "+ AM_ARR[FT_AUTO] + AM_ARR[CORR_COEF_AUTO] + "       ", 0, 3, I2C_NUM_COLS)
+    show_lcd("<PicoBETH> "+ AM_ARR[CP_SW] + AM_ARR[CORR_COEF_AUTO] + "       ", 0, 3, I2C_NUM_COLS)
     show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
     show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
     show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
