@@ -49,7 +49,6 @@ PU_PRECISE = 100     # (G)如超過設定張力加此值，則進入恆拉微調
 PU_STAY = 0.3        # (Second)預拉暫留秒數使用(蜂鳴器)，秒數過後退回原設定磅數
 FT_ADD = 7           # 增加恆拉微調時步進馬達的步數
 CP_SW = 1            # 自動恆拉預設 0=關閉，1=只設啟用
-CP_SW_T = 50         # 觸發自動學習張力系數數值(FT_ADD*微調次數)
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
 AUTO_SAVE_SEC = 1.5  # (Second)自動儲存設定張力秒數
 LOG_MAX = 50         # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
@@ -60,8 +59,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.80"
-VER_DATE = "2024-03-06"
+VERSION = "1.81"
+VER_DATE = "2024-03-08"
 CFG_NAME = "config.cfg" # 設定存檔檔名
 LOG_NAME = "logs.txt"   # LOG存檔檔名
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNTS', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO'] # 存檔變數
@@ -451,7 +450,9 @@ def start_tensioning():
     ft_add_flag = 0
     ft_add_time = 0
     ft_add_max = 0
-    smart_ft_flag = 0
+    cc_count_add = 0
+    cc_add_flag = 0
+    smart_ft_add_flag = 0
     tmp_LB_CONV_G = LB_CONV_G
     t0 = time.time()
     # 到達指定張力，等待
@@ -464,7 +465,7 @@ def start_tensioning():
                     tension_info()
                 else:
                     time.sleep(0.5)
-                    
+                beepbeep(PU_STAY)
                 over_flag = 1
                 
                 if SMART == 0:
@@ -473,8 +474,7 @@ def start_tensioning():
                     show_lcd("S:   ", 15, 1, 5)
                 else:
                     time.sleep(0.84)
-                
-                beepbeep(PU_STAY)
+                    
                 t0 = time.time()
         
         # 張力不足加磅
@@ -483,11 +483,8 @@ def start_tensioning():
             abort_flag = forward(MOTO_SPEED_V2, FT_ADD, 0 ,0)
             if diff_g < PU_PRECISE:
                 ft_flag = 0
+                cc_add_flag = 1
                 if SMART == 2:
-                    if smart_ft_flag == 0:
-                        t1 = time.time()
-                        smart_ft_flag = 1
-                    
                     if time.ticks_ms() - ft_add_time < 1000:
                         ft_add_flag = ft_add_flag + 1
                     else:
@@ -497,8 +494,14 @@ def start_tensioning():
                     ft_add_time = time.ticks_ms()
             else:
                 ft_flag = 1
+                smart_ft_add_flag = 1
+                if cc_add_flag == 0:
+                    cc_count_add = cc_count_add + 1
+                
                 if over_flag == 0:
                     count_add = count_add + 1
+                    
+
         
         # 張力超過減磅
         if (tmp_LB_CONV_G + PU_PRECISE) < TENSION_MON and (manual_flag == 1 or over_flag == 0):
@@ -548,33 +551,23 @@ def start_tensioning():
                 return 0
         
         # 夾線頭按鈕取消按鈕
-        if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT') or (smart_ft_flag == 1 and (time.time()-t1) > 5) or (SMART == 1 and count_add > CP_SW_T) or (SMART == 1 and over_flag == 1):
-            
+        if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT') or (SMART == 2 and ft_add_flag > 10) or (SMART == 2 and time.time()-t0 > 5) or (SMART == 2 and smart_ft_add_flag == 0):
             #CC參數自動調整
             cc_add_sub = 0
-            if CORR_COEF_AUTO == 1 or SMART == 1:
-                if count_add > count_sub:
-                    if count_add * FT_ADD > CP_SW_T:
-                        if SMART == 1:
-                            cc_add_sub = -0.1
-                        else:
-                            cc_add_sub = -0.01
+            if CORR_COEF_AUTO == 1 and SMART != 2:
+                if cc_count_add > 5:
+                    CORR_COEF = CORR_COEF - 0.01
                 else:
-                    cc_add_sub = 0.01
-                
-                CORR_COEF = CORR_COEF + cc_add_sub
-                if SMART == 1:
-                    moto_goto_standby(0)
-                    MOTO_WAIT = 0
-                    TENSION_COUNTS = TENSION_COUNTS + 1
-                    return True
+                    CORR_COEF = CORR_COEF + 0.01
             
             #FT參數自動調整
             if SMART == 2:
                 ft_add_max = max(ft_add_max, ft_add_flag)
-                if ft_add_max >= 6 or ft_add_max == 0:
+                if smart_ft_add_flag == 0:
+                    CORR_COEF = CORR_COEF + 0.01
+                if ft_add_max >= 10:
                     FT_ADD = FT_ADD + 2
-                elif ft_add_max >= 3:
+                elif ft_add_max >= 4:
                     FT_ADD = FT_ADD + 1
                 
                 moto_goto_standby(0)
@@ -841,93 +834,86 @@ def setting():
             # 自我FT&CC學習
             elif cursor_xy == (11, 2):
                 if BOTTON_SETTING.value():
+                    lcd.hide_cursor()
                     SMART = 1
-                    smart_1_diff = 0.03
                     beepbeep(0.1)
                     show_lcd("sFT: ", 0, 0, 8)
                     show_lcd("sCC: ", 0, 1, 8)
                     show_lcd("TEST: ", 0, 2, 10)
                     ori_LB_CONV_G = LB_CONV_G
-                    ori_PRE_STRECH = PRE_STRECH
                     ori_FT_ADD = FT_ADD
                     ori_CORR_COEF = CORR_COEF
-                    ori_CORR_COEF_AUTO = CORR_COEF_AUTO
-                    CORR_COEF_AUTO = 1
-                    FT_ADD = 1
-                    CORR_COEF = 1.3
-                    PRE_STRECH = 0
                     LB_CONV_G = int(15 * 453.59237)
-                    t_pass = 0
-                    r_CORR_COEF = CORR_COEF
+                    FT_ADD = 1
                     r_FT_ADD = FT_ADD
+                    r_CORR_COEF = CORR_COEF
                     j = 0
+                    t_pass = 0
+                    fail_flag = 0
+                    cc_array = []
                     while True:
                         if BOTTON_EXIT.value():
                             beepbeep(0.1)
                             break
                         
-                        show_lcd(str(j+1), 6, 2, 2)
-                        ret = start_tensioning()
+                        show_lcd("{:02d}".format(j+1), 6, 2, 2)
                         if SMART == 1:
-                            if r_CORR_COEF > CORR_COEF and t_pass != 2:
-                                t_pass = 1
-                            elif CORR_COEF > r_CORR_COEF:
-                                t_pass = 2
-                            elif CORR_COEF <= r_CORR_COEF and t_pass == 2:
-                                t_pass = 3
-                                CORR_COEF = r_CORR_COEF
+                            time.sleep(0.5)
+                            ret_cc = forward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 1, 0)
+                            if ret_cc == 0:
+                                CORR_COEF = round(((TENSION_MON)/LB_CONV_G), 2)
+                                cc_array.append(CORR_COEF)
+                                beepbeep(PU_STAY)
+                                moto_goto_standby(0)
+                            else:
+                                fail_flag = 1
                             
-                            r_CORR_COEF = CORR_COEF
-                            if t_pass == 3:
-                                CORR_COEF_AUTO = 0
-                                CORR_COEF = CORR_COEF + smart_1_diff
+                            if j == 4:
+                                cc_array.sort()
+                                CORR_COEF = cc_array[2]
                                 show_lcd("v", 9, 1, 1)
                                 SMART = 2
-                                t_pass = 0
                                 
+                            j = j + 1
                         elif SMART == 2:
-                            if r_FT_ADD == FT_ADD:
-                                t_pass = t_pass + 1
-                                if t_pass == 2:
-                                    show_lcd("v", 7, 0, 1)
-                                    show_lcd("OK", 6, 2, 2)
-                                    CORR_COEF = CORR_COEF - smart_1_diff
-                                    config_save()
-                                    while True:
-                                        if BOTTON_EXIT.value():
-                                            break
-                                    break
+                            time.sleep(0.5)
+                            r_CORR_COEF = CORR_COEF
+                            ret_ft = start_tensioning()
+                            if ret_ft == True:
+                                if (r_FT_ADD == FT_ADD) and (r_CORR_COEF == CORR_COEF):
+                                    t_pass = t_pass + 1
+                                    if t_pass == 2:
+                                        show_lcd("v", 7, 0, 1)
+                                        show_lcd("v", 8, 2, 2)
+                                        LB_CONV_G = ori_LB_CONV_G
+                                        config_save()
+                                        SMART = 0 
+                                else:
+                                    r_FT_ADD = FT_ADD
                             else:
-                                r_FT_ADD = FT_ADD
+                                fail_flag = 1
+                                
+                            j = j + 1
                         
-                        if ret == False:
+                        if fail_flag:
                             show_lcd("X", 5, 0, 4)
                             show_lcd("X", 5, 1, 4)
                             show_lcd("FAIL", 6, 2, 5)
+                            SMART = 0
                             CORR_COEF = ori_CORR_COEF
                             FT_ADD = ori_FT_ADD
+                            LB_CONV_G = ori_LB_CONV_G
+                            moto_goto_standby(0)
                             while True:
                                 if BOTTON_EXIT.value():
                                     break
-                            moto_goto_standby(0)
-                            setting_interface()
-                            break
                         else:
-                            show_lcd("{:02d}".format(FT_ADD), 5, 0, 4)
-                            if SMART == 2:
-                                show_lcd("{: >1.2f}".format(CORR_COEF - smart_1_diff), 5, 1, 4)
-                            else:
-                                show_lcd("{: >1.2f}".format(CORR_COEF), 5, 1, 4)
-                            
+                            show_lcd("{:02d}".format(FT_ADD), 5, 0, 2)
+                            show_lcd("{: >1.2f}".format(CORR_COEF), 5, 1, 4)
                             show_lcd("{: >5d}".format(TENSION_COUNTS) +"T", 14, 3, 6)
-                        
-                        j = j + 1
-                        time.sleep(1)
                     
-                    SMART = 0
-                    PRE_STRECH = ori_PRE_STRECH
-                    LB_CONV_G = ori_LB_CONV_G
-                    CORR_COEF_AUTO = ori_CORR_COEF_AUTO
+                    lcd.show_cursor()
+                    lcd.blink_cursor_on()
                     setting_interface()
 
             # LOG顯示
@@ -1122,3 +1108,4 @@ while True:
     if ERR_MSG:
         show_lcd(ERR_MSG, 0, 2, I2C_NUM_COLS)
         break
+    
