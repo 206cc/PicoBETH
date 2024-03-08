@@ -59,7 +59,7 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.81"
+VERSION = "1.82"
 VER_DATE = "2024-03-08"
 CFG_NAME = "config.cfg" # 設定存檔檔名
 LOG_NAME = "logs.txt"   # LOG存檔檔名
@@ -223,10 +223,13 @@ def beepbeep(run_time):
     BEEP.off()
 
 # 張力顯示
-def tension_info():
-    show_lcd("{: >4.1f}".format(TENSION_MON * 0.0022), 9, 0, 4)
-    show_lcd("{: >4.1f}".format(TENSION_MON / 1000), 9, 1, 4)
-    show_lcd("{: >5d}G".format(TENSION_MON), 14, 3, 6)
+def tension_info(tension):
+    if tension is None:
+        tension = TENSION_MON
+    
+    show_lcd("{: >4.1f}".format(tension * 0.0022), 9, 0, 4)
+    show_lcd("{: >4.1f}".format(tension / 1000), 9, 1, 4)
+    show_lcd("{: >5d}G".format(tension), 14, 3, 6)
     
 # 步進馬達旋轉
 def setStep(in_w):
@@ -434,7 +437,6 @@ def start_tensioning():
         TIMER_DEFF = 0
         
     rel = forward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 1, 0)
-    log_lb_max = int(TENSION_MON_TMP * CORR_COEF)
     if rel:
         if SMART == 0:
             show_lcd(str(rel), 0, 2, I2C_NUM_COLS)
@@ -454,6 +456,7 @@ def start_tensioning():
     cc_add_flag = 0
     smart_ft_add_flag = 0
     tmp_LB_CONV_G = LB_CONV_G
+    log_lb_max = int(TENSION_MON_TMP * CORR_COEF)
     t0 = time.time()
     # 到達指定張力，等待
     while True:
@@ -461,21 +464,17 @@ def start_tensioning():
         # 到磅偵測
         if over_flag == 0:
             if abs(tmp_LB_CONV_G - TENSION_MON) < PU_PRECISE:
-                if SMART == 0:
-                    tension_info()
-                else:
-                    time.sleep(0.5)
                 beepbeep(PU_STAY)
-                over_flag = 1
-                
                 if SMART == 0:
+                    tension_info(log_lb_max)
                     tmp_LB_CONV_G = int(DEFAULT_LB * 453.59237)
                     show_lcd("Target Tension", 0, 2, I2C_NUM_COLS)
                     show_lcd("S:   ", 15, 1, 5)
                 else:
-                    time.sleep(0.84)
+                    time.sleep(1.34)
                     
                 t0 = time.time()
+                over_flag = 1
         
         # 張力不足加磅
         if tmp_LB_CONV_G > TENSION_MON and (manual_flag == 1 or over_flag == 0):
@@ -557,7 +556,7 @@ def start_tensioning():
             if CORR_COEF_AUTO == 1 and SMART != 2:
                 if cc_count_add > 5:
                     CORR_COEF = CORR_COEF - 0.01
-                else:
+                elif cc_count_add == 0:
                     CORR_COEF = CORR_COEF + 0.01
             
             #FT參數自動調整
@@ -598,7 +597,7 @@ def start_tensioning():
         
         if ft_flag == 0:
             if SMART == 0:
-                tension_info()
+                tension_info(None)
                 show_lcd("{: >3d}".format(time.time()-t0), 17, 1, 3)
             else:
                 time.sleep(0.617)
@@ -844,7 +843,7 @@ def setting():
                     ori_FT_ADD = FT_ADD
                     ori_CORR_COEF = CORR_COEF
                     LB_CONV_G = int(15 * 453.59237)
-                    FT_ADD = 1
+                    FT_ADD = 2
                     r_FT_ADD = FT_ADD
                     r_CORR_COEF = CORR_COEF
                     j = 0
@@ -1094,7 +1093,7 @@ while True:
     
     # 張力顯示更新
     if (time.ticks_ms() - ts_info_time) > TS_INFO_MS:
-        tension_info()
+        tension_info(None)
         if TIMER:
             if timer_flag == 0:
                 TIMER_DEFF = time.time() - TIMER
