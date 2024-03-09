@@ -42,14 +42,17 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 4. 張力系數設定
 5. 張力校正
 6. 穿線計時
-7. 張緊次數記錄
+7. 張緊和開機次數記錄
 8. 張緊LOG的詳細記錄
 9. 二段速度設定(在TB6600馬達控制器上切換)
+10. 打結加磅
+11. UPS不斷電
 
 ## 待機畫面
 1. 使用左右鍵可設定磅、公斤及預拉的十位數、個位數、小數。
 2. 使用上下鍵調整選擇的設定。
 3. 穿線計時功能，在按下離開鍵開始計時，再按一下停止計時，按第三下計時器歸零。
+4. 預拉功能(PS)及打結功能(KT)使用上下鍵切換，打結功能用完後會自動切回預拉功能。
 ![images1-3](docs/images1-3.png)
 
 ## 張緊畫面
@@ -62,11 +65,12 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 > 每次的張力微調幅度如太高或太低，可自行調整 FT 參數
 
 ## 設定畫面
-1. UN: 選擇設定時使用磅或公斤單位
-2. CC: 微調參數(詳見第一次開機章節)
+1. UN: 選擇設定時使用磅或公斤單位。
+2. CC: 微調參數(詳見第一次開機章節)，1.70版之後可自動學習最佳的參數值。
 3. HX: HX711 的張力傳感器校正(詳見第一次開機章節)
 4. FT: 達到指定張力時微調的幅度
 5. AT: 預設恆拉開關
+6. SMART: 自動偵測最佳的FT微調參數及CC張力系數參數 
 ![images1-5](docs/images1-5.png)
   
 > [!NOTE]
@@ -74,7 +78,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 ## 張緊LOG的詳細記錄
 在設定畫面下，使用左右鍵選到張緊次數，再點下五向建的中鍵進入張緊 LOG 記錄頁面  
-在頁面下使用左右鍵可瀏覽 LOG 記錄  
+在頁面下使用左右鍵可瀏覽 LOG 記錄
 TIMER: 如果有開啟計時功能，顯示此張緊時的時間  
 LB: 設定張力/停止張力  
 PS: 設定預拉值  
@@ -84,7 +88,7 @@ ST: CC參數/HX參數
 ![images1-7](docs/images1-7.png)
   
 > [!NOTE]
-> 預設顯示 1-50 筆 LOG 記錄，如要需調整請修改 LOG_MAX 參數
+> 預設顯示 1-20 筆 LOG 記錄，如要需調整請修改 LOG_MAX 參數
 
 > [!WARNING]
 > LOG_MAX 參數請勿設定過大，開機時如載入過多 LOG 會導致記憶體不足會無開機
@@ -105,6 +109,7 @@ ST: CC參數/HX參數
 11. 微控開關 / Micro Switch
 12. 有源蜂鳴器 / Active buzzer
 13. 三色 LED / Tri-Color LEDs
+14. 12V 18650 UPS 電池盒 / 18650 UPS Battery Box
 
 > [!WARNING]
 > 除非您有自行修改程式的能力，否則請照指的的型號或規格購買材料

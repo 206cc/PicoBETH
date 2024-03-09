@@ -47,14 +47,17 @@ Function demonstration video
 4. Tension coefficient setting
 5. Tension calibration
 6. Stringing timer
-7. Tensioning count recording
+7. Tension counter and boot counter
 8. Detailed recording of tensioning logs
 9. Pull speed of the string(Switch on the TB6600 stepper motor driver)
+10. Knot function
+11. Real-time UPS Redundancy Feature
 
 ## Standby screen
 1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
 2. Use up and down keys to adjust the selected settings.
 3. Stringing timer function: Start timing by pressing the exit key, stop timing by pressing it again, and reset the timer on the third press.
+4. The Pre-Stretch function (PS) and Knot function (KT) are switched using the up and down keys. After using the Knot function, it will automatically switch back to the Pre-Stretch function.
 ![images1-3](docs/images1-3.png)
 
 ## Tensioning screen
@@ -68,10 +71,11 @@ Function demonstration video
 
 ## Settings screen
 1. UN: Select pounds or kilograms when setting.
-2. CC: Fine-tuning parameters (see the first boot chapter for details).
+2. CC: Fine-tuning parameters (see the first boot chapter for details). After version 1.70, the system can automatically learn the optimal parameter values.
 3. HX: Calibration of the tension sensor for HX711 (see the first boot chapter for details).
 4. FT: Amplitude of fine-tuning when reaching the specified tension.
 5. AT: Default Constant-Pull Switch.
+6. SAMRT: Automatically detecting optimal FT fine-tuning parameters and CC tension coefficient parameters.
 ![images1-5](docs/images1-5.png)
 
 > [!NOTE]
@@ -88,7 +92,7 @@ ST: CC parameter/HX parameter.
 ![images1-7](docs/images1-7.png)
 
 > [!NOTE]
-> The default display is 1-50 log records. If you need to adjust, please modify the LOG_MAX parameter.
+> The default display is 1-20 log records. If you need to adjust, please modify the LOG_MAX parameter.
 
 > [!WARNING]
 > Do not set the LOG_MAX parameter too large, as loading too many logs during startup will cause insufficient memory and result in failure to boot.
@@ -109,6 +113,7 @@ Main materials
 11. Micro switch
 12. Active buzzer
 13. Tri-color LEDs
+14. 12V 18650 UPS Battery Box
 
 > [!WARNING]
 > Unless you have the ability to modify the code yourself, please purchase materials according to the specified models or specifications.
