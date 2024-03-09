@@ -19,6 +19,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 4. 使用堆疊方式減少體積，不會擋到置物槽
 5. 改使用自行設計PCB電路板
 6. HX711模塊改用紅色抗干擾版本
+7. 新增UPS電池盒，可在無外部電源的狀況下繼續完成穿線
 
 穿線展示影片
 
@@ -46,7 +47,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 8. 張緊LOG的詳細記錄
 9. 二段速度設定(在TB6600馬達控制器上切換)
 10. 打結加磅
-11. UPS不斷電
+11. UPS不斷電功能
 
 ## 待機畫面
 1. 使用左右鍵可設定磅、公斤及預拉的十位數、個位數、小數。

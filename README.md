@@ -24,6 +24,7 @@ Improvements in the final machine:
 4. Reduced volume by using a stacking approach, avoiding interference with the storage slot
 5. Switched to a custom-designed PCB circuit board
 6. HX711 module change red anti-interference version
+7. Addition of a UPS battery box that allows continued stringing even in the absence of an external power source.
 
 Stringing demonstration video
 
