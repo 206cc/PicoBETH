@@ -48,7 +48,7 @@ CORR_MAX = 1.7       # 張力校正參數最大值
 CORR_MIN = 0.3       # 張力校正參數最小值
 FT_ADD_MAX = 20      # 增加恆拉微調參數最大值
 FT_ADD_MIN = 1       # 增加恆拉微調參數最小值
-PU_PRECISE = 60      # (G)如超過設定張力加此值，則進入恆拉微調
+PU_PRECISE = 50      # (G)如超過設定張力加此值，則進入恆拉微調
 PU_STAY = 0.3        # (Second)預拉暫留秒數使用(蜂鳴器)，秒數過後退回原設定磅數
 FT_ADD = 7           # 增加恆拉微調時步進馬達的步數
 CP_SW = 1            # 自動恆拉預設 0=關閉，1=只設啟用
@@ -62,8 +62,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.90"
-VER_DATE = "2024-03-09"
+VERSION = "1.91"
+VER_DATE = "2024-03-10"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT'] # 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,2],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -112,7 +112,7 @@ BOTTON_LIST = {"BOTTON_HEAD":0,
                "BOTTON_DOWN":0,
                "BOTTON_LEFT":0,
                "BOTTON_RIGHT":0}                # 按鈕列表
-BOTTON_CLICK_MS = 500                           # (MS)按鈕點擊毫秒
+BOTTON_CLICK_MS = 400                           # (MS)按鈕點擊毫秒
 
 # LED參數
 LED_GREEN = Pin(19, machine.Pin.OUT)  # 綠
@@ -236,6 +236,7 @@ def tension_info(tension):
     show_lcd("{: >4.1f}".format(tension * 0.0022), 9, 0, 4)
     show_lcd("{: >4.1f}".format(tension / 1000), 9, 1, 4)
     show_lcd("{: >5d}G".format(tension), 14, 3, 6)
+    return tension
     
 # 步進馬達旋轉
 def setStep(in_w):
@@ -432,7 +433,7 @@ def init():
 
 # 開始增加張力
 def start_tensioning():
-    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNT, LOGS, CORR_COEF, FT_ADD, KNOT_FLAG, LB_CONV_G
+    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNT, LOGS, CORR_COEF, FT_ADD, KNOT_FLAG, LB_CONV_G, BOTTON_LIST
     if KNOT_FLAG == 0:
         LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100)), int(LB_MAX * 453.59237))
     else:
@@ -440,13 +441,6 @@ def start_tensioning():
         
     if SMART == 0:
         show_lcd("Tensioning", 0, 2, I2C_NUM_COLS)
-    
-    LED_YELLOW.on()
-    beepbeep(0.1)
-    if CP_SW == 1:
-        manual_flag = 1
-    else:
-        manual_flag = 0
     
     if TIMER:
         TIMER_DEFF = time.time() - TIMER
@@ -471,8 +465,12 @@ def start_tensioning():
     ft_add_max = 0
     cc_count_add = 0
     cc_add_flag = 0
+    log_lb_max = 0
     smart_ft_add_flag = 0
+    manual_flag = 1
+    log_lb_max = 0
     tmp_LB_CONV_G = LB_CONV_G
+    LED_YELLOW.on()
     t0 = time.time()
     # 到達指定張力，等待
     while True:
@@ -482,7 +480,7 @@ def start_tensioning():
             if abs(tmp_LB_CONV_G - TENSION_MON) < PU_PRECISE:
                 beepbeep(PU_STAY)
                 if SMART == 0:
-                    log_lb_max = int(TENSION_MON_TMP * CORR_COEF)
+                    log_lb_max = tmp_LB_CONV_G
                     tension_info(log_lb_max)
                     show_lcd("Target Tension", 0, 2, I2C_NUM_COLS)
                     show_lcd("S:   ", 15, 1, 5)
@@ -492,7 +490,23 @@ def start_tensioning():
                     time.sleep(1.34)
                     
                 t0 = time.time()
-                over_flag = 1
+                if PRE_STRECH == 0:
+                    over_flag = 2
+                    if CP_SW == 1 or SMART == 2:
+                        manual_flag = 1
+                    else:
+                        manual_flag = 0
+                else:
+                    over_flag = 1
+        elif over_flag == 1:
+            if (abs(tmp_LB_CONV_G - TENSION_MON) < PU_PRECISE) and (time.time()-t0) > 0.5:
+                beepbeep(0.1)
+                t0 = time.time()
+                over_flag = 2
+                if CP_SW == 1 or SMART == 2:
+                    manual_flag = 1
+                else:
+                    manual_flag = 0
         
         # 張力不足加磅
         if tmp_LB_CONV_G > TENSION_MON and (manual_flag == 1 or over_flag == 0):
@@ -517,8 +531,6 @@ def start_tensioning():
                 
                 if over_flag == 0:
                     count_add = count_add + 1
-                    
-
         
         # 張力超過減磅
         if (tmp_LB_CONV_G + PU_PRECISE) < TENSION_MON and (manual_flag == 1 or over_flag == 0):
@@ -568,7 +580,11 @@ def start_tensioning():
                 return 0
         
         # 夾線頭按鈕取消按鈕
-        if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT') or (SMART == 2 and ft_add_flag > 10) or (SMART == 2 and time.time()-t0 > 5) or (SMART == 2 and smart_ft_add_flag == 0):
+        if botton_list('BOTTON_HEAD') or \
+           botton_list('BOTTON_EXIT') or \
+           (SMART == 2 and ft_add_flag > 10) or \
+           (SMART == 2 and time.time()-t0 > 5 and over_flag == 2) or \
+           (SMART == 2 and smart_ft_add_flag == 0):
             #CC參數自動調整
             cc_add_sub = 0
             if CORR_COEF_AUTO == 1 and SMART != 2:
@@ -582,9 +598,9 @@ def start_tensioning():
                 ft_add_max = max(ft_add_max, ft_add_flag)
                 if smart_ft_add_flag == 0:
                     CORR_COEF = CORR_COEF + 0.01
-                if ft_add_max >= 10:
+                if ft_add_max >= 5:
                     FT_ADD = FT_ADD + 2
-                elif ft_add_max >= 4:
+                elif ft_add_max >= 3:
                     FT_ADD = FT_ADD + 1
                 
                 moto_goto_standby(0)
@@ -924,7 +940,7 @@ def setting():
                             if j == 4:
                                 cc_array.sort()
                                 CORR_COEF = cc_array[2]
-                                show_lcd("v", 9, 1, 1)
+                                show_lcd("o", 9, 1, 1)
                                 SMART = 2
                                 
                             j = j + 1
@@ -937,7 +953,8 @@ def setting():
                                     t_pass = t_pass + 1
                                     if t_pass == 2:
                                         show_lcd("v", 7, 0, 1)
-                                        show_lcd("v", 8, 2, 2)
+                                        show_lcd("v", 9, 1, 1)
+                                        show_lcd("T", 8, 2, 2)
                                         config_save()
                                         SMART = 0 
                                 else:
