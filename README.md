@@ -40,7 +40,7 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 
 Function demonstration video
 
-[![DEMO VIDEO](https://img.youtube.com/vi/t-nlxYUoaV0/0.jpg)](https://www.youtube.com/watch?v=t-nlxYUoaV0)
+[![DEMO VIDEO](https://img.youtube.com/vi/s5no9YdeNnc/0.jpg)](https://www.youtube.com/watch?v=s5no9YdeNnc)
 
 1. Set tension in pounds or kilograms
 2. Pre-Stretch function

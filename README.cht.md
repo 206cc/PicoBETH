@@ -35,7 +35,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 功能展示影片
 
-[![DEMO VIDEO](https://img.youtube.com/vi/t-nlxYUoaV0/0.jpg)](https://www.youtube.com/watch?v=t-nlxYUoaV0)
+[![DEMO VIDEO](https://img.youtube.com/vi/s5no9YdeNnc/0.jpg)](https://www.youtube.com/watch?v=s5no9YdeNnc)
 
 1. 使用磅或公斤單位設定張力
 2. 預拉(Pre-Strech)
@@ -126,7 +126,7 @@ ST: CC參數/HX參數
 ![images2-3](docs/images2-4.svg)
 
 > [!NOTE]
-> 您可以自行下載上圖洗電路板，避免手焊電路板的麻煩，如果不會洗板的可上露天拍賣搜尋 PicoBETH
+> 您可以自行下載上圖洗電路板，避免手焊電路板的麻煩
 
 > [!NOTE]
 > 此電路板四周的鎖點比照 2004 LCD 鎖點位置，可堆疊減少體積
