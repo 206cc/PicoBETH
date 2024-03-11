@@ -40,7 +40,7 @@ KNOT = 15            # (%)打結增加%數
 LB_MAX = 35.0        # (LB)設定張緊的最高磅數
 LB_MIN = 15.0        # (LB)設定張緊的最低磅數
 PS_MAX = 30          # (LB)設定預拉的最高%數
-KNOT_MIN = 10        # (%)打結增最低%數
+KNOT_MIN = 5         # (%)打結增最低%數
 KNOT_MAX = 30        # (%)打結增最高%數
 HX711_MAX = 25.00    # HX711校正參數最大值
 HX711_MIN = 15.00    # HX711校正參數最小值
@@ -62,8 +62,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.91"
-VER_DATE = "2024-03-10"
+VERSION = "1.92"
+VER_DATE = "2024-03-11"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT'] # 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,2],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -112,7 +112,7 @@ BOTTON_LIST = {"BOTTON_HEAD":0,
                "BOTTON_DOWN":0,
                "BOTTON_LEFT":0,
                "BOTTON_RIGHT":0}                # 按鈕列表
-BOTTON_CLICK_MS = 400                           # (MS)按鈕點擊毫秒
+BOTTON_CLICK_MS = 500                           # (MS)按鈕點擊毫秒
 
 # LED參數
 LED_GREEN = Pin(19, machine.Pin.OUT)  # 綠
@@ -258,7 +258,7 @@ def forward(delay, steps, check, init):
                 return(0)
             
             # 停止條件
-            if botton_list('BOTTON_HEAD') or botton_list('BOTTON_EXIT'):
+            if botton_list('BOTTON_EXIT'):
                 moto_goto_standby(0)
                 MOTO_MOVE = 0
                 MOTO_WAIT = 0
@@ -433,7 +433,7 @@ def init():
 
 # 開始增加張力
 def start_tensioning():
-    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNT, LOGS, CORR_COEF, FT_ADD, KNOT_FLAG, LB_CONV_G, BOTTON_LIST
+    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNT, LOGS, CORR_COEF, FT_ADD, KNOT_FLAG, LB_CONV_G
     if KNOT_FLAG == 0:
         LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100)), int(LB_MAX * 453.59237))
     else:
@@ -735,30 +735,29 @@ def setting_ts():
                         
                     show_lcd(PSKT_ARR[KNOT_FLAG], 14, 0, 2)
                     show_lcd("{: >2d}".format(ps_kt_tmp), 17, 0, 2)
-         
-            if KNOT_FLAG == 1:
-                KNOT = ps_kt_tmp
-            else:
-                PRE_STRECH = ps_kt_tmp
             
             if DEFAULT_LB >= LB_MAX:
                 DEFAULT_LB = LB_MAX  
             elif DEFAULT_LB <= LB_MIN:
                 DEFAULT_LB = LB_MIN
-                
-            if PRE_STRECH >= PS_MAX:
-                PRE_STRECH = PS_MAX
-            elif PRE_STRECH <= 0:
-                PRE_STRECH = 0
-                
-            if KNOT >= KNOT_MAX:
-                KNOT = KNOT_MAX
-            elif KNOT <= KNOT_MIN:
-                KNOT = KNOT_MIN
             
             if KNOT_FLAG == 1:
+                KNOT = ps_kt_tmp
+                if KNOT >= KNOT_MAX:
+                    KNOT = KNOT_MAX
+                elif KNOT <= KNOT_MIN:
+                    KNOT = KNOT_MIN
+                    
+                ps_kt_tmp = KNOT
                 show_lcd("{: >2d}".format(KNOT), 17, 0, 2)
             else:
+                PRE_STRECH = ps_kt_tmp
+                if PRE_STRECH >= PS_MAX:
+                    PRE_STRECH = PS_MAX
+                elif PRE_STRECH <= 0:
+                    PRE_STRECH = 0
+                
+                ps_kt_tmp = PRE_STRECH
                 show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
             
             show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
