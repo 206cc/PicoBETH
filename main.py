@@ -54,7 +54,7 @@ FT_ADD = 7           # 增加恆拉微調時步進馬達的步數
 CP_SW = 1            # 自動恆拉預設 0=關閉，1=只設啟用
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
 AUTO_SAVE_SEC = 1.5  # (Second)自動儲存設定張力秒數
-LOG_MAX = 20         # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
+LOG_MAX = 50         # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
                     
 import time, _thread, machine
 from machine import I2C, Pin
@@ -62,9 +62,9 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.92"
-VER_DATE = "2024-03-11"
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT'] # 存檔變數
+VERSION = "1.93"
+VER_DATE = "2024-03-13"
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS'] # 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,2],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
 ONOFF_ARR = ['Off', 'On ']
@@ -387,17 +387,19 @@ def lb_kg_select():
 
 # 開機初始化
 def init():
-    global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTO_RS_STEPS, MOTO_MAX_STEPS, BOOT_COUNT, ABORT_GRAM
+    global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTO_RS_STEPS, MOTO_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, FT_ADD
+    max_MOTO_MAX_STEPS = MOTO_MAX_STEPS
     config_read()
     logs_read()
     lb_kg_select()
     show_lcd(" **** PicoBETH **** ", 0, 0, I2C_NUM_COLS)
     show_lcd("Version: " + VERSION, 0, 1, I2C_NUM_COLS)
-    show_lcd("Date: " + str(VER_DATE), 0, 2, I2C_NUM_COLS)
+    show_lcd("Date: " + VER_DATE, 0, 2, I2C_NUM_COLS)
+    show_lcd("GitH: 206cc/PicoBETH", 0, 3, I2C_NUM_COLS)
+    time.sleep(3)
     LED_RED.on()
     LED_YELLOW.on()
     LED_GREEN.on()
-    time.sleep(0.5)
     LED_YELLOW.off()
     LED_GREEN.off()
     main_interface()
@@ -417,13 +419,18 @@ def init():
 
     moto_goto_standby(0)
     show_lcd("Checking motor...", 0, 2, I2C_NUM_COLS)
+    ori_MOTO_MAX_STEPS = MOTO_MAX_STEPS
+    MOTO_MAX_STEPS = max_MOTO_MAX_STEPS
     MOTO_MAX_STEPS = forward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 0, 1)
+    
     if MOTO_MAX_STEPS == "ABORT GRAM":
         ERR_MSG = "ERROR: Abort Gram"
     else:
-        MOTO_RS_STEPS = int(MOTO_MAX_STEPS/20)
-        ABORT_LM = int(MOTO_MAX_STEPS*0.3)
+        MOTO_RS_STEPS = int(int(MOTO_MAX_STEPS) / 20)
+        ABORT_LM = int(int(MOTO_MAX_STEPS) * 0.3)
         ABORT_GRAM = ori_ABORT_GRAM
+        FT_ADD = round(FT_ADD * MOTO_MAX_STEPS / ori_MOTO_MAX_STEPS)
+        config_save()
         moto_goto_standby(0)
         LED_RED.off()
         show_lcd("Ready", 0, 2, I2C_NUM_COLS)
@@ -461,6 +468,7 @@ def start_tensioning():
     count_sub = 0
     over_flag = 0
     ft_add_flag = 0
+    ft_add_over = 0
     ft_add_time = 0
     ft_add_max = 0
     cc_count_add = 0
@@ -515,7 +523,7 @@ def start_tensioning():
             if diff_g < PU_PRECISE:
                 ft_flag = 0
                 cc_add_flag = 1
-                if SMART == 2:
+                if SMART == 2 and over_flag == 2:
                     if time.ticks_ms() - ft_add_time < 1000:
                         ft_add_flag = ft_add_flag + 1
                     else:
@@ -543,6 +551,9 @@ def start_tensioning():
             
             if over_flag == 0:
                 count_sub = count_sub + 1
+            
+            if SMART == 2 and over_flag == 2:
+                ft_add_over  = 1
             
         if SMART == 0:
             # 手動加磅
@@ -583,7 +594,7 @@ def start_tensioning():
         if botton_list('BOTTON_HEAD') or \
            botton_list('BOTTON_EXIT') or \
            (SMART == 2 and ft_add_flag > 10) or \
-           (SMART == 2 and time.time()-t0 > 5 and over_flag == 2) or \
+           (SMART == 2 and time.time()-t0 > 10 and over_flag == 2) or \
            (SMART == 2 and smart_ft_add_flag == 0):
             #CC參數自動調整
             cc_add_sub = 0
@@ -598,9 +609,11 @@ def start_tensioning():
                 ft_add_max = max(ft_add_max, ft_add_flag)
                 if smart_ft_add_flag == 0:
                     CORR_COEF = CORR_COEF + 0.01
-                if ft_add_max >= 5:
+                elif ft_add_over == 1:
+                    FT_ADD = FT_ADD - 1
+                elif ft_add_max >= 8:
                     FT_ADD = FT_ADD + 2
-                elif ft_add_max >= 3:
+                elif ft_add_max >= 5:
                     FT_ADD = FT_ADD + 1
                 
                 moto_goto_standby(0)
@@ -616,16 +629,16 @@ def start_tensioning():
             show_lcd("     ", 15, 1, 5)
             MOTO_WAIT = 0
             TENSION_COUNT = TENSION_COUNT + 1
+            #LOG寫入
+            LOGS.insert(0, [TENSION_COUNT, TIMER_DEFF, LB_KG_SELECT, DEFAULT_LB, log_lb_max, PRE_STRECH, log_s, count_add, count_sub, CORR_COEF, HX711_CAL, FT_ADD, KNOT_FLAG, KNOT])
+            logs_save([LOGS[0]], "a")
+            if len(LOGS) > LOG_MAX:
+                LOGS = LOGS[:LOG_MAX]
+                
             if KNOT_FLAG == 1:
                 KNOT_FLAG = 0
                 show_lcd(PSKT_ARR[KNOT_FLAG], 14, 0, 2)
                 show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
-            
-            #LOG寫入
-            LOGS.insert(0, [TENSION_COUNT, TIMER_DEFF, LB_KG_SELECT, DEFAULT_LB, log_lb_max, PRE_STRECH, log_s, count_add, count_sub, CORR_COEF, HX711_CAL, FT_ADD])
-            logs_save([LOGS[0]], "a")
-            if len(LOGS) > LOG_MAX:
-                LOGS = LOGS[:LOG_MAX]
             
             config_save()
             return 0
@@ -907,7 +920,7 @@ def setting():
                     beepbeep(0.1)
                     show_lcd("sFT: ", 0, 0, 10)
                     show_lcd("sCC: ", 0, 1, 10)
-                    show_lcd("TEST: ", 0, 2, 10)
+                    show_lcd("TEST:   T", 0, 2, 10)
                     ori_FT_ADD = FT_ADD
                     ori_CORR_COEF = CORR_COEF
                     LB_CONV_G = int(15 * 453.59237)
@@ -950,10 +963,11 @@ def setting():
                             if ret_ft == True:
                                 if (r_FT_ADD == FT_ADD) and (r_CORR_COEF == CORR_COEF):
                                     t_pass = t_pass + 1
-                                    if t_pass == 2:
+                                    if t_pass == 1:
+                                        show_lcd("o", 7, 0, 1)
+                                    elif t_pass == 2:
                                         show_lcd("v", 7, 0, 1)
                                         show_lcd("v", 9, 1, 1)
-                                        show_lcd("T", 8, 2, 2)
                                         config_save()
                                         SMART = 0 
                                 else:
@@ -1068,16 +1082,16 @@ def setting_interface():
     show_lcd("UN:        FT: "+ "{:02d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
     show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
     show_lcd("AT: "+ ONOFF_ARR[CP_SW] +"    CC: "+ ML_ARR[CORR_COEF_AUTO] + "{: >1.2f}".format(CORR_COEF), 0, 1, I2C_NUM_COLS)
-    show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL) +"  SMART", 0, 2, I2C_NUM_COLS)
+    show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL) +"  *SMART", 0, 2, I2C_NUM_COLS)
     show_lcd("<PicoBETH>"+ "{: >3d}".format(BOOT_COUNT) +"B"+ "{: >5d}".format(TENSION_COUNT) +"T", 0, 3, I2C_NUM_COLS)
     
 # LOG介面顯示
 def logs_interface(idx):
     if idx=="init":
         show_lcd("  LOG  TIMER:   m  s", 0, 0, I2C_NUM_COLS)
-        show_lcd("LB:    /      PS:  %", 0, 1, I2C_NUM_COLS)
+        show_lcd("LB:    /        :  %", 0, 1, I2C_NUM_COLS)
         show_lcd("FT:  /  /      S:   ", 0, 2, I2C_NUM_COLS)
-        show_lcd("ST:    /           T", 0, 3, I2C_NUM_COLS)
+        show_lcd("C/H:    /          T", 0, 3, I2C_NUM_COLS)
     else:
         show_lcd("{:0>2d}".format((idx + 1)), 0, 0, 2)
         if int(LOGS[idx][1]):
@@ -1092,13 +1106,17 @@ def logs_interface(idx):
             show_lcd("LB:" + str(LOGS[idx][3]), 0, 1, 7)
             show_lcd("{: >4.1f}".format(int(LOGS[idx][4]) * 0.0022046), 8, 1, 4)
         
-        show_lcd(str(LOGS[idx][5]), 17, 1, 2)
+        if int(LOGS[idx][12]) == 1:
+            show_lcd("KT:" + "{: >2d}".format(int(LOGS[idx][13])), 14, 1, 5)
+        else:
+            show_lcd("PS:" + "{: >2d}".format(int(LOGS[idx][5])), 14, 1, 5)
+            
         show_lcd("{: >3d}".format(int(LOGS[idx][6])), 17, 2, 3)
         show_lcd("{: >2d}".format(int(LOGS[idx][7])), 3, 2, 2)
         show_lcd("{: >2d}".format(int(LOGS[idx][8])), 6, 2, 2)
-        show_lcd(str(LOGS[idx][11]), 9, 2, 2)
-        show_lcd(str(LOGS[idx][9]), 3, 3, 4)
-        show_lcd(str(LOGS[idx][10]), 8, 3, 5)
+        show_lcd("{:02d}".format(int(LOGS[idx][11])), 9, 2, 2)
+        show_lcd("{:.2f}".format(float(LOGS[idx][9])), 4, 3, 4)
+        show_lcd("{:.2f}".format(float(LOGS[idx][10])), 9, 3, 5)
         show_lcd("{: >5d}".format(int(LOGS[idx][0])), 14, 3, 5)
 
 # 設定主畫面顯示
