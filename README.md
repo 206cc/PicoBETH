@@ -169,21 +169,24 @@ Calibration method:
 4. Press the up or down key to start stringing. When the LCD displays 20 pounds, note down the tension gauge reading.
 5. Enter the recorded tension gauge value in the HX parameter field on the settings page.
 
+Reference video
+[![Reference video](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
+
 > [!WARNING]
 > If you skip this calibration, there may be a discrepancy between the actual tension and the tension displayed on the LCD.
 
 > [!IMPORTANT]
 > This parameter is mainly based on setting storage (config.cfg).
 
+##Setting CC and FT Parameters
+CC Parameter: It is the compensation coefficient during the line tensioning process. Accurate values can reduce subsequent fine-tuning movements. Since version 1.70, an automatic learning function has been added, which dynamically adjusts to the optimal value.
+
+FT Parameter: It determines the magnitude of adjustments after reaching the specified tension. A too large value can cause repeated tension adjustments, while a too small value increases the number of fine-tuning iterations required to reach the specified tension.
+
+Both parameters can be measured using the SMART function introduced in version 1.90 to obtain recommended values.
+
 Reference video
-
-[![Reference video](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
-
-## Set the CC Parameter
-After version 1.70, an automatic learning function has been added. Stringing multiple times to stabilize the CC values. Alternatively, you can disable the learning function and manually configure the settings.
-
-> [!IMPORTANT]
-> Improper settings may lead to frequent fine-tuning.
+[![DEMO](https://img.youtube.com/vi/KtqIK_Z-yhg/0.jpg)](https://www.youtube.com/watch?v=KtqIK_Z-yhg)
 
 # Conclusion
 If you encounter any issues during the manufacturing process, feel free to discuss them in the comments or send me an email with your inquiries.
