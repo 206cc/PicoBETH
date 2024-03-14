@@ -165,6 +165,7 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 5. 至設定頁面上填入剛抄下張力計的數值
 
 參考影片
+
 [![DEMO](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
 
 > [!WARNING]
@@ -184,6 +185,7 @@ FT參數: 達到指定張力後微調時的幅度，過大的值會造成反覆�
 以上二個參數可以使用1.90版本後新增的 SMART 功能測出建議的值
 
 參考影片
+
 [![DEMO](https://img.youtube.com/vi/KtqIK_Z-yhg/0.jpg)](https://www.youtube.com/watch?v=KtqIK_Z-yhg)
 
 
