@@ -170,6 +170,7 @@ Calibration method:
 5. Enter the recorded tension gauge value in the HX parameter field on the settings page.
 
 Reference video
+
 [![Reference video](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
 
 > [!WARNING]
@@ -186,6 +187,7 @@ FT Parameter: It determines the magnitude of adjustments after reaching the spec
 Both parameters can be measured using the SMART function introduced in version 1.90 to obtain recommended values.
 
 Reference video
+
 [![DEMO](https://img.youtube.com/vi/KtqIK_Z-yhg/0.jpg)](https://www.youtube.com/watch?v=KtqIK_Z-yhg)
 
 # Conclusion
