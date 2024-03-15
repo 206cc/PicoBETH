@@ -24,6 +24,7 @@
 
 # 第一次開機請至 https://github.com/206cc/PicoBETH?tab=readme-ov-file#first-boot 觀看如何設定 HX、CC、FT 參數
 # 基本參數(如CFG_NAME內有儲存參數值會以的存檔的設定為主)
+FIRST_TEST = 1       # 第一次開機自我測試檢查
 HX711_CAL = 20.00    # HX711張力感應器校正系數，第一次使用或有更換張力傳感器、HX711電路板時務必重新校正一次
 CORR_COEF_AUTO = 1   # 自我學習CC張力系數開關
 LB_KG_SELECT = 0     # 磅或公斤的設定，0=皆可設定，1=只設定磅，2=只設定公斤
@@ -55,9 +56,9 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.94"
-VER_DATE = "2024-03-14"
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS'] # 存檔變數
+VERSION = "1.95"
+VER_DATE = "2024-03-16"
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST'] # 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,2],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
 ONOFF_ARR = ['Off', 'On ']
@@ -74,7 +75,6 @@ MOTO_MAX_STEPS = 1000000
 MOTO_RS_STEPS = 2000    # 滑台復位時感應到前限位開關時退回的步數，必需退回到未按壓前限位開關的程度
 MOTO_SPEED_V1 = 0.0001  # (Second)步進馬達高速
 MOTO_SPEED_V2 = 0.001   # (Second)步進馬達低速
-TS_INFO_MS = 100        # (MS)主畫面張力更新顯示毫秒
 FT_SUB_COEF = 0.5       # 減少磅數微調時步進馬達的補償系數
 BOTTON_SLEEP = 0.1      # (Second)按鍵等待秒數
 CORR_COEF = 1.00        # 張力系數
@@ -409,7 +409,10 @@ def init():
         if abs(TENSION_MON) > 10:
             ERR_MSG = "ERROR: Tension Sensor"
             show_lcd("{: >5d}G".format(TENSION_MON), 14, 3, 6)
-
+    
+    if FIRST_TEST == 1:
+        first_test()
+        
     moto_goto_standby(0)
     show_lcd("Checking motor...", 0, 2, I2C_NUM_COLS)
     ori_MOTO_MAX_STEPS = MOTO_MAX_STEPS
@@ -1132,6 +1135,126 @@ def show_timer():
         show_lcd("{: >3d}".format(int(TIMER_DEFF / 60)), 14, 1, 3)
         show_lcd("{: >2d}".format(TIMER_DEFF % 60), 18, 1, 2)
 
+def first_test():
+    global FIRST_TEST
+    LED_RED.off()
+    i = 1
+    while True:
+        if i == 1:
+            show_lcd("T"+ str(i) +": BOTTON_SETTING P", 0, 2, I2C_NUM_COLS)
+            show_lcd("    ress", 0, 3, 14)
+            if botton_list('BOTTON_SETTING'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                show_lcd("", 0, 3, 14)
+                i = i + 1
+        elif i == 2:
+            show_lcd("T"+ str(i) +": BOTTON_UP Press", 0, 2, I2C_NUM_COLS)
+            if botton_list('BOTTON_UP'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                show_lcd("", 0, 3, 14)
+                i = i + 1
+        elif i == 3:
+            show_lcd("T"+ str(i) +": BOTTON_DOWN Pres", 0, 2, I2C_NUM_COLS)
+            show_lcd("    s", 0, 3, 14)
+            if botton_list('BOTTON_DOWN'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                show_lcd("", 0, 3, 14)
+                i = i + 1
+        elif i == 4:
+            show_lcd("T"+ str(i) +": BOTTON_LEFT Pre", 0, 2, I2C_NUM_COLS)
+            show_lcd("    ss", 0, 3, 14)
+            if botton_list('BOTTON_LEFT'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                show_lcd("", 0, 3, 14)
+                i = i + 1
+        elif i == 5:
+            show_lcd("T"+ str(i) +": BOTTON_RIGHT Pre", 0, 2, I2C_NUM_COLS)
+            show_lcd("    ss", 0, 3, 14)
+            if botton_list('BOTTON_RIGHT'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                show_lcd("", 0, 3, 14)
+                i = i + 1
+        elif i == 6:
+            show_lcd("T"+ str(i) +": BOTTON_EXIT Pres", 0, 2, I2C_NUM_COLS)
+            show_lcd("    s", 0, 3, 14)
+            if botton_list('BOTTON_EXIT'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                show_lcd("", 0, 3, 14)
+                i = i + 1
+        elif i == 7:
+            show_lcd("T"+ str(i) +": BOTTON_HEAD Pres", 0, 2, I2C_NUM_COLS)
+            show_lcd("    s", 0, 3, 14)
+            if botton_list('BOTTON_HEAD'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                show_lcd("", 0, 3, 14)
+                i = i + 1
+        elif i == 8:
+            show_lcd("T"+ str(i) +": MOTO_LM_REAR Pre", 0, 2, I2C_NUM_COLS)
+            show_lcd("    ss", 0, 3, 14)
+            if MOTO_SW_REAR.value():
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                show_lcd("", 0, 3, 14)
+                i = i + 1
+        elif i == 9:
+            show_lcd("T"+ str(i) +": MOTO_LM_FRONT Pr", 0, 2, I2C_NUM_COLS)
+            show_lcd("    ess", 0, 3, 14)
+            if MOTO_SW_FRONT.value():
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                show_lcd("", 0, 3, 14)
+                i = i + 1
+        elif i == 10:
+            show_lcd("T"+ str(i) +": LED GREEN ON?", 0, 2, I2C_NUM_COLS)
+            show_lcd("[Pres SET KEY]", 0, 3, 14)
+            LED_GREEN.on()
+            if botton_list('BOTTON_SETTING'):
+                LED_GREEN.off()
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                i = i + 1
+        elif i == 11:
+            show_lcd("T"+ str(i) +": LED YELLOW ON?", 0, 2, I2C_NUM_COLS)
+            LED_YELLOW.on()
+            if botton_list('BOTTON_SETTING'):
+                LED_YELLOW.off()
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                i = i + 1
+        elif i == 12:
+            show_lcd("T"+ str(i) +": LED RED ON?", 0, 2, I2C_NUM_COLS)
+            LED_RED.on()
+            if botton_list('BOTTON_SETTING'):
+                LED_RED.off()
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                i = i + 1
+        elif i == 13:
+            show_lcd("T"+ str(i) +": BEEP ON?", 0, 2, I2C_NUM_COLS)
+            beepbeep(0.2)
+            if botton_list('BOTTON_SETTING'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                i = i + 1
+        elif i == 14:
+            show_lcd("T"+ str(i) +": Right KEY FWD?", 0, 2, I2C_NUM_COLS)
+            if botton_list('BOTTON_RIGHT'):
+                forward(MOTO_SPEED_V2, 500, 0, 0)
+            if botton_list('BOTTON_SETTING'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                i = i + 1
+        elif i == 15:
+            show_lcd("T"+ str(i) +": Left KEY BWD?", 0, 2, I2C_NUM_COLS)
+            if botton_list('BOTTON_LEFT'):
+                backward(MOTO_SPEED_V2, 500, 1, 0)
+            if botton_list('BOTTON_SETTING'):
+                show_lcd("T"+ str(i) +": PASS", 0, 2, I2C_NUM_COLS)
+                i = i + 1
+        elif i == 16:
+            show_lcd("T"+ str(i) +": Head Over 1000G", 0, 2, I2C_NUM_COLS)
+            if abs(TENSION_MON) > 1000:
+                show_lcd("T"+ str(i) +": ALL PASS Reboot", 0, 2, I2C_NUM_COLS)
+                show_lcd("     Please", 0, 3, 14)
+                FIRST_TEST = 0
+                config_save()
+                i = i + 1
+        
+        tension_info(None)
+    
 init()
 ts_info_time = time.ticks_ms()
 timer_flag = 0
@@ -1170,7 +1293,7 @@ while True:
         setting_ts()
     
     # 張力顯示更新
-    if (time.ticks_ms() - ts_info_time) > TS_INFO_MS:
+    if (time.ticks_ms() - ts_info_time) > 100:
         tension_info(None)
         if TIMER:
             if timer_flag == 0:
