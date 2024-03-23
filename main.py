@@ -55,7 +55,7 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.96"
+VERSION = "1.96a"
 VER_DATE = "2024-03-23"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST'] # 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,2],[19,3]] # 設定選單陣列
@@ -104,7 +104,7 @@ BOTTON_LIST = {"BOTTON_HEAD":0,
                "BOTTON_DOWN":0,
                "BOTTON_LEFT":0,
                "BOTTON_RIGHT":0}                # 按鈕列表
-BOTTON_CLICK_MS = 400                           # (MS)按鈕點擊毫秒
+BOTTON_CLICK_MS = 500                           # (MS)按鈕點擊毫秒
 
 # LED參數
 LED_GREEN = Pin(19, machine.Pin.OUT)  # 綠
@@ -123,9 +123,7 @@ MOTO_WAIT = 0
 MOTO_STEPS = 0
 CURSOR_XY_TMP = 0
 CURSOR_XY_TS_TMP = 1
-HX711_I = 0
-HX711_RATE = 0
-HX711_DIFF = 0
+HX711 = {"RATE":0, "DIFF":0, "V0":[]}
 TENSION_COUNT = 0
 BOOT_COUNT = 0
 TIMER = 0
@@ -311,7 +309,6 @@ def backward(delay, steps, check, init):
 
 # 滑台復位
 def moto_goto_standby():
-    global HX711_I
     LED_YELLOW.on()
     time.sleep(0.2)
     backward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 1, 0)
@@ -335,28 +332,30 @@ def botton_list(key):
     else:
         return False
     
-# 張力監控
+# 第二核心: 張力監控、按鍵偵測、HX711 歸0
 def tension_monitoring():
-    global TENSION_MON, MOTO_WAIT, HX711_I, BOTTON_LIST, TENSION_MON_TMP, HX711_RATE, HX711_DIFF
+    global TENSION_MON, MOTO_WAIT, HX711, BOTTON_LIST, TENSION_MON_TMP
+    # HX711歸0
     v0_arr = []
-    HX711_I = time.ticks_ms()
+    t0 = time.ticks_ms()
     while True:
         if val := hx.get_value_noblock():
-            if HX711_I != 0:
-                v0_arr.append(val)
-                if (time.ticks_ms() - HX711_I) > 1000:
-                    v0_arr = sorted(v0_arr)
-                    v0 = v0_arr[int((len(v0_arr)/2))]
-                    HX711_DIFF = v0_arr[-1] - v0_arr[0]
-                    HX711_RATE = len(v0_arr)
-                    v0_arr = []
-                    HX711_I = 0
-            else:
-                TENSION_MON = int((val-(v0))/100*(HX711_CAL/20))
-                if MOTO_MOVE == 1:
-                    if LB_CONV_G < (TENSION_MON * CORR_COEF):
-                        TENSION_MON_TMP = TENSION_MON
-                        MOTO_WAIT = 1
+            HX711["V0"].append(val)
+            if (time.ticks_ms() - t0) > 1000:
+                v0_arr = sorted(HX711["V0"])
+                v0 = v0_arr[int((len(v0_arr)/2))]
+                HX711["DIFF"] = v0_arr[-1] - v0_arr[0]
+                HX711["RATE"] = len(v0_arr)
+                break
+    
+    while True:
+        # 張力監控
+        if val := hx.get_value_noblock():
+            TENSION_MON = int((val-(v0))/100*(HX711_CAL/20))
+            if MOTO_MOVE == 1:
+                if LB_CONV_G < (TENSION_MON * CORR_COEF):
+                    TENSION_MON_TMP = TENSION_MON
+                    MOTO_WAIT = 1
         
         # 按鍵偵測
         for key in BOTTON_LIST:
@@ -399,27 +398,43 @@ def init():
     show_lcd("Tension monitoring...", 0, 2, I2C_NUM_COLS)
     _thread.start_new_thread(tension_monitoring, ())
     
-    # 等待 HX711 校正
+    # 等待HX711歸零
+    i = 0
     while True:
-        if HX711_RATE != 0:
+        if HX711["RATE"] != 0:
             break
-    
-    # 檢查HX711 RATE是否為 80Hz
-    if HX711_RATE < 70:
-        ERR_MSG = "ERR: HX711@"+ str(HX711_RATE) +"Hz"
-    
-    # 取樣誤差過大超過1G(不穩定)
-    if HX711_DIFF > 1000:
-        ERR_MSG = "ERR: HX711@"+ str(int(HX711_DIFF/1000)) +"G #1"
         
+        if i > 20:
+            ERR_MSG = "ERR: HX711@Zero #1"
+            break
+        
+        i = i + 1
+        time.sleep(0.1)
+        
+    # 取樣誤差過小於0.01G(HX711損壞?)
+    if HX711["DIFF"] < 10:
+        ERR_MSG = "ERR: HX711@Zero #2"
+        
+    # 取樣值過小(HX711損壞?)
+    if HX711["V0"][0] < 0:
+        ERR_MSG = "ERR: HX711@Zero #3"
+
+    # 檢查HX711 RATE是否為 80Hz
+    if HX711["RATE"] < 70:
+        ERR_MSG = "ERR: HX711@"+ str(HX711["RATE"]) +"Hz"
+
+    # 取樣誤差過大超過1G(不穩定)
+    if HX711["DIFF"] > 1000:
+        ERR_MSG = "ERR: HX711@"+ str(int(HX711["DIFF"]/1000)) +"G #1"
+
     # 待機誤差過大超過5G(不穩定)
     if abs(TENSION_MON) > 5:
         ERR_MSG = "ERR: HX711@"+ str(abs(TENSION_MON)) +"G #2"
     
-    if FIRST_TEST == 1:
-        first_test()
-    
     if ERR_MSG == "":
+        if FIRST_TEST == 1:
+            first_test()
+        
         moto_goto_standby()
         show_lcd("Checking motor...", 0, 2, I2C_NUM_COLS)
         ori_MOTO_MAX_STEPS = MOTO_MAX_STEPS
@@ -1313,6 +1328,7 @@ while True:
         ts_info_time = time.ticks_ms()
         
     if ERR_MSG:
+        LED_RED.on()
         beepbeep(3)
         show_lcd(ERR_MSG, 0, 2, I2C_NUM_COLS)
         break
