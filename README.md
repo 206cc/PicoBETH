@@ -198,7 +198,8 @@ Reference video
 > [!IMPORTANT]
 > This parameter is mainly based on setting storage (config.cfg).
 
-##Setting CC and FT Parameters
+## Setting CC and FT Parameters
+
 CC Parameter: It is the compensation coefficient during the line tensioning process. Accurate values can reduce subsequent fine-tuning movements. Since version 1.70, an automatic learning function has been added, which dynamically adjusts to the optimal value.
 
 FT Parameter: It determines the magnitude of adjustments after reaching the specified tension. A too large value can cause repeated tension adjustments, while a too small value increases the number of fine-tuning iterations required to reach the specified tension.
