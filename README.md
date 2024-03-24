@@ -209,6 +209,16 @@ Reference video
 
 [![DEMO](https://img.youtube.com/vi/KtqIK_Z-yhg/0.jpg)](https://www.youtube.com/watch?v=KtqIK_Z-yhg)
 
+The recommended FT parameters:
+
+| Slide Specifications | TB6600 Normal Mode | TB6600 Fast Mode |
+| -------------------- |:------------------:|:----------------:|
+| 1605                 |         15         |         7        |
+| 1610                 |          8         |         4        |
+
+> [!WARNING]
+> Due to differences in hardware brands' precision, the correct FT parameters depend on actual testing.
+
 # Conclusion
 If you encounter any issues during the manufacturing process, feel free to discuss them in the comments or send me an email with your inquiries.
 
