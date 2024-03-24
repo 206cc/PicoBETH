@@ -136,6 +136,25 @@ Main materials
 > [!NOTE]
 > The lock points around this circuit board are based on the lock point positions of the 2004 LCD, allowing stacking to reduce volume.
 
+## HX711 Load Cell Amplifier
+
+This project requires a high demand for HX711, necessitating the version with a sampling frequency of 80Hz. Since the price difference is negligible, it is recommended to utilize the red anti-interference version.
+
+Below are the versions I have tested:
+
+| Appearance    | Default RATE | Remarks |
+| ------------- |:------------:|:-------:|
+| Green Small Board | 10Hz | Can be soldered to switch to 80Hz, Barely usable |
+| Green Large Board | 10Hz | Not usable |
+| Purple Large Board | 80Hz | Usable, not tested for long periods |
+| Red Tape Shielded | 80Hz | Usable |
+
+> [!WARNING]
+> Starting from version 1.96, the startup checks the RATE. If it does not reach 80Hz or the stability is poor, it will not function properly.
+
+> [!WARNING]
+> The quality of each HX711 amplifier varies. If there are any issues, it is recommended to switch suppliers.
+
 ## TB6600 stepper motor parameters
 ![images2-3](docs/images2-3.png)
 
