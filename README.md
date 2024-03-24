@@ -179,7 +179,7 @@ Use Thonny to save the following code files to the Raspberry Pico. The src folde
 
 ## Step 1: Full System Function Test
 
-After assembling, power on the machine once and conduct tests on all buttons, front and rear limits, and HX711 sensors according to the on-screen instructions.
+Upon completing assembly and powering on the machine for the first time, please conduct tests on all buttons, front and rear limits, and HX711 sensors as instructed on the screen.
 
 ## Step 2: Calibrate the HX Parameter
 
