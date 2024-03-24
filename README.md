@@ -177,7 +177,11 @@ Use Thonny to save the following code files to the Raspberry Pico. The src folde
 
 # First Boot
 
-## Calibrate the HX Parameter
+## Step 1: Full System Function Test
+
+After assembling, power on the machine once and conduct tests on all buttons, front and rear limits, and HX711 sensors according to the on-screen instructions.
+
+## Step 2: Calibrate the HX Parameter
 
 HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
 
@@ -198,7 +202,7 @@ Reference video
 > [!IMPORTANT]
 > This parameter is mainly based on setting storage (config.cfg).
 
-## Setting CC and FT Parameters
+## Step 3: Setting CC and FT Parameters
 
 CC Parameter: It is the compensation coefficient during the line tensioning process. Accurate values can reduce subsequent fine-tuning movements. Since version 1.70, an automatic learning function has been added, which dynamically adjusts to the optimal value.
 
