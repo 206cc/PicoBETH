@@ -136,6 +136,25 @@ Main materials
 > [!NOTE]
 > The lock points around this circuit board are based on the lock point positions of the 2004 LCD, allowing stacking to reduce volume.
 
+## HX711 Load Cell Amplifier
+
+This project requires a high demand for HX711, necessitating the version with a sampling frequency of 80Hz. Since the price difference is negligible, it is recommended to utilize the red anti-interference version.
+
+Below are the versions I have tested:
+
+| Appearance    | Default RATE | Remarks |
+| ------------- |:------------:|:-------:|
+| Green Small Board | 10Hz | Can be soldered to switch to 80Hz, Barely usable |
+| Green Large Board | 10Hz | Not usable |
+| Purple Large Board | 80Hz | Usable, not tested for long periods |
+| Red Tape Shielded | 80Hz | Usable |
+
+> [!WARNING]
+> Starting from version 1.96, the startup checks the RATE. If it does not reach 80Hz or the stability is poor, it will not function properly.
+
+> [!WARNING]
+> The quality of each HX711 amplifier varies. If there are any issues, it is recommended to switch suppliers.
+
 ## TB6600 stepper motor parameters
 ![images2-3](docs/images2-3.png)
 
@@ -158,7 +177,11 @@ Use Thonny to save the following code files to the Raspberry Pico. The src folde
 
 # First Boot
 
-## Calibrate the HX Parameter
+## Step 1: Full System Function Test
+
+Upon completing assembly and powering on the machine for the first time, please conduct tests on all buttons, front and rear limits, and HX711 sensors as instructed on the screen.
+
+## Step 2: Calibrate the HX Parameter
 
 HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
 
@@ -179,7 +202,8 @@ Reference video
 > [!IMPORTANT]
 > This parameter is mainly based on setting storage (config.cfg).
 
-##Setting CC and FT Parameters
+## Step 3: Setting CC and FT Parameters
+
 CC Parameter: It is the compensation coefficient during the line tensioning process. Accurate values can reduce subsequent fine-tuning movements. Since version 1.70, an automatic learning function has been added, which dynamically adjusts to the optimal value.
 
 FT Parameter: It determines the magnitude of adjustments after reaching the specified tension. A too large value can cause repeated tension adjustments, while a too small value increases the number of fine-tuning iterations required to reach the specified tension.
@@ -189,6 +213,16 @@ Both parameters can be measured using the SMART function introduced in version 1
 Reference video
 
 [![DEMO](https://img.youtube.com/vi/KtqIK_Z-yhg/0.jpg)](https://www.youtube.com/watch?v=KtqIK_Z-yhg)
+
+The recommended FT parameters:
+
+| Slide Specifications | TB6600 Normal Mode | TB6600 Fast Mode |
+| -------------------- |:------------------:|:----------------:|
+| 1605                 |         15         |         7        |
+| 1610                 |          8         |         4        |
+
+> [!WARNING]
+> Due to differences in hardware brands' precision, the correct FT parameters depend on actual testing.
 
 # Conclusion
 If you encounter any issues during the manufacturing process, feel free to discuss them in the comments or send me an email with your inquiries.
