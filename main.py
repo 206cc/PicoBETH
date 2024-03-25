@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 
-# 第一次開機請至 https://github.com/206cc/PicoBETH?tab=readme-ov-file#first-boot 觀看如何設定 HX、CC、FT 參數
+# 第一次開機請至 https://github.com/206cc/PicoBETH?tab=readme-ov-file#first-boot 觀看如何設定 HX、FT 參數
 # 基本參數(如CFG_NAME內有儲存參數值會以的存檔的設定為主)
 FIRST_TEST = 1       # 第一次開機自我測試檢查
 HX711_CAL = 20.00    # HX711張力感應器校正系數，第一次使用或有更換張力傳感器、HX711電路板時務必重新校正一次
@@ -45,7 +45,8 @@ FT_ADD_MIN = 1       # 增加恆拉微調參數最小值
 PU_PRECISE = 50      # (G)如超過設定張力加此值，則進入恆拉微調
 PU_STAY = 0.3        # (Second)預拉暫留秒數使用(蜂鳴器)，秒數過後退回原設定磅數
 FT_ADD = 7           # 增加恆拉微調時步進馬達的步數
-CP_SW = 1            # 自動恆拉預設 0=關閉，1=只設啟用
+CP_SW = 1            # 自動恆拉開關 0=關閉，1=啟用
+BB_SW = 1            # 蜂鳴器開關 0=關閉，1=啟用
 ABORT_GRAM = 20000   # (G)最大中斷公克(約44磅)
 LOG_MAX = 50         # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
                     
@@ -55,10 +56,10 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.96a"
-VER_DATE = "2024-03-23"
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST'] # 存檔變數
-MENU_ARR = [[4,0],[4,1],[4,2],[5,2],[7,2],[8,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,2],[19,3]] # 設定選單陣列
+VERSION = "1.97"
+VER_DATE = "2024-03-25"
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BB_SW'] # 存檔變數
+MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[17,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
 ONOFF_ARR = ['Off', 'On ']
 MA_ARR = ['M', 'A']
@@ -215,9 +216,12 @@ def logs_read():
 
 # 有源蜂鳴器
 def beepbeep(run_time):
-    BEEP.on()
-    time.sleep(run_time)
-    BEEP.off()
+    if BB_SW == 1:
+        BEEP.on()
+        time.sleep(run_time)
+        BEEP.off()
+    else:
+        time.sleep(run_time)
 
 # 張力顯示
 def tension_info(tension):
@@ -332,7 +336,7 @@ def botton_list(key):
     else:
         return False
     
-# 第二核心: 張力監控、按鍵偵測、HX711 歸0
+# 第二核心: 張力監控、按鍵偵測、HX711歸零
 def tension_monitoring():
     global TENSION_MON, MOTO_WAIT, HX711, BOTTON_LIST, TENSION_MON_TMP
     # HX711歸0
@@ -452,7 +456,7 @@ def init():
             LED_RED.off()
             show_lcd("Ready", 0, 2, I2C_NUM_COLS)
             
-        beepbeep(1)
+        beepbeep(0.3)
         BOOT_COUNT = BOOT_COUNT + 1
         config_save()
 
@@ -827,7 +831,7 @@ def setting_ts():
 
 # 設定頁面
 def setting():
-    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP, CP_SW, CORR_COEF_AUTO, SMART, LB_CONV_G, PRE_STRECH, TENSION_COUNT
+    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP, CP_SW, CORR_COEF_AUTO, SMART, LB_CONV_G, PRE_STRECH, TENSION_COUNT, BB_SW
     set_count = len(MENU_ARR)
     i = CURSOR_XY_TMP
     cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
@@ -838,36 +842,18 @@ def setting():
         # 按下上下鍵動作
         if BOTTON_UP.value() or BOTTON_DOWN.value() or botton_list('BOTTON_SETTING'):
             # 張力校正系數個位數
-            if cursor_xy == (16, 1):
-                if BOTTON_UP.value():
-                    CORR_COEF = CORR_COEF + 1
-                elif BOTTON_DOWN.value():
-                    CORR_COEF = CORR_COEF - 1
-            
-            # 張力校正系數小數第一位
-            elif cursor_xy == (18, 1):
-                if BOTTON_UP.value():
-                    CORR_COEF = CORR_COEF + 0.1
-                elif BOTTON_DOWN.value():
-                    CORR_COEF = CORR_COEF - 0.1
-                    
-            # 張力校正系數小數第二位
-            elif cursor_xy == (19, 1):
-                if BOTTON_UP.value():
-                    CORR_COEF = CORR_COEF + 0.01
-                elif BOTTON_DOWN.value():
-                    CORR_COEF = CORR_COEF - 0.01
-                    
-            # 張力校正系數自動調整
-            elif cursor_xy == (15, 1):
-                if BOTTON_UP.value() or BOTTON_DOWN.value():
+            if cursor_xy == (11, 3):
+                if BOTTON_SETTING.value():
                     beepbeep(0.1)
-                    if CORR_COEF_AUTO == 0:
-                        CORR_COEF_AUTO = 1
-                    else:
-                        CORR_COEF_AUTO = 0
-                    
-                    show_lcd(ML_ARR[CORR_COEF_AUTO], 15, 1, 1)
+                    show_lcd("SW:V"+ VERSION +"_"+ VER_DATE, 0, 0, I2C_NUM_COLS)
+                    show_lcd("HX:"+ str(HX711["DIFF"]) +"mg/"+ str(sorted(HX711["V0"])[0]) +"/"+ str(HX711["RATE"]) +"Hz", 0, 1, I2C_NUM_COLS)
+                    show_lcd("CC:"+ ML_ARR[CORR_COEF_AUTO] + "{: >1.2f}".format(CORR_COEF) +"   BOOT:" + str(BOOT_COUNT), 0, 2, I2C_NUM_COLS)
+                    lcd.move_to(11, 3)
+                    while True:
+                        if BOTTON_EXIT.value():
+                            beepbeep(0.1)
+                            setting_interface()
+                            break
             
             # 磅、公斤設定選擇
             elif cursor_xy == (4, 0):
@@ -900,44 +886,54 @@ def setting():
                         CP_SW = 1
                     
                     show_lcd(ONOFF_ARR[CP_SW], 4, 1, 3)
+                    
+            # 蜂鳴器開關
+            elif cursor_xy == (4, 2):
+                if BOTTON_UP.value() or BOTTON_DOWN.value():
+                    if BB_SW == 1:
+                        BB_SW = 0
+                    else:
+                        BB_SW = 1
+                    
+                    show_lcd(ONOFF_ARR[BB_SW], 4, 2, 3)
 
             # HX711校正系數十位數
-            if cursor_xy == (4, 2):
+            if cursor_xy == (15, 1):
                 if BOTTON_UP.value():
                     HX711_CAL = HX711_CAL + 10
                 elif BOTTON_DOWN.value():
                     HX711_CAL = HX711_CAL - 10
                     
             # HX711校正系數個位數
-            if cursor_xy == (5, 2):
+            if cursor_xy == (16, 1):
                 if BOTTON_UP.value():
                     HX711_CAL = HX711_CAL + 1
                 elif BOTTON_DOWN.value():
                     HX711_CAL = HX711_CAL - 1
             
             # HX711校正系數個位數
-            elif cursor_xy == (7, 2):
+            elif cursor_xy == (18, 1):
                 if BOTTON_UP.value():
                     HX711_CAL = HX711_CAL + 0.1
                 elif BOTTON_DOWN.value():
                     HX711_CAL = HX711_CAL - 0.1
                     
             # HX711校正系數個位數
-            elif cursor_xy == (8, 2):
+            elif cursor_xy == (19, 1):
                 if BOTTON_UP.value():
                     HX711_CAL = HX711_CAL + 0.01
                 elif BOTTON_DOWN.value():
                     HX711_CAL = HX711_CAL - 0.01
             
             # 自我FT&CC學習
-            elif cursor_xy == (11, 2):
+            elif cursor_xy == (17, 0):
                 if BOTTON_SETTING.value():
                     lcd.hide_cursor()
                     SMART = 1
                     beepbeep(0.1)
-                    show_lcd("sFT: ", 0, 0, 10)
-                    show_lcd("sCC: ", 0, 1, 10)
-                    show_lcd("TEST:   T", 0, 2, 10)
+                    show_lcd("sFT:       FT: " + "{:02d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
+                    show_lcd("sCC:       CC: " + "{: >1.2f}".format(CORR_COEF), 0, 1, I2C_NUM_COLS)
+                    show_lcd("TEST:   T  *SMART", 0, 2, I2C_NUM_COLS)
                     ori_FT_ADD = FT_ADD
                     ori_CORR_COEF = CORR_COEF
                     LB_CONV_G = int(15 * 453.59237)
@@ -1045,11 +1041,6 @@ def setting():
                         setting_interface()
                         lcd.show_cursor()
                         lcd.blink_cursor_on()
-
-            if CORR_COEF >= CORR_MAX:
-                CORR_COEF = CORR_MAX  
-            elif CORR_COEF <= CORR_MIN:
-                CORR_COEF = CORR_MIN
                 
             if HX711_CAL >= HX711_MAX:
                 HX711_CAL = HX711_MAX  
@@ -1061,8 +1052,7 @@ def setting():
             elif FT_ADD <= FT_ADD_MIN:
                 FT_ADD = FT_ADD_MIN
             
-            show_lcd("{: >1.2f}".format(CORR_COEF), 16, 1, 4)
-            show_lcd("{: >2.2f}".format(HX711_CAL), 4, 2, 5)
+            show_lcd("{: >2.2f}".format(HX711_CAL), 15, 1, 5)
             show_lcd("{:02d}".format(FT_ADD), 15, 0, 2)
             lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
             beepbeep(0.1)
@@ -1097,11 +1087,11 @@ def setting():
      
 # 設定介面顯示
 def setting_interface():
-    show_lcd("UN:        FT: "+ "{:02d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
+    show_lcd("UN:        FT: "+ "{:02d}".format(FT_ADD) + "S", 0, 0, I2C_NUM_COLS)
     show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
-    show_lcd("AT: "+ ONOFF_ARR[CP_SW] +"    CC: "+ ML_ARR[CORR_COEF_AUTO] + "{: >1.2f}".format(CORR_COEF), 0, 1, I2C_NUM_COLS)
-    show_lcd("HX: "+ "{: >2.2f}".format(HX711_CAL) +"  *SMART", 0, 2, I2C_NUM_COLS)
-    show_lcd("<PicoBETH>"+ "{: >3d}".format(BOOT_COUNT) +"B"+ "{: >5d}".format(TENSION_COUNT) +"T", 0, 3, I2C_NUM_COLS)
+    show_lcd("AT: "+ ONOFF_ARR[CP_SW] +"    HX: "+ "{: >2.2f}".format(HX711_CAL), 0, 1, I2C_NUM_COLS)
+    show_lcd("BB: "+ ONOFF_ARR[BB_SW], 0, 2, I2C_NUM_COLS)
+    show_lcd("<PicoBETH> I "+ "{: >6d}".format(TENSION_COUNT) +"T", 0, 3, I2C_NUM_COLS)
     
 # LOG介面顯示
 def logs_interface(idx):
@@ -1146,7 +1136,7 @@ def main_interface():
     show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
     show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
     show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
-
+    
 def show_timer():
     if TIMER:
         show_lcd("   m  ", 14, 1, 6)
