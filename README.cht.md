@@ -18,7 +18,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 3. 更合理的硬體佈局，各零件可單獨拆裝不需全拆
 4. 使用堆疊方式減少體積，不會擋到置物槽
 5. 改使用自行設計PCB電路板
-6. HX711模塊改用紅色抗干擾版本
+6. HX711模塊改用 SparkFun
 7. 新增UPS電池盒，可在無外部電源的狀況下繼續完成穿線
 
 穿線展示影片
@@ -102,7 +102,7 @@ ST: CC參數/HX參數
 3. 57步進馬達(2相4線 1.8°) / 57 Stepper Motor (1.8° Step Angle 2 Phase 4 Line)
 4. TB6600 步進馬達驅動器 / TB6600 Stepper Motor Driver
 5. NJ5 20KG 張力傳感器 / NJ5 20KG load cell
-6. HX711 模塊(紅色抗干擾版本) / Load Cell Amplifier(Red PCB, Anti-Interference Version)
+6. HX711 模塊(SparkFun) / Load Cell Amplifier(SparkFun)
 7. 2004 i2c LCD 
 8. WISE 2086 珠夾頭 / WISE 2086 Head
 9. 5向按鍵模組 / Five-way key
@@ -133,18 +133,24 @@ ST: CC參數/HX參數
 
 ## HX711 張力感測器放大器
 
-此專案對於HX711的要求較高，需使用80Hz採集頻率的版本，因為價差不大，建議直接使用紅色帶遮蔽的抗干擾版本。
+此專案對於HX711的要求較高，我測試過許多廠版的 HX711機板建議使用 SparkFun 品質較為穩定。
+![images2-2](docs/Sparkfun_HX711.jpg)
 
-以下是我測試過的版本
-| 外觀        | 預設RATE           | 備註  |
-| ------------- |:-------------:|:-----:|
-| 綠色小板        | 10Hz      | 可焊接切換為80Hz，堪用 |
-| 綠色大板        | 10Hz      |   不可用 |
-| 紫色大板      | 80Hz      |    可用，未長時間測試 |
-| 紅色帶遮蔽      | 80Hz      |    可用 |
+### 開啟 80Hz
+
+SparkFun 的 HX711 預設是 10Hz，需使用美功刀將以下綠色箭頭處的連接線割斷來開啟 80Hz
+![images2-2](docs/Sparkfun_HX711_80Hz.jpg)
+
+### 穩定度測試
+
+每片 HX711 的品質不一，在裝上機器前可先使用麵包板測試穩定度，正常穩定的機板跑一整天的飄移量不會超過1G
+![images2-2](docs/Sparkfun_HX711_test.jpg)
+
+> [!NOTE]
+> 測試程式為 TEST_hx711.py
 
 > [!WARNING]
-> 在V1.96版本之後開機時會檢查RATE，未達到80Hz或穩定度不佳會無法使用
+> 在V1.96版本之後開機時會檢查RATE，未達到80Hz或飄移量超過1G會無法開機使用
 
 > [!WARNING]
 > 每個HX711的放大器品質不一，如果有問題建議換供應商購買
