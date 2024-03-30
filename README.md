@@ -102,7 +102,7 @@ ST: CC parameter/HX parameter.
 
 Main materials
 1. Raspberry Pico H
-2. 1610 200MM sliding table
+2. CBX/SGX 1610 200MM sliding table
 3. 57 stepper motor (2-phase 4-wire 1.8°)
 4. TB6600 stepper motor driver
 5. NJ5 20KG tension sensor
