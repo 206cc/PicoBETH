@@ -23,7 +23,7 @@ Improvements in the final machine:
 3. More rational hardware layout, allowing individual disassembly without the need for complete disassembly
 4. Reduced volume by using a stacking approach, avoiding interference with the storage slot
 5. Switched to a custom-designed PCB circuit board
-6. HX711 module change red anti-interference version
+6. HX711 module change SparkFun
 7. Addition of a UPS battery box that allows continued stringing even in the absence of an external power source.
 
 Stringing demonstration video
@@ -106,7 +106,7 @@ Main materials
 3. 57 stepper motor (2-phase 4-wire 1.8°)
 4. TB6600 stepper motor driver
 5. NJ5 20KG tension sensor
-6. HX711 module (red anti-interference version)
+6. HX711 module (SparkFun)
 7. 2004 i2c LCD
 8. WISE 2086 head
 9. Five-way key module
@@ -138,19 +138,24 @@ Main materials
 
 ## HX711 Load Cell Amplifier
 
-This project requires a high demand for HX711, necessitating the version with a sampling frequency of 80Hz. Since the price difference is negligible, it is recommended to utilize the red anti-interference version.
+This project demands a higher standard for the HX711, and it is recommended to use the more stable quality provided by SparkFun.
+![images2-2](docs/Sparkfun_HX711.jpg)
 
-Below are the versions I have tested:
+### Enabling 80Hz
 
-| Appearance    | Default RATE | Remarks |
-| ------------- |:------------:|:-------:|
-| Green Small Board | 10Hz | Can be soldered to switch to 80Hz, Barely usable |
-| Green Large Board | 10Hz | Not usable |
-| Purple Large Board | 80Hz | Usable, not tested for long periods |
-| Red Tape Shielded | 80Hz | Usable |
+The default setting for SparkFun's HX711 is 10Hz. To enable 80Hz, you'll need to cut the connection wire at the green arrow as indicated below.
+![images2-2](docs/Sparkfun_HX711_80Hz.jpg)
+
+### Stability Testing
+
+The quality of each HX711 unit varies. Before installing the equipment, it's advisable to test the stability using a breadboard. A normally stable board should not drift by more than 1G over the course of a whole day.
+![images2-2](docs/Sparkfun_HX711_test.jpg)
+
+> [!NOTE]
+> The testing script is named TEST_hx711.py.
 
 > [!WARNING]
-> Starting from version 1.96, the startup checks the RATE. If it does not reach 80Hz or the stability is poor, it will not function properly.
+> Starting from version 1.96, during boot-up, the board will check the RATE. Failure to reach 80Hz or exceeding a drift of 1G will prevent the board from booting up.
 
 > [!WARNING]
 > The quality of each HX711 amplifier varies. If there are any issues, it is recommended to switch suppliers.
