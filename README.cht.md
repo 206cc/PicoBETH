@@ -98,7 +98,7 @@ ST: CC參數/HX參數
 
 主要材料
 1. Raspberry Pico H
-2. 1610 200MM 滑台 / 1610 Sliding Table 200MM 
+2. CBX/SGX 1610 200MM 滑台 / CBX/SGX 1610 Sliding Table 200MM 
 3. 57步進馬達(2相4線 1.8°) / 57 Stepper Motor (1.8° Step Angle 2 Phase 4 Line)
 4. TB6600 步進馬達驅動器 / TB6600 Stepper Motor Driver
 5. NJ5 20KG 張力傳感器 / NJ5 20KG load cell
@@ -133,12 +133,12 @@ ST: CC參數/HX參數
 
 ## HX711 張力感測器放大器
 
-此專案對於HX711的要求較高，我測試過許多廠版的 HX711機板，建議使用 SparkFun 品質較為穩定。
+此專案對於HX711的要求較高，我測試過許多廠商的 HX711機板，建議使用 SparkFun 品質較為穩定。
 ![images2-2](docs/Sparkfun_HX711.jpg)
 
 ### 開啟 80Hz
 
-SparkFun 的 HX711 預設是 10Hz，需使用美功刀將以下綠色箭頭處的連接線割斷來開啟 80Hz
+SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭處的連接線割斷來開啟 80Hz
 ![images2-2](docs/Sparkfun_HX711_80Hz.jpg)
 
 ### 穩定度測試
