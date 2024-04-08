@@ -25,7 +25,7 @@
 # 第一次開機請至 https://github.com/206cc/PicoBETH?tab=readme-ov-file#first-boot 觀看如何設定 HX、FT 參數
 # 基本參數(如CFG_NAME內有儲存參數值會以的存檔的設定為主)
 FIRST_TEST = 1       # 第一次開機自我測試檢查
-HX711_CAL = 20.00    # HX711張力感應器校正系數，第一次使用或有更換張力傳感器、HX711電路板時務必重新校正一次
+HX711_CAL = 20.001   # HX711張力感應器校正系數，第一次使用或有更換張力傳感器、HX711電路板時務必重新校正一次
 CORR_COEF_AUTO = 1   # 自我學習CC張力系數開關
 LB_KG_SELECT = 0     # 磅或公斤的設定，0=皆可設定，1=只設定磅，2=只設定公斤
 DEFAULT_LB = 18.0    # (LB)預設磅數
@@ -56,8 +56,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.97"
-VER_DATE = "2024-03-25"
+VERSION = "1.98"
+VER_DATE = "2024-04-08"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BB_SW'] # 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[17,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -175,7 +175,8 @@ def config_save():
         file = open("config.cfg", "w")
         save_cfg = ""
         for val in SAVE_CFG_ARRAY:
-            save_cfg = save_cfg + val +"=" + str(globals()[val]) + ","
+            if isinstance(globals()[val], int) or isinstance(globals()[val], float):
+                save_cfg = save_cfg + val +"=" + str(globals()[val]) + ","
 
         file.write(save_cfg)
         file.close()
@@ -451,14 +452,20 @@ def init():
             MOTO_RS_STEPS = int(int(MOTO_MAX_STEPS) / 20)
             ABORT_LM = int(int(MOTO_MAX_STEPS) * 0.3)
             ABORT_GRAM = ori_ABORT_GRAM
-            FT_ADD = round(FT_ADD * MOTO_MAX_STEPS / ori_MOTO_MAX_STEPS)
+            tmp_FT_ADD = round(FT_ADD * MOTO_MAX_STEPS / ori_MOTO_MAX_STEPS)
+            if tmp_FT_ADD != 0:
+                FT_ADD = tmp_FT_ADD
+            
             moto_goto_standby()
             LED_RED.off()
-            show_lcd("Ready", 0, 2, I2C_NUM_COLS)
-            
-        beepbeep(0.3)
-        BOOT_COUNT = BOOT_COUNT + 1
-        config_save()
+            if HX711_CAL == 20.001:
+                show_lcd("Check HX Coeffs!", 0, 2, I2C_NUM_COLS)
+            else:
+                show_lcd("Ready", 0, 2, I2C_NUM_COLS)
+                
+            beepbeep(0.3)
+            BOOT_COUNT = BOOT_COUNT + 1
+            config_save()
 
 # 開始增加張力
 def start_tensioning():
@@ -898,32 +905,32 @@ def setting():
                     show_lcd(ONOFF_ARR[BB_SW], 4, 2, 3)
 
             # HX711校正系數十位數
-            if cursor_xy == (15, 1):
+            elif cursor_xy == (15, 1):
                 if BOTTON_UP.value():
-                    HX711_CAL = HX711_CAL + 10
+                    HX711_CAL = round(HX711_CAL + 10, 2)
                 elif BOTTON_DOWN.value():
-                    HX711_CAL = HX711_CAL - 10
+                    HX711_CAL = round(HX711_CAL - 10, 2)
                     
             # HX711校正系數個位數
-            if cursor_xy == (16, 1):
+            elif cursor_xy == (16, 1):
                 if BOTTON_UP.value():
-                    HX711_CAL = HX711_CAL + 1
+                    HX711_CAL = round(HX711_CAL + 1, 2)
                 elif BOTTON_DOWN.value():
-                    HX711_CAL = HX711_CAL - 1
+                    HX711_CAL = round(HX711_CAL - 1, 2)
             
             # HX711校正系數個位數
             elif cursor_xy == (18, 1):
                 if BOTTON_UP.value():
-                    HX711_CAL = HX711_CAL + 0.1
+                    HX711_CAL = round(HX711_CAL + 0.1, 2)
                 elif BOTTON_DOWN.value():
-                    HX711_CAL = HX711_CAL - 0.1
+                    HX711_CAL = round(HX711_CAL - 0.1, 2)
                     
             # HX711校正系數個位數
             elif cursor_xy == (19, 1):
                 if BOTTON_UP.value():
-                    HX711_CAL = HX711_CAL + 0.01
+                    HX711_CAL = round(HX711_CAL + 0.01, 2)
                 elif BOTTON_DOWN.value():
-                    HX711_CAL = HX711_CAL - 0.01
+                    HX711_CAL = round(HX711_CAL - 0.01, 2)
             
             # 自我FT&CC學習
             elif cursor_xy == (17, 0):
