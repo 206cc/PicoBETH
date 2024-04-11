@@ -125,6 +125,10 @@ ST: CC參數/HX參數
 ## PCB 電路板
 ![images2-3](docs/images2-4.svg)
 
+![images2-3](docs/images2-4_2.svg)
+
+![images2-3](docs/images2-4_3.svg)
+
 > [!NOTE]
 > 您可以自行下載上圖洗電路板，避免手焊電路板的麻煩
 

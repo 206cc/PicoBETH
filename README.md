@@ -130,6 +130,10 @@ Main materials
 ## PCB circuit board
 ![images2-3](docs/images2-4.svg)
 
+![images2-3](docs/images2-4_2.svg)
+
+![images2-3](docs/images2-4_3.svg)
+
 > [!NOTE]
 > You can download the circuit board for the above image to avoid the trouble of hand-soldering the circuit board.
 
