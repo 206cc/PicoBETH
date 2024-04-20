@@ -56,8 +56,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.98a"
-VER_DATE = "2024-04-11"
+VERSION = "1.99"
+VER_DATE = "2024-04-20"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BB_SW'] # 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[17,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -389,13 +389,9 @@ def init():
     show_lcd(" **** PicoBETH **** ", 0, 0, I2C_NUM_COLS)
     show_lcd("Version: " + VERSION, 0, 1, I2C_NUM_COLS)
     show_lcd("Date: " + VER_DATE, 0, 2, I2C_NUM_COLS)
-    show_lcd("GitH: 206cc/PicoBETH", 0, 3, I2C_NUM_COLS)
+    show_lcd("Ghub: 206cc/PicoBETH", 0, 3, I2C_NUM_COLS)
     time.sleep(3)
     LED_RED.on()
-    LED_YELLOW.on()
-    LED_GREEN.on()
-    LED_YELLOW.off()
-    LED_GREEN.off()
     main_interface()
     ori_ABORT_GRAM = ABORT_GRAM
     ABORT_GRAM = 1000
@@ -686,6 +682,13 @@ def start_tensioning():
 # 主畫面張力及預拉設定
 def setting_ts():
     global DEFAULT_LB, PRE_STRECH, LB_CONV_G, CURSOR_XY_TS_TMP, KNOT_FLAG, KNOT
+    if KNOT_FLAG == 1:
+        ps_kt_show = DEFAULT_LB * ((KNOT + 100) / 100)
+    else:
+        ps_kt_show = DEFAULT_LB * ((PRE_STRECH + 100) / 100)
+                
+    show_lcd("{: >4.1f}".format(ps_kt_show), 9, 0, 4)
+    show_lcd("{: >4.1f}".format(ps_kt_show * 0.45359237), 9, 1, 4)
     last_set_time = time.ticks_ms()
     set_count = len(TS_ARR)
     i = CURSOR_XY_TS_TMP
@@ -791,6 +794,7 @@ def setting_ts():
                     
                 ps_kt_tmp = KNOT
                 show_lcd("{: >2d}".format(KNOT), 17, 0, 2)
+                ps_kt_show = DEFAULT_LB * ((KNOT + 100) / 100)
             else:
                 PRE_STRECH = ps_kt_tmp
                 if PRE_STRECH >= PS_MAX:
@@ -800,7 +804,10 @@ def setting_ts():
                 
                 ps_kt_tmp = PRE_STRECH
                 show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
+                ps_kt_show = DEFAULT_LB * ((PRE_STRECH + 100) / 100)
             
+            show_lcd("{: >4.1f}".format(ps_kt_show), 9, 0, 4)
+            show_lcd("{: >4.1f}".format(ps_kt_show * 0.45359237), 9, 1, 4)
             show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
             show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
             lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
@@ -829,11 +836,11 @@ def setting_ts():
             time.sleep(BOTTON_SLEEP)
 
         # 按下離開鍵動作
-        if botton_list('BOTTON_EXIT') or ((time.ticks_ms() - last_set_time) > (1.5 * 1000)):
+        if botton_list('BOTTON_EXIT') or ((time.ticks_ms() - last_set_time) > (2.5 * 1000)):
             config_save()
             lcd.blink_cursor_off()
-            beepbeep(0.1)
             time.sleep(BOTTON_SLEEP)
+            beepbeep(0.1)
             return 0
 
 # 設定頁面
@@ -845,6 +852,7 @@ def setting():
     lcd.move_to(MENU_ARR[i][0], MENU_ARR[i][1])
     lcd.blink_cursor_on()
     time.sleep(BOTTON_SLEEP)
+    beepbeep(0.1)
     while True:
         # 按下上下鍵動作
         if BOTTON_UP.value() or BOTTON_DOWN.value() or botton_list('BOTTON_SETTING'):
@@ -857,6 +865,7 @@ def setting():
                     show_lcd("HX:"+ str(HX711["DIFF"]) +"mg/"+ str(sorted(HX711["V0"])[0]) +"/"+ str(HX711["RATE"]) +"Hz", 0, 1, I2C_NUM_COLS)
                     show_lcd("CC:"+ ML_ARR[CORR_COEF_AUTO] + "{: >1.2f}".format(CORR_COEF) +"   BOOT:" + str(BOOT_COUNT), 0, 2, I2C_NUM_COLS)
                     lcd.move_to(11, 3)
+                    beepbeep(0.1)
                     while True:
                         if BOTTON_EXIT.value():
                             beepbeep(0.1)
@@ -958,6 +967,7 @@ def setting():
                     t_pass = 0
                     fail_flag = 0
                     cc_array = []
+                    beepbeep(0.1)
                     while True:
                         if BOTTON_EXIT.value():
                             beepbeep(0.1)
@@ -1035,6 +1045,7 @@ def setting():
                         logs_interface("init")
                         logs_interface(logs_idx)
                         log_flag = 0
+                        beepbeep(0.1)
                         while True:
                             if BOTTON_RIGHT.value():
                                 logs_idx = (logs_idx + 1) % len(LOGS)
@@ -1050,6 +1061,7 @@ def setting():
                             
                             if log_flag != logs_idx:
                                 logs_interface(logs_idx)
+                                beepbeep(0.1)
                                 log_flag = logs_idx
                             
                         setting_interface()
@@ -1100,8 +1112,8 @@ def setting():
         if botton_list('BOTTON_EXIT'):
             config_save()
             lcd.blink_cursor_off()
-            beepbeep(0.1)
             time.sleep(BOTTON_SLEEP)
+            beepbeep(0.1)
             return 0
      
 # 設定介面顯示
@@ -1302,6 +1314,7 @@ while True:
         setting()
         main_interface()
         show_lcd("Ready", 0, 2, I2C_NUM_COLS)
+        beepbeep(0.1)
         show_timer()
     
     # 計時器開關
