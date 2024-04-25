@@ -28,7 +28,7 @@ FIRST_TEST = 1       # 第一次開機自我測試檢查
 HX711_CAL = 20.00    # HX711張力感應器校正系數，第一次使用或有更換張力傳感器、HX711電路板時務必重新校正一次
 CORR_COEF_AUTO = 1   # 自我學習CC張力系數開關
 LB_KG_SELECT = 0     # 磅或公斤的設定，0=皆可設定，1=只設定磅，2=只設定公斤
-DEFAULT_LB = 18.0    # (LB)預設磅數
+DEFAULT_LB = 20.0    # (LB)預設磅數
 PRE_STRECH = 10      # (%)預拉Pre-Strech
 KNOT = 15            # (%)打結增加%數
 LB_MAX = 35.0        # (LB)設定張緊的最高磅數
@@ -56,8 +56,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "1.99"
-VER_DATE = "2024-04-20"
+VERSION = "1.99a"
+VER_DATE = "2024-04-26"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BB_SW'] # 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[17,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -836,7 +836,7 @@ def setting_ts():
             time.sleep(BOTTON_SLEEP)
 
         # 按下離開鍵動作
-        if botton_list('BOTTON_EXIT') or ((time.ticks_ms() - last_set_time) > (2.5 * 1000)):
+        if botton_list('BOTTON_EXIT') or ((time.ticks_ms() - last_set_time) > (1.8 * 1000)):
             config_save()
             lcd.blink_cursor_off()
             time.sleep(BOTTON_SLEEP)

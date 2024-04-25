@@ -129,15 +129,15 @@ ST: CC參數/HX參數
 ## PCB 電路板
 ![images2-3](docs/images2-4.svg)
 
-![images2-3](docs/images2-4_2.svg)
+Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_2024-04-01.zip)
 
 ![images2-3](docs/images2-4_3.svg)
+
+Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_btn_2024-04-02.zip)
 
 > [!NOTE]
 > 您可以自行下載上圖洗電路板，避免手焊電路板的麻煩
 
-> [!NOTE]
-> 此電路板四周的鎖點比照 2004 LCD 鎖點位置，可堆疊減少體積
 
 ## HX711 張力感測器放大器
 
@@ -228,8 +228,8 @@ FT參數: 達到指定張力後微調時的幅度，過大的值會造成反覆�
 以下是建議的FT參數
 | 滑台規格  | TB6600一般模式 | TB6600快速模式 |
 | -------- |:-------:|:--------:|
-| 1605     | 15      | 7        |
-| 1610     | 8       | 4        |
+| 1605     |  14~15  |   7~8    |
+| 1610     |  7~8    |   3~4    |
 
 > [!WARNING]
 > 因硬體廠牌精細度的差異，正確的FT參數依實際測試為主

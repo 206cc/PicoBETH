@@ -134,15 +134,15 @@ Main materials
 ## PCB circuit board
 ![images2-3](docs/images2-4.svg)
 
-![images2-3](docs/images2-4_2.svg)
+Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_2024-04-01.zip)
 
 ![images2-3](docs/images2-4_3.svg)
+
+Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_btn_2024-04-02.zip)
 
 > [!NOTE]
 > You can download the circuit board for the above image to avoid the trouble of hand-soldering the circuit board.
 
-> [!NOTE]
-> The lock points around this circuit board are based on the lock point positions of the 2004 LCD, allowing stacking to reduce volume.
 
 ## HX711 Load Cell Amplifier
 
@@ -231,8 +231,8 @@ The recommended FT parameters:
 
 | Slide Specifications | TB6600 Normal Mode | TB6600 Fast Mode |
 | -------------------- |:------------------:|:----------------:|
-| 1605                 |         15         |         7        |
-| 1610                 |          8         |         4        |
+| 1605                 |        14~15       |        7~8       |
+| 1610                 |        7~8         |        3~4       |
 
 > [!WARNING]
 > Due to differences in hardware brands' precision, the correct FT parameters depend on actual testing.
