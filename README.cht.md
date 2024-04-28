@@ -136,8 +136,7 @@ Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs
 Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_btn_2024-04-02.zip)
 
 > [!NOTE]
-> 您可以自行下載上圖洗電路板，避免手焊電路板的麻煩
-
+> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
 
 ## HX711 張力感測器放大器
 
@@ -163,11 +162,17 @@ SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭
 > [!WARNING]
 > 每個HX711的放大器品質不一，如果有問題建議換供應商購買
 
+> [!NOTE]
+> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/pZT4ccE3bZk/0.jpg)](https://www.youtube.com/watch?v=pZT4ccE3bZk)
+
 ## TB6600 步進馬達電機參數
 ![images2-3](docs/images2-3.png)
 
 > [!WARNING]
 > 如更改此TB6600電機參數，程式碼可能會有許多要修正的地方
+
+> [!NOTE]
+> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/7eG5W6a95h0/0.jpg)](https://www.youtube.com/watch?v=7eG5W6a95h0)
 
 # 軟體安裝
 使用 Thonny 將以下程式碼檔案儲存到 Raspberry Pico 中，其中 src 資料夾內是 hx711 及 2004 LCD 的相關函式庫
@@ -182,6 +187,9 @@ SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭
 
 > [!NOTE]
 > 感謝 [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) 提供 2004 LCD for pico 的函式庫
+
+> [!NOTE]
+> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
 
 # 第一次開機
 
