@@ -141,7 +141,7 @@ Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pi
 Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_btn_2024-04-02.zip)
 
 > [!NOTE]
-> You can download the circuit board for the above image to avoid the trouble of hand-soldering the circuit board.
+> Related crafting videos [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
 
 
 ## HX711 Load Cell Amplifier
@@ -168,11 +168,17 @@ The quality of each HX711 unit varies. Before installing the equipment, it's adv
 > [!WARNING]
 > The quality of each HX711 amplifier varies. If there are any issues, it is recommended to switch suppliers.
 
+> [!NOTE]
+> Related crafting videos [![VIDEO](https://img.youtube.com/vi/pZT4ccE3bZk/0.jpg)](https://www.youtube.com/watch?v=pZT4ccE3bZk)
+
 ## TB6600 stepper motor parameters
 ![images2-3](docs/images2-3.png)
 
 > [!WARNING]
 > Changing these TB6600 motor parameters may require many modifications in the code.
+
+> [!NOTE]
+> Related crafting videos [![VIDEO](https://img.youtube.com/vi/7eG5W6a95h0/0.jpg)](https://www.youtube.com/watch?v=7eG5W6a95h0)
 
 # Software Installation
 Use Thonny to save the following code files to the Raspberry Pico. The src folder contains relevant libraries for hx711 and 2004 LCD.
@@ -187,6 +193,9 @@ Use Thonny to save the following code files to the Raspberry Pico. The src folde
 
 > [!NOTE]
 > Thanks to [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) for providing the 2004 LCD library for Pico.
+
+> [!NOTE]
+> Related crafting videos [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
 
 # First Boot
 
