@@ -198,16 +198,18 @@ Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerbe
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
 
-## First Boot
 
-### Step 1: Full System Function Test
+
+## Full System Function Test
 
 Upon completing assembly and powering on the machine for the first time, please conduct tests on all buttons, front and rear limits, and HX711 sensors as instructed on the screen.
 
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/MN-W57_CqYg/0.jpg)](https://www.youtube.com/watch?v=MN-W57_CqYg)
 
-### Step 2: Calibrate the HX Parameter
+## Final Settings
+
+### Step 1: Calibrate the HX Parameter
 
 HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
 
@@ -228,13 +230,11 @@ Reference video
 > [!IMPORTANT]
 > This parameter is mainly based on setting storage (config.cfg).
 
-### Step 3: Setting CC and FT Parameters
-
-CC Parameter: It is the compensation coefficient during the line tensioning process. Accurate values can reduce subsequent fine-tuning movements. Since version 1.70, an automatic learning function has been added, which dynamically adjusts to the optimal value.
+### Step 2: Setting FT Parameters
 
 FT Parameter: It determines the magnitude of adjustments after reaching the specified tension. A too large value can cause repeated tension adjustments, while a too small value increases the number of fine-tuning iterations required to reach the specified tension.
 
-Both parameters can be measured using the SMART function introduced in version 1.90 to obtain recommended values.
+The parameters can be measured using the SMART function introduced in version 1.90 to obtain recommended values.
 
 Reference video
 
