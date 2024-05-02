@@ -30,10 +30,6 @@ Stringing demonstration video
 
 [![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
 
-Video Series of the Production Process (Continuously Updating)
-
-[![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/playlist?list=PLN3s8Sz8h_G_Dp-Vqi42OujVhEX1pyrGo)
-
 ## Warning
 If your badminton stringing machine structure is not robust, I strongly advise against undertaking this project. A weak fixing platform can deform when under tension, causing the racket frame to become rounded and the tension to decrease. As a result, the machine compensates by reinforcing the tension, leading to a cycle that ultimately results in the badminton racket breaking.
 
@@ -131,18 +127,37 @@ Main materials
 > [!WARNING]
 > Please add safety measures as needed, such as adding pull-up resistors to buttons, fuses to stepper motors, limiting resistors to LEDs, etc., to protect the Raspberry Pi Pico and motors.
 
-## PCB circuit board
-![images2-3](docs/images2-4.svg)
+# How to make
 
-Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_2024-04-01.zip)
+Video Series of the Production Process (Continuously Updating)
 
-![images2-3](docs/images2-4_3.svg)
+[![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/playlist?list=PLN3s8Sz8h_G_Dp-Vqi42OujVhEX1pyrGo)
 
-Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_btn_2024-04-02.zip)
+## Software Installation
+Use Thonny to save the following code files to the Raspberry Pico. The src folder contains relevant libraries for hx711 and 2004 LCD.
+
+1. main.py
+2. src\hx711.py
+3. src\lcd_api.py
+4. src\pico_i2c_lcd.py
 
 > [!NOTE]
-> Related crafting videos [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
+> Thanks to [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) for providing the hx711 library for Pico.
 
+> [!NOTE]
+> Thanks to [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) for providing the 2004 LCD library for Pico.
+
+> [!NOTE]
+> Related crafting videos [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
+
+## TB6600 stepper motor parameters
+![images2-3](docs/images2-3.png)
+
+> [!WARNING]
+> Changing these TB6600 motor parameters may require many modifications in the code.
+
+> [!NOTE]
+> Related crafting videos [![VIDEO](https://img.youtube.com/vi/7eG5W6a95h0/0.jpg)](https://www.youtube.com/watch?v=7eG5W6a95h0)
 
 ## HX711 Load Cell Amplifier
 
@@ -171,39 +186,28 @@ The quality of each HX711 unit varies. Before installing the equipment, it's adv
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/pZT4ccE3bZk/0.jpg)](https://www.youtube.com/watch?v=pZT4ccE3bZk)
 
-## TB6600 stepper motor parameters
-![images2-3](docs/images2-3.png)
+## PCB circuit board
+![images2-3](docs/images2-4.svg)
 
-> [!WARNING]
-> Changing these TB6600 motor parameters may require many modifications in the code.
+Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_2024-04-01.zip)
 
-> [!NOTE]
-> Related crafting videos [![VIDEO](https://img.youtube.com/vi/7eG5W6a95h0/0.jpg)](https://www.youtube.com/watch?v=7eG5W6a95h0)
+![images2-3](docs/images2-4_3.svg)
 
-# Software Installation
-Use Thonny to save the following code files to the Raspberry Pico. The src folder contains relevant libraries for hx711 and 2004 LCD.
-
-1. main.py
-2. src\hx711.py
-3. src\lcd_api.py
-4. src\pico_i2c_lcd.py
+Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_btn_2024-04-02.zip)
 
 > [!NOTE]
-> Thanks to [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) for providing the hx711 library for Pico.
+> Related crafting videos [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
 
-> [!NOTE]
-> Thanks to [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) for providing the 2004 LCD library for Pico.
+## First Boot
 
-> [!NOTE]
-> Related crafting videos [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
-
-# First Boot
-
-## Step 1: Full System Function Test
+### Step 1: Full System Function Test
 
 Upon completing assembly and powering on the machine for the first time, please conduct tests on all buttons, front and rear limits, and HX711 sensors as instructed on the screen.
 
-## Step 2: Calibrate the HX Parameter
+> [!NOTE]
+> Related crafting videos [![VIDEO](https://img.youtube.com/vi/MN-W57_CqYg/0.jpg)](https://www.youtube.com/watch?v=MN-W57_CqYg)
+
+### Step 2: Calibrate the HX Parameter
 
 HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
 
@@ -224,7 +228,7 @@ Reference video
 > [!IMPORTANT]
 > This parameter is mainly based on setting storage (config.cfg).
 
-## Step 3: Setting CC and FT Parameters
+### Step 3: Setting CC and FT Parameters
 
 CC Parameter: It is the compensation coefficient during the line tensioning process. Accurate values can reduce subsequent fine-tuning movements. Since version 1.70, an automatic learning function has been added, which dynamically adjusts to the optimal value.
 
@@ -247,7 +251,7 @@ The recommended FT parameters:
 > Due to differences in hardware brands' precision, the correct FT parameters depend on actual testing.
 
 # Conclusion
-If you encounter any issues during the manufacturing process, feel free to discuss them in the comments or send me an email with your inquiries.
+If you have any questions about making, please leave a comment in the YouTube video.
 
 # Pico Sringing Pattern
 
