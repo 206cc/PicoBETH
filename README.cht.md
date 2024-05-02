@@ -25,10 +25,6 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 [![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
 
-製作過程影集(持續更新中)
-
-[![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/playlist?list=PLN3s8Sz8h_G_Dp-Vqi42OujVhEX1pyrGo)
-
 ## 警告
 如果你的羽毛球穿線機結構不是強壯的，我非常不建議進行這個專案，不強壯的固定平台會在張緊時型變，造成球拍框架變圓、張緊度降低，結果是機器補強張力，循環之下，最終羽毛球拍斷裂。
 
@@ -126,17 +122,37 @@ ST: CC參數/HX參數
 > [!WARNING]
 > 請適時增加安全措施，例如增加按鍵的上拉電阻、步進馬達的保險絲、LED 限流電阻之類保護 Raspberry Pi Pico 及馬達電機
 
-## PCB 電路板
-![images2-3](docs/images2-4.svg)
+# 製作教學
 
-Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_2024-04-01.zip)
+製作過程影集(持續更新中)
 
-![images2-3](docs/images2-4_3.svg)
+[![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/playlist?list=PLN3s8Sz8h_G_Dp-Vqi42OujVhEX1pyrGo)
 
-Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_btn_2024-04-02.zip)
+## 軟體安裝
+使用 Thonny 將以下程式碼檔案儲存到 Raspberry Pico 中，其中 src 資料夾內是 hx711 及 2004 LCD 的相關函式庫
+
+1. main.py
+2. src\hx711.py
+3. src\lcd_api.py
+4. src\pico_i2c_lcd.py
 
 > [!NOTE]
-> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
+> 感謝 [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) 提供 hx711 for pico 的函式庫
+
+> [!NOTE]
+> 感謝 [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) 提供 2004 LCD for pico 的函式庫
+
+> [!NOTE]
+> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
+
+## TB6600 步進馬達電機參數
+![images2-3](docs/images2-3.png)
+
+> [!WARNING]
+> 如更改此TB6600電機參數，程式碼可能會有許多要修正的地方
+
+> [!NOTE]
+> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/7eG5W6a95h0/0.jpg)](https://www.youtube.com/watch?v=7eG5W6a95h0)
 
 ## HX711 張力感測器放大器
 
@@ -165,39 +181,28 @@ SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭
 > [!NOTE]
 > 相關製作影片 [![VIDEO](https://img.youtube.com/vi/pZT4ccE3bZk/0.jpg)](https://www.youtube.com/watch?v=pZT4ccE3bZk)
 
-## TB6600 步進馬達電機參數
-![images2-3](docs/images2-3.png)
+## PCB 電路板
+![images2-3](docs/images2-4.svg)
 
-> [!WARNING]
-> 如更改此TB6600電機參數，程式碼可能會有許多要修正的地方
+Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_2024-04-01.zip)
 
-> [!NOTE]
-> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/7eG5W6a95h0/0.jpg)](https://www.youtube.com/watch?v=7eG5W6a95h0)
+![images2-3](docs/images2-4_3.svg)
 
-# 軟體安裝
-使用 Thonny 將以下程式碼檔案儲存到 Raspberry Pico 中，其中 src 資料夾內是 hx711 及 2004 LCD 的相關函式庫
-
-1. main.py
-2. src\hx711.py
-3. src\lcd_api.py
-4. src\pico_i2c_lcd.py
+Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_btn_2024-04-02.zip)
 
 > [!NOTE]
-> 感謝 [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) 提供 hx711 for pico 的函式庫
+> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
 
-> [!NOTE]
-> 感謝 [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) 提供 2004 LCD for pico 的函式庫
+## 第一次開機
 
-> [!NOTE]
-> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
-
-# 第一次開機
-
-## 第一步：全機功能測試
+### 第一步：全機功能測試
 
 組裝完成一次開機時請依照指示做所有的按鍵、前後限位、HX711感測器的測試。
 
-## 第二步：校正 HX 參數
+> [!NOTE]
+> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/MN-W57_CqYg/0.jpg)](https://www.youtube.com/watch?v=MN-W57_CqYg)
+
+### 第二步：校正 HX 參數
 
 HX711 張力感應器校正系數，第一次使用或有更換張力傳感器、HX711 電路板時務必重新校正一次
 
@@ -218,9 +223,7 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 > [!IMPORTANT]
 > 此參數以設定存檔為主(config.cfg)
 
-
-
-## 第三步：設定 CC 及 FT 參數
+### 第三步：設定 CC 及 FT 參數
 
 CC參數: 是線在拉申時的補償系數，準確的值可減少後續的微調動作，在1.70版本已後新增自動學習功能，可動態調整成最佳的數值。
 
@@ -242,8 +245,8 @@ FT參數: 達到指定張力後微調時的幅度，過大的值會造成反覆�
 > [!WARNING]
 > 因硬體廠牌精細度的差異，正確的FT參數依實際測試為主
 
-# 最後
-如果有製作上的問題，歡迎留言討論，也可以寫信給我詢問。
+## 最後
+如果有製作上的問題，可以直接在 youtube 製作影片下留言。
 
 # Pico 線譜
 
