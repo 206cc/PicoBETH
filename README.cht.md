@@ -181,6 +181,16 @@ SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭
 > [!NOTE]
 > 相關製作影片 [![VIDEO](https://img.youtube.com/vi/pZT4ccE3bZk/0.jpg)](https://www.youtube.com/watch?v=pZT4ccE3bZk)
 
+## 結構佈局
+
+零件佈局自由發揮，下圖是供參考佈局的定位孔圖，如何使用請參閱製作影片。
+
+![定位孔圖](docs/EP4_%E5%AE%9A%E4%BD%8D%E5%AD%94%E5%9C%96_Drawing%20for%20Positioning%20of%20Holes.png)
+
+> [!NOTE]
+> 相關製作影片 [![VIDEO](https://img.youtube.com/vi/gZF2_dbtVzA/0.jpg)](https://www.youtube.com/watch?v=gZF2_dbtVzA)
+
+
 ## PCB 電路板
 ![images2-3](docs/images2-4.svg)
 
