@@ -186,6 +186,15 @@ The quality of each HX711 unit varies. Before installing the equipment, it's adv
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/pZT4ccE3bZk/0.jpg)](https://www.youtube.com/watch?v=pZT4ccE3bZk)
 
+## Structural Layout
+
+Components can be freely arranged. The diagram below shows the positioning hole diagram for reference. Refer to the tutorial video for usage instructions.
+
+![EP4](docs/EP4_%E5%AE%9A%E4%BD%8D%E5%AD%94%E5%9C%96_Drawing%20for%20Positioning%20of%20Holes.png)
+
+> [!NOTE]
+> Related crafting videos [![VIDEO](https://img.youtube.com/vi/gZF2_dbtVzA/0.jpg)](https://www.youtube.com/watch?v=gZF2_dbtVzA)
+
 ## PCB circuit board
 ![images2-3](docs/images2-4.svg)
 
