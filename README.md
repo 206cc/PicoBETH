@@ -14,7 +14,7 @@ Drop-weight stringing machine and modification parts
 Modified prototype machine
 ![images1-2](docs/images1-2.jpg)
 
-Final machine [More detailed photos](https://github.com/206cc/PicoBETH/tree/main/Images)
+Final machine [How to make step by step](https://youtu.be/uJVE3YFJtJA)
 ![images1-2](docs/images1-6.jpg)
 
 Improvements in the final machine:
@@ -36,7 +36,7 @@ If your badminton stringing machine structure is not robust, I strongly advise a
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a tension sensor, several microswitches, and buttons.
 
-## Current main features:
+## Current Main Features:
 
 Function demonstration video
 
@@ -54,14 +54,14 @@ Function demonstration video
 10. Knot function
 11. Real-time UPS Redundancy Feature
 
-## Standby screen
+## Standby Screen
 1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
 2. Use up and down keys to adjust the selected settings.
 3. Stringing timer function: Start timing by pressing the exit key, stop timing by pressing it again, and reset the timer on the third press.
 4. The Pre-Stretch function (PS) and Knot function (KT) are switched using the up and down keys. After using the Knot function, it will automatically switch back to the Pre-Stretch function.
 ![images1-3](docs/images1-3.png)
 
-## Tensioning screen
+## Tensioning Screen
 1. When the set tension is reached, automatically enter the constant-pull mode. Increase tension if it's insufficient, decrease tension if it's too high, until pressing the button on the clamp or exit button to end the tensioning mode.
 2. Press the center button of the five-way key to enter manual fine-tuning mode. The constant-pull mode will be canceled at this time, and tension can be manually adjusted with the up and down keys. Press the center button of the five-way key again to re-enter constant-pull mode.
 3. When the specified tension is reached, the countdown timer will appear.
@@ -70,7 +70,7 @@ Function demonstration video
 > [!WARNING]
 > If the tension fine-tuning amplitude is too high or too low, you can adjust the FT parameter yourself.
 
-## Settings screen
+## Settings Screen
 1. UN: Select pounds or kilograms when setting.
 2. CC: Fine-tuning parameters (see the first boot chapter for details). After version 1.70, the system can automatically learn the optimal parameter values.
 3. HX: Calibration of the tension sensor for HX711 (see the first boot chapter for details).
@@ -82,7 +82,7 @@ Function demonstration video
 > [!NOTE]
 > Once these parameters are set, there is usually no need to set them again.
 
-## Detailed recording of tensioning logs
+## Detailed Recording Of Tensioning Logs
 On the settings screen, use the left and right keys to select the tensioning count, then press the center key of the five-way key to enter the tensioning log recording page.
 On the page, use the left and right keys to browse through the log records.
 TIMER: If the timing function is enabled, display the time of tensioning.
@@ -121,13 +121,13 @@ Main materials
 
 ![images2-1](docs/images2-1.jpg)
 
-## Wiring diagram
+## Wiring Diagram
 ![images2-2](docs/images2-2.png)
 
 > [!WARNING]
 > Please add safety measures as needed, such as adding pull-up resistors to buttons, fuses to stepper motors, limiting resistors to LEDs, etc., to protect the Raspberry Pi Pico and motors.
 
-# How to make
+# How To Make
 
 Video Series of the Production Process (Continuously Updating)
 
@@ -150,7 +150,7 @@ Use Thonny to save the following code files to the Raspberry Pico. The src folde
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
 
-## TB6600 stepper motor parameters
+## TB6600 Stepper Motor Parameters
 ![images2-3](docs/images2-3.png)
 
 > [!WARNING]
@@ -195,7 +195,7 @@ Components can be freely arranged. The diagram below shows the positioning hole 
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/gZF2_dbtVzA/0.jpg)](https://www.youtube.com/watch?v=gZF2_dbtVzA)
 
-## PCB circuit board
+## PCB Circuit Board
 ![images2-3](docs/images2-4.svg)
 
 Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_2024-04-01.zip)
@@ -207,8 +207,6 @@ Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerbe
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
 
-
-
 ## Full System Function Test
 
 Upon completing assembly and powering on the machine for the first time, please conduct tests on all buttons, front and rear limits, and HX711 sensors as instructed on the screen.
@@ -218,7 +216,7 @@ Upon completing assembly and powering on the machine for the first time, please 
 
 ## Final Settings
 
-### Step 1: Calibrate the HX Parameter
+### Step 1: Calibrate The HX Parameter
 
 HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
 
@@ -278,7 +276,7 @@ The stringing pattern demo.
 3. The cross strings are first the bottom of the short side, tying knots at the bottom, and then strings on the long side, tying knots at the top.
 4. Increasing the tension of the cross strings will help the racquet maintain its original shape after stringing. Due to variations in stringing machine and individual techniques, you can experiment to find the tension increment that minimizes deformation.
 
-## Tension of Each String
+## Tension Of Each String
 ![images2-2](docs/pico_stringing_tension.png)
 
 1. The measured values were obtained after stringing with a 25lb tension, following a 10% pre-stretch, and allowing it to sit for 48 hours.
