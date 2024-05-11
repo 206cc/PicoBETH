@@ -30,6 +30,9 @@ Stringing demonstration video
 
 [![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
 
+> [!NOTE]
+> If you don't have a stringing machine, you can refer to this project to make one: [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer)
+
 ## Warning
 If your badminton stringing machine structure is not robust, I strongly advise against undertaking this project. A weak fixing platform can deform when under tension, causing the racket frame to become rounded and the tension to decrease. As a result, the machine compensates by reinforcing the tension, leading to a cycle that ultimately results in the badminton racket breaking.
 
@@ -223,32 +226,9 @@ Upon completing assembly and powering on the machine for the first time, please 
 
 ## Final Settings
 
-### Step 1: Calibrate The HX Parameter
-
-HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
-
-Calibration method:
-1. Temporarily disable the Constant-pull function on the settings page.
-2. Set the HX parameter to 20.00 on the settings page.
-3. Attach one end of the external tension gauge to the stringing machine and the other end to the badminton string.
-4. Return to the main menu and set the tension to 20.3 lb with a Pre-Stretch of 10%.
-5. Start stringing, and when the LCD displays below 20.0 lb(19.9), note down the reading on the external tension gauge.
-6. Enter the recorded tension gauge reading on the settings page and re-enable the constant-pull function.
-
-Reference video
-
-[![Reference video](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
-
-> [!WARNING]
-> Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
-
-### Step 2: Setting FT Parameters
+### Step 1: Setting FT Parameters
 
 FT Parameter: It determines the magnitude of adjustments after reaching the specified tension. A too large value can cause repeated tension adjustments, while a too small value increases the number of fine-tuning iterations required to reach the specified tension.
-
-Reference video
-
-[![DEMO](https://img.youtube.com/vi/KtqIK_Z-yhg/0.jpg)](https://www.youtube.com/watch?v=KtqIK_Z-yhg)
 
 The recommended FT parameters:
 
@@ -259,6 +239,25 @@ The recommended FT parameters:
 
 > [!WARNING]
 > Due to differences in hardware brands' precision, the correct FT parameters depend on actual testing.
+
+### Step 2: Calibrate The HX Parameter
+
+HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
+
+Calibration method:
+1. Temporarily disable the Constant-pull function on the settings page.
+2. Set the HX parameter to 20.00 on the settings page.
+3. Return to the main menu and set the tension to 20.3 lb with a Pre-Stretch of 10%.
+4. Attach one end of the external tension gauge to the stringing machine and the other end to the badminton string.
+5. Start tensioning, and when the LCD displays below 20.0 lb(19.9), note down the reading on the external tension gauge.
+6. Enter the recorded tension gauge reading on the settings page and re-enable the constant-pull function.
+
+Reference video
+
+[![Reference video](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
+
+> [!WARNING]
+> Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
 
 # Conclusion
 If you have any questions about making, please leave a comment in the YouTube video.
