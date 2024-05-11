@@ -86,11 +86,13 @@ Function demonstration video
 ## Detailed Recording Of Tensioning Logs
 On the settings screen, use the left and right keys to select the tensioning count, then press the center key of the five-way key to enter the tensioning log recording page.
 On the page, use the left and right keys to browse through the log records.
-TIMER: If the timing function is enabled, display the time of tensioning.
-LB: Set tension/stop tension.
-PS: Set pre-stretch value.
-FT: Increase tension fine-tuning count/decrease tension fine-tuning count/fine-tuning parameters.
-C/H: CC parameter/HX parameter.
+
+TIMER: If the timing function is enabled, display the time of tensioning.<br />
+LB: Set tension/stop tension.<br />
+PS: Set pre-stretch value.<br />
+FT: Increase tension fine-tuning count/decrease tension fine-tuning count/fine-tuning parameters.<br />
+C/H: CC parameter/HX parameter.<br />
+
 ![images1-7](docs/images1-7.png)
 
 ## System information
