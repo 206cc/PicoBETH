@@ -72,11 +72,12 @@ Function demonstration video
 
 ## Settings Screen
 1. UN: Select pounds or kilograms when setting.
-2. CC: Fine-tuning parameters (see the first boot chapter for details). After version 1.70, the system can automatically learn the optimal parameter values.
-3. HX: Calibration of the tension sensor for HX711 (see the first boot chapter for details).
+2. AT: Default Constant-Pull Switch.
+3. BB: Active buzzer Switch.
 4. FT: Amplitude of fine-tuning when reaching the specified tension.
-5. AT: Default Constant-Pull Switch.
-6. SAMRT: Automatically detecting optimal FT fine-tuning parameters and CC tension coefficient parameters.
+5. HX: Calibration of the tension sensor for HX711 (see the Final Settings chapter for details).
+6. I: System information.
+7. T: Tensioning Count/Log interface
 ![images1-5](docs/images1-5.png)
 
 > [!NOTE]
@@ -89,11 +90,15 @@ TIMER: If the timing function is enabled, display the time of tensioning.
 LB: Set tension/stop tension.
 PS: Set pre-stretch value.
 FT: Increase tension fine-tuning count/decrease tension fine-tuning count/fine-tuning parameters.
-ST: CC parameter/HX parameter.
+C/H: CC parameter/HX parameter.
 ![images1-7](docs/images1-7.png)
 
+## System information
+
+![images1-8](docs/images1-8.png)
+
 > [!NOTE]
-> The default display is 1-20 log records. If you need to adjust, please modify the LOG_MAX parameter.
+> The default display is 1-50 log records. If you need to adjust, please modify the LOG_MAX parameter.
 
 > [!WARNING]
 > Do not set the LOG_MAX parameter too large, as loading too many logs during startup will cause insufficient memory and result in failure to boot.
@@ -221,27 +226,23 @@ Upon completing assembly and powering on the machine for the first time, please 
 HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
 
 Calibration method:
-1. Attach one end of an external tension gauge to the stringing machine and the other end to the badminton string.
-2. Set the HX parameter in the LCD setting page to 20.00.
-3. Return to the main menu and set the tension to 20 pounds.
-4. Press the up or down key to start stringing. When the LCD displays 20 pounds, note down the tension gauge reading.
-5. Enter the recorded tension gauge value in the HX parameter field on the settings page.
+1. Temporarily disable the Constant-pull function on the settings page.
+2. Attach one end of the external tension gauge to the stringing machine and the other end to the badminton string.
+3. Set the HX parameter in the LCD settings page to 20.00.
+4. Return to the main menu and set the tension to 20.3 lb with a Pre-Stretch of 10%.
+5. Start stringing, and when the LCD displays below 20 lb(19.9), note down the reading on the external tension gauge.
+6. Enter the recorded tension gauge reading on the settings page and re-enable the constant-pull function.
 
 Reference video
 
 [![Reference video](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
 
 > [!WARNING]
-> If you skip this calibration, there may be a discrepancy between the actual tension and the tension displayed on the LCD.
-
-> [!IMPORTANT]
-> This parameter is mainly based on setting storage (config.cfg).
+> Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
 
 ### Step 2: Setting FT Parameters
 
 FT Parameter: It determines the magnitude of adjustments after reaching the specified tension. A too large value can cause repeated tension adjustments, while a too small value increases the number of fine-tuning iterations required to reach the specified tension.
-
-The parameters can be measured using the SMART function introduced in version 1.90 to obtain recommended values.
 
 Reference video
 
