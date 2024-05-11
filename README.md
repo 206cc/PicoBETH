@@ -229,10 +229,10 @@ HX711 tension sensor calibration coefficient. It is necessary to recalibrate it 
 
 Calibration method:
 1. Temporarily disable the Constant-pull function on the settings page.
-2. Attach one end of the external tension gauge to the stringing machine and the other end to the badminton string.
-3. Set the HX parameter in the LCD settings page to 20.00.
+2. Set the HX parameter to 20.00 on the settings page.
+3. Attach one end of the external tension gauge to the stringing machine and the other end to the badminton string.
 4. Return to the main menu and set the tension to 20.3 lb with a Pre-Stretch of 10%.
-5. Start stringing, and when the LCD displays below 20 lb(19.9), note down the reading on the external tension gauge.
+5. Start stringing, and when the LCD displays below 20.0 lb(19.9), note down the reading on the external tension gauge.
 6. Enter the recorded tension gauge reading on the settings page and re-enable the constant-pull function.
 
 Reference video
