@@ -247,7 +247,7 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 
 參考影片
 
-[![DEMO](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
+[![DEMO](https://img.youtube.com/vi/r7JQPvqK3No/0.jpg)](https://www.youtube.com/watch?v=r7JQPvqK3No)
 
 > [!WARNING]
 > 非常重要，如不做此校正，實際張力會與 LCD 上的張力會有誤差
