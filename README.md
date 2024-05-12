@@ -254,7 +254,7 @@ Calibration method:
 
 Reference video
 
-[![Reference video](https://img.youtube.com/vi/s3eXI36kEWM/0.jpg)](https://www.youtube.com/watch?v=s3eXI36kEWM)
+[![Reference video](https://img.youtube.com/vi/r7JQPvqK3No/0.jpg)](https://www.youtube.com/watch?v=r7JQPvqK3No)
 
 > [!WARNING]
 > Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
