@@ -131,6 +131,20 @@ Main materials
 
 ![images2-1](docs/images2-1.jpg)
 
+## Hardware Procurement Recommendations
+
+### Sliding Table
+
+There are many styles of sliding tables, and this project uses the screw-driven CBX/SGX 1610 200MM sliding table. It is recommended to purchase the CBX version with a motor end support bracket. Some sliding tables without support brackets may experience issues under high-speed and high-tension conditions.
+
+### TB6600 Stepper Motor Driver
+
+TB6600 is a small, economical stepper motor driver used for 42 and 57 type stepper motors. It is very cheap on online stores. It is recommended to buy TB6600 labeled as "upgraded version" or "enhanced version". Some very cheap TB6600s may have noticeable electrical noise, and I am not aware of any unknown issues.
+
+### HX711 Load Cell Amplifier
+
+HX711 is a simple and easy-to-use amplifier for weight sensors, commonly used in high-precision electronic scales. In this project, it is used to measure the tension of the strings. I have tested many HX711 circuit boards produced by various manufacturers and found a serious issue: many HX711 circuit boards from different manufacturers tend to drift. Of course, this drifting issue can be fixed. I will produce a dedicated episode on my [YouTube channel](https://www.youtube.com/@kuokuo702) on how to fix this issue. It is recommended to directly purchase the HX711 Load Cell Amplifier produced by SparkFun, as it has better quality. Before connecting it to the stringing machine, use the drift test program taught in [EP. 3](https://youtu.be/pZT4ccE3bZk) to test the stability of this board. If you encounter any issues, you can leave a comment on the video.
+
 ## Wiring Diagram
 ![images2-2](docs/images2-2.png)
 
