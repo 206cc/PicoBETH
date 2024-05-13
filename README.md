@@ -112,7 +112,7 @@ C/H: CC parameter/HX parameter.<br />
 
 Main materials
 1. Raspberry Pico H
-2. CBX/SGX 1610 200MM sliding table
+2. CBX/SGX 1610 ballscrew 200MM sliding table
 3. 57 stepper motor (2-phase 4-wire 1.8°)
 4. TB6600 stepper motor driver
 5. NJ5 20KG tension sensor
@@ -135,7 +135,7 @@ Main materials
 
 ### Sliding Table
 
-There are many styles of sliding tables, and this project uses the screw-driven CBX/SGX 1610 200MM sliding table. It is recommended to purchase the CBX version with a bearing fixing seat. Some sliding tables without bearing fixing seat may experience issues under high-speed and high-tension conditions.
+There are many styles of sliding tables, and this project uses the CBX/SGX 1610 ballscrew 200MM sliding table. It is recommended to purchase the CBX version with a bearing fixing seat. Some sliding tables without bearing fixing seat may experience issues under high-speed and high-tension conditions.
 
 Bearing Fixing Seat
 ![cbx_bracket](docs/cbx_bracket.png)
@@ -252,7 +252,7 @@ FT Parameter: It determines the magnitude of adjustments after reaching the spec
 
 The recommended FT parameters:
 
-| Slide Specifications | TB6600 Normal Mode | TB6600 Fast Mode |
+| Ballscrew | TB6600 Normal Mode | TB6600 Fast Mode |
 | -------------------- |:------------------:|:----------------:|
 | 1605                 |        14~15       |        7~8       |
 | 1610                 |        7~8         |        3~4       |
