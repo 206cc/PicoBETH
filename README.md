@@ -8,6 +8,8 @@
 # PicoBETH
 PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source project that allows hobbyist stringers who enjoy stringing but only have mechanical stringing machines (drop-weight, manual crank) to create their own electronic tensioning head. If you have basic programming skills, this project can be easily completed.
 
+> Design philosophy: Affordable, Easy , Precision
+
 Drop-weight stringing machine and modification parts
 ![images1-1](docs/images1-1.jpg)
 
@@ -18,12 +20,12 @@ Final machine [How to make step by step](https://youtu.be/uJVE3YFJtJA)
 ![images1-2](docs/images1-6.jpg)
 
 Improvements in the final machine:
-1. Added screw dust cover
-2. Upgraded to a 1610 specification screw for increased tensioning speed
-3. More rational hardware layout, allowing individual disassembly without the need for complete disassembly
-4. Reduced volume by using a stacking approach, avoiding interference with the storage slot
-5. Switched to a custom-designed PCB circuit board
-6. HX711 module change SparkFun
+1. Added screw dust cover.
+2. Upgraded to a 1610 ballscrew for increased tensioning speed.
+3. More rational hardware layout, allowing individual disassembly without the need for complete disassembly.
+4. Reduced volume by using a stacking approach, avoiding interference with the storage slot.
+5. Switched to a custom-designed PCB circuit board.
+6. Replacing the HX711 module with one produced by SparkFun.
 7. Addition of a UPS battery box that allows continued stringing even in the absence of an external power source.
 
 Stringing demonstration video
@@ -36,6 +38,9 @@ Stringing demonstration video
 ## Warning
 If your badminton stringing machine structure is not robust, I strongly advise against undertaking this project. A weak fixing platform can deform when under tension, causing the racket frame to become rounded and the tension to decrease. As a result, the machine compensates by reinforcing the tension, leading to a cycle that ultimately results in the badminton racket breaking.
 
+> [!CAUTION]
+> Extremely important: If your stringing machine is of a simple type, please make sure to reinforce the structure.
+
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a tension sensor, several microswitches, and buttons.
 
@@ -45,17 +50,19 @@ Function demonstration video
 
 [![DEMO VIDEO](https://img.youtube.com/vi/s5no9YdeNnc/0.jpg)](https://www.youtube.com/watch?v=s5no9YdeNnc)
 
-1. Set tension in pounds or kilograms
+1. LB/KG display and setting
 2. Pre-Stretch function
 3. Constant-pull system
-4. Tension coefficient setting
-5. Tension calibration
-6. Stringing timer
-7. Tension counter and boot counter
-8. Detailed recording of tensioning logs
-9. Pull speed of the string(Switch on the TB6600 stepper motor driver)
-10. Knot function
-11. Real-time UPS Redundancy Feature
+4. Knot function
+5. Tension adjustment manually during tensioning
+6. Tension calibration
+7. Stringing timer
+8. Tension timer
+9. Tension counter and boot counter
+10. Detailed recording of tensioning logs
+11. Pull speed of the string(Switch on the TB6600 stepper motor driver)
+12. Real-time UPS Redundancy Feature
+13. 0.1LB(50G) accurate
 
 ## Standby Screen
 1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
@@ -83,8 +90,6 @@ Function demonstration video
 7. T: Tensioning Count/Log interface
 ![images1-5](docs/images1-5.png)
 
-> [!NOTE]
-> Once these parameters are set, there is usually no need to set them again.
 
 ## Detailed Recording Of Tensioning Logs
 On the settings screen, use the left and right keys to select the tensioning count, then press the center key of the five-way key to enter the tensioning log recording page.
@@ -95,18 +100,17 @@ LB: Set tension/stop tension.<br />
 PS: Set pre-stretch value.<br />
 FT: Increase tension fine-tuning count/decrease tension fine-tuning count/fine-tuning parameters.<br />
 C/H: CC parameter/HX parameter.<br />
-
 ![images1-7](docs/images1-7.png)
-
-## System information
-
-![images1-8](docs/images1-8.png)
 
 > [!NOTE]
 > The default display is 1-50 log records. If you need to adjust, please modify the LOG_MAX parameter.
 
 > [!WARNING]
 > Do not set the LOG_MAX parameter too large, as loading too many logs during startup will cause insufficient memory and result in failure to boot.
+
+## System information
+
+![images1-8](docs/images1-8.png)
 
 ## Hardware
 
@@ -146,9 +150,9 @@ TB6600 is a small, economical stepper motor driver used for 42 and 57 type stepp
 
 ### HX711 Load Cell Amplifier
 
-HX711 is a simple and easy-to-use amplifier for weight sensors, commonly used in high-precision electronic scales. In this project, it is used to measure the tension of the strings. I have tested many HX711 circuit boards produced by various manufacturers and found a serious issue: many HX711 circuit boards from different manufacturers tend to drift. Of course, this drifting issue can be fixed. I will produce a dedicated episode on my [YouTube channel](https://www.youtube.com/@kuokuo702) on how to fix this issue. It is recommended to directly purchase the HX711 Load Cell Amplifier produced by SparkFun, as it has better quality. Before connecting it to the stringing machine, use the drift test program taught in [EP. 3](https://youtu.be/pZT4ccE3bZk) to test the stability of this board. If you encounter any issues, you can leave a comment on the video.
+HX711 is a simple and easy-to-use amplifier for weight sensors, commonly used in high-precision electronic scales. In this project, it is used to measure the tension of the strings. I have tested many HX711 circuit boards produced by various manufacturers and found a serious issue: many HX711 circuit boards from different manufacturers tend to drift. Of course, this drifting issue can be fixed. I will produce a dedicated episode on my [YouTube channel](https://www.youtube.com/@kuokuo702) on how to fix this issue. It is recommended to directly purchase the HX711 Load Cell Amplifier produced by SparkFun, as it has better quality. Before fabricating the stringing machine head, use the drift test program taught in [EP. 3](https://youtu.be/pZT4ccE3bZk) to test the stability of this board. If you encounter any issues, you can leave a comment on the video.
 
-HX711 board 
+I tested the HX711 circuit board 
 ![hx711](docs/hx711.jpg)
 
 ## Wiring Diagram
@@ -182,9 +186,6 @@ Use Thonny to save the following code files to the Raspberry Pico. The src folde
 
 ## TB6600 Stepper Motor Parameters
 ![images2-3](docs/images2-3.png)
-
-> [!WARNING]
-> Changing these TB6600 motor parameters may require many modifications in the code.
 
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/7eG5W6a95h0/0.jpg)](https://www.youtube.com/watch?v=7eG5W6a95h0)
@@ -276,7 +277,7 @@ Reference video
 
 [![Reference video](https://img.youtube.com/vi/r7JQPvqK3No/0.jpg)](https://www.youtube.com/watch?v=r7JQPvqK3No)
 
-> [!WARNING]
+> [!IMPORTANT]
 > Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
 
 # Conclusion
