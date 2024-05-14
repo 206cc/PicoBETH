@@ -57,8 +57,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # 其它參數(請勿更動)
-VERSION = "2.00"
-VER_DATE = "2024-05-10"
+VERSION = "2.01"
+VER_DATE = "2024-05-15"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BB_SW'] # 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -68,7 +68,7 @@ ML_ARR = ['N', 'L']
 PSKT_ARR = ['PS', 'KT']
 TS_LB_ARR = [[4,0],[5,0],[7,0]] # 磅調整陣列
 TS_KG_ARR = [[4,1],[5,1],[7,1]] # 公斤調整陣列
-TS_KT     = [[14,0]]              # 打結鍵切換
+TS_KT     = [[14,0]]            # 打結鍵切換
 TS_PS_ARR = [[17,0],[18,0]]     # 預拉調整陣列
 MOTO_FORW_W = [[1, 0, 1, 0],[0, 1, 0, 0],[0, 1, 1, 1],[1, 0, 1, 0]] # 步進馬達正轉參數
 MOTO_BACK_W = [[0, 1, 0, 1],[1, 0, 0, 1],[1, 0, 1, 0],[0, 1, 1, 0]] # 步進馬達反轉參數
@@ -627,9 +627,9 @@ def start_tensioning():
         
         if ft_flag == 0:
             tension_info(None)
-            show_lcd("{: >3d}".format(time.time()-t0), 17, 1, 3)
+            show_lcd("{: >3d}".format(min(time.time()-t0, 999)), 17, 1, 3)
         else:
-            time.sleep(0.05)
+            time.sleep(0.02)
 
 # 主畫面張力及預拉設定
 def setting_ts():
