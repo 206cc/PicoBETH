@@ -3,6 +3,8 @@
 # PicoBETH
 PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項目，讓喜歡穿線，但只有機械式穿線機（重錘式、手搖式）的業餘穿線師可以自行製作電子拉線機頭，如果你有一些基本的程式能力，這個項目會很容易完成。
 
+> 設計理念：便宜、簡單、精準
+
 重錘式穿線機與改裝零件
 ![images1-1](docs/images1-1.jpg)
 
@@ -31,6 +33,9 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 ## 警告
 如果你的羽毛球穿線機結構不是強壯的，我非常不建議進行這個專案，不強壯的固定平台會在張緊時型變，造成球拍框架變圓、張緊度降低，結果是機器補強張力，循環之下，最終羽毛球拍斷裂。
 
+> [!CAUTION]
+> 非常重要，如果您的穿線機台是簡易型的，請務必補強結構。
+
 ## 原由
 一年前因為公司社團關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想再購買電子拉線機頭，但後來想想我可以用我會的知識，在 Raspberry Pico 上使用張力傳感器、幾個微動開關、按鈕製作了這個專案。
 
@@ -40,17 +45,19 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 [![DEMO VIDEO](https://img.youtube.com/vi/s5no9YdeNnc/0.jpg)](https://www.youtube.com/watch?v=s5no9YdeNnc)
 
-1. 使用磅或公斤單位設定張力
+1. 磅/公斤顯示及設定
 2. 預拉(Pre-Strech)
 3. 自動恆拉(Constant-pull)
-4. 張力系數設定
-5. 張力校正
-6. 穿線計時
-7. 張緊和開機次數記錄
-8. 張緊LOG的詳細記錄
-9. 二段速度設定(在TB6600馬達控制器上切換)
-10. 打結加磅
-11. UPS不斷電功能
+4. 打結加磅(Knot)
+5. 張緊時手動調整張力
+6. 張力校正
+7. 穿線計時器
+8. 張力計時器
+9. 張力計數器和開機計數器
+10. 張緊LOG的詳細記錄
+11. 二段速度設定(在TB6600馬達控制器上切換)
+12. UPS不斷電功能
+13. 0.1LB(50G)高精度
 
 ## 待機畫面
 1. 使用左右鍵可設定磅、公斤及預拉的十位數、個位數、小數。
@@ -77,9 +84,6 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 6. I: 系統資訊
 7. T: 張緊次數/Log記錄
 ![images1-5](docs/images1-5.png)
-  
-> [!NOTE]
-> 一般來說這些參數設定好後就不需要再設定了
 
 ## 張緊LOG的詳細記錄
 在設定畫面下，使用左右鍵選到張緊次數，再點下五向建的中鍵進入張緊 LOG 記錄頁面  
@@ -91,34 +95,34 @@ FT: 增加張力微調次數/減少張力微調次數/微調參數
 C/H: CC參數/HX參數  
 
 ![images1-7](docs/images1-7.png)
- 
-## 系統資訊
 
-![images1-8](docs/images1-8.png)
- 
 > [!NOTE]
 > 預設顯示 1-50 筆 LOG 記錄，如要需調整請修改 LOG_MAX 參數
 
 > [!WARNING]
 > LOG_MAX 參數請勿設定過大，開機時如載入過多 LOG 會導致記憶體不足會無開機
 
+## 系統資訊
+
+![images1-8](docs/images1-8.png)
+
 ## 硬體
 
 主要材料
 1. Raspberry Pico H
-2. CBX/SGX 1610 200MM 滑台 / CBX/SGX 1610 Sliding Table 200MM 
-3. 57步進馬達(2相4線 1.8°) / 57 Stepper Motor (1.8° Step Angle 2 Phase 4 Line)
-4. TB6600 步進馬達驅動器 / TB6600 Stepper Motor Driver
-5. NJ5 20KG 張力傳感器 / NJ5 20KG load cell
-6. HX711 模塊(SparkFun) / Load Cell Amplifier(SparkFun)
+2. CBX/SGX 1610 200MM 滑台
+3. 57步進馬達(2相4線 1.8°)
+4. TB6600 步進馬達驅動器
+5. NJ5 20KG 張力傳感器
+6. HX711 模塊(SparkFun)
 7. 2004 i2c LCD 
-8. WISE 2086 珠夾頭 / WISE 2086 Head
-9. 5向按鍵模組 / Five-way key
-10. 按鈕 / Button
-11. 微控開關 / Micro Switch
-12. 有源蜂鳴器 / Active buzzer
-13. 三色 LED / Tri-Color LEDs
-14. 12V 18650 UPS 電池盒 / 18650 UPS Battery Box
+8. WISE 2086 珠夾頭
+9. 5向按鍵模組
+10. 按鈕
+11. 微控開關
+12. 有源蜂鳴器
+13. 三色 LED
+14. 12V 18650 UPS 電池盒
 
 > [!WARNING]
 > 除非您有自行修改程式的能力，否則請照指的的型號或規格購買材料
@@ -140,13 +144,15 @@ TB6600 是一款小型、經濟型的步進電機驅動器，用於 42、57型�
 
 ### HX711 張力感應加大器
 
-HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度電子稱，在這個專案用來量測弦線的張力，我測試過許多廠商生產的 HX711 電路板，發現一個嚴重的問題，許多廠商生產的 HX711 電路板用起來常會有飄移的現象，當然此飄移的現象可以修復，之後會在我的 [Youtube 頻道](https://www.youtube.com/@kuokuo702) 專門拍一集如何修復此現像的影片，建議直接買 SparkFun 生產的 HX711 Load Cell Amplifier 品質較為優良，在接上穿線機前，先使用 [EP.3 影片](https://youtu.be/pZT4ccE3bZk) 中教學的飄移測試程式測式此板的穩定度，如果你有遇到問題可以在影片中留言。
+HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度電子稱，在這個專案用來量測弦線的張力，我測試過許多廠商生產的 HX711 電路板，發現一個嚴重的問題，許多廠商生產的 HX711 電路板用起來常會有飄移的現象，當然此飄移的現象可以修復，之後會在我的 [Youtube 頻道](https://www.youtube.com/@kuokuo702) 專門拍一集如何修復此現像的影片，建議直接買 SparkFun 生產的 HX711 Load Cell Amplifier 品質較為優良，在製作前先使用 [EP.3 影片](https://youtu.be/pZT4ccE3bZk) 中教學的飄移測試程式測式此板的穩定度，如果你有遇到問題可以在影片中留言。
 
-我試過的 HX711 電路版 
+我測試過的 HX711 電路版 
 ![cbx_bracket](docs/hx711.jpg)
 
 ## 接線圖
+
 ![images2-2](docs/images2-2.png)
+
 > [!WARNING]
 > 請適時增加安全措施，例如增加按鍵的上拉電阻、步進馬達的保險絲、LED 限流電阻之類保護 Raspberry Pi Pico 及馬達電機
 
@@ -175,9 +181,6 @@ HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度�
 
 ## TB6600 步進馬達電機參數
 ![images2-3](docs/images2-3.png)
-
-> [!WARNING]
-> 如更改此TB6600電機參數，程式碼可能會有許多要修正的地方
 
 > [!NOTE]
 > 相關製作影片 [![VIDEO](https://img.youtube.com/vi/7eG5W6a95h0/0.jpg)](https://www.youtube.com/watch?v=7eG5W6a95h0)
@@ -245,7 +248,7 @@ Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/
 FT參數: 達到指定張力後微調時的幅度，過大的值會造成反覆加減張力，過小的值微調次數會增加才能到達指定張力。
 
 以下是建議的 FT 參數
-| 滑台規格  | TB6600一般模式 | TB6600快速模式 |
+| 滑台螺杆規格  | TB6600一般模式 | TB6600快速模式 |
 | -------- |:-------:|:--------:|
 | 1605     |  14~15  |   7~8    |
 | 1610     |  7~8    |   3~4    |
@@ -269,7 +272,7 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 
 [![DEMO](https://img.youtube.com/vi/r7JQPvqK3No/0.jpg)](https://www.youtube.com/watch?v=r7JQPvqK3No)
 
-> [!WARNING]
+> [!IMPORTANT]
 > 非常重要，如不做此校正，實際張力會與 LCD 上的張力會有誤差
 
 ## 最後
