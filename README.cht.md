@@ -225,11 +225,11 @@ SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭
 ## PCB 電路板
 ![images2-3](docs/images2-4.svg)
 
-Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_2024-04-01.zip)
+Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-05-15.zip)
 
 ![images2-3](docs/images2-4_3.svg)
 
-Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_pico_PCB_btn_2024-04-02.zip)
+Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-05-15.zip)
 
 > [!NOTE]
 > 相關製作影片 [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
