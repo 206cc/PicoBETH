@@ -1,4 +1,23 @@
-# TB6600&MOTOR TEST v1.0 https://github.com/206cc/PicoBETH
+# TB6600&MOTOR TEST v1.1 https://github.com/206cc/PicoBETH
+# YouTube Example https://youtu.be/7eG5W6a95h0
+
+# This program is a standalone test to check if the TB6600 stepper motor driver and the 57 stepper motor are functioning properly.
+# Wiring
+# TB6600 DIR- <-> Raspberry Pi Pico GPIO 2
+# TB6600 DIR+ <-> Raspberry Pi Pico GPIO 3
+# TB6600 PUL- <-> Raspberry Pi Pico GPIO 4
+# TB6600 PUL+ <-> Raspberry Pi Pico GPIO 5
+# TB6600 A+   <-> MOTOR Red wire
+# TB6600 A-   <-> MOTOR Green wire
+# TB6600 B+   <-> MOTOR Yellow wire
+# TB6600 B-   <-> MOTOR Blue wire
+# TB6600 VCC  <-> 12V3A +
+# TB6600 GND  <-> 12V3A -
+# TB6600 SW1  SW2  SW3  SW4  SW5  SW6 
+#        OFF  ON   OFF  OFF  OFF  OFF
+#
+# Test Results: The 57 stepper motor will rotate one full turn clockwise and then one full turn counterclockwise
+
 # 此為單獨測試TB6600步進馬達控制器及57步進馬達是否正常的程式
 # 接線方式
 # TB6600 DIR- <-> Raspberry PICO GPIO 2

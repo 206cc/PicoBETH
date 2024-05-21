@@ -1,4 +1,19 @@
-# HX711 TEST v1.1 https://github.com/206cc/PicoBETH
+# HX711 TEST v1.2 https://github.com/206cc/PicoBETH
+# YouTube Example https://youtu.be/pZT4ccE3bZk
+
+# This program is a standalone test for HX711 RATE and drift during stillness, outputting results once every 60 seconds by default.
+# Wiring
+# HX711 VCC           <-> Raspberry Pi Pico 5V
+# HX711 DT/DO/RX/DAT  <-> Raspberry Pi Pico GPIO 26
+# HX711 SCK/CK/TX/CLK <-> Raspberry Pi Pico GPIO 27
+# HX711 GND           <-> Raspberry Pi Pico GND
+# HX711 E+/RED        <-> NJ5 20KG Red wire
+# HX711 E-/BLK        <-> NJ5 20KG Black wire
+# HX711 A+/GRN        <-> NJ5 20KG Green wire
+# HX711 A-/WHT        <-> NJ5 20KG White wire
+# Test Results: Sampling rate above 75Hz
+#               Drift during stillness approximately 0.5 grams, more than 1 gram is considered unqualified
+
 # 此為單獨測試HX711 RATE及靜止時張力飄移的測試程式，預設60秒輸出一次結果
 # 接線方式
 # HX711 VCC           <-> Raspberry PICO 5V
@@ -10,7 +25,7 @@
 # HX711 A+/GRN        <-> NJ5 20KG GREEN(綠線)
 # HX711 A-/WHT        <-> NJ5 20KG WHITE(白線)
 # 測試結果: REAT(採樣頻率)75Hz以上
-#           Difrt(飄移)靜止時約0.5公克，超過1公克為不合格
+#          Difrt(飄移)靜止時約0.5公克，超過1公克為不合格
 
 import time, machine
 from machine import I2C, Pin
