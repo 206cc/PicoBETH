@@ -42,7 +42,7 @@ If your badminton stringing machine structure is not robust, I strongly advise a
 > Extremely important: If your stringing machine is of a simple type, please make sure to reinforce the structure.
 
 ## Background
-A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a tension sensor, several microswitches, and buttons.
+A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
 
 ## Current Main Features
 
@@ -85,7 +85,7 @@ Function demonstration video
 2. AT: Default Constant-Pull Switch.
 3. BB: Active buzzer Switch.
 4. FT: Amplitude of fine-tuning when reaching the specified tension.
-5. HX: Calibration of the tension sensor for HX711 (see the Final Settings chapter for details).
+5. HX: Calibration of the load sensor for HX711 (see the Final Settings chapter for details).
 6. I: System information.
 7. T: Tensioning Count/Log interface
 ![images1-5](docs/images1-5.png)
@@ -119,7 +119,7 @@ Main materials
 2. CBX/SGX 1610 ballscrew 200MM sliding table
 3. 57x56 stepper motor (2-phase 4-wire 1.8°)
 4. TB6600 stepper motor driver
-5. NJ5 20KG tension sensor
+5. NJ5 20KG load sensor
 6. HX711 module (SparkFun)
 7. 2004 i2c LCD
 8. Wise 2086 bead clip easy head
@@ -283,7 +283,7 @@ Reference video
 # Frequently Asked Questions
 
 ## Q: I want to make this project, but I'm not sure if I can complete it.
-A: It is recommended to first watch EP.1 ~ EP.3 of the [project compilation](https://www.youtube.com/playlist?list=PLN3s8Sz8h_G_Dp-Vqi42OujVhEX1pyrGo) on my YouTube channel. You will need to purchase materials such as Raspberry Pico, HX711 load cell amplifier, NJ5 sensor, TB6600 stepper motor controller, and 57x56 stepper motor. These materials are easy to prepare and not expensive. If the example program runs smoothly, you can prepare the remaining materials. The subsequent production process leans towards mechanical machining. Additionally, you will need tools such as a bench drill, angle grinder, soldering iron, and some basic mechanical machining skills. Follow the tutorial videos step by step to complete the project.
+A: It is recommended to first watch EP.1 ~ EP.3 of the [project compilation](https://www.youtube.com/playlist?list=PLN3s8Sz8h_G_Dp-Vqi42OujVhEX1pyrGo) on my YouTube channel. You will need to purchase materials such as Raspberry Pico, HX711 load cell amplifier, NJ5 load sensor, TB6600 stepper motor controller, and 57x56 stepper motor. These materials are easy to prepare and not expensive. If the example program runs smoothly, you can prepare the remaining materials. The subsequent production process leans towards mechanical machining. Additionally, you will need tools such as a bench drill, angle grinder, soldering iron, and some basic mechanical machining skills. Follow the tutorial videos step by step to complete the project.
 
 ## Q: Can I use other stepper motor drivers, such as the better DM542C?
 A: In theory, you can switch to DM542C, but the driving method may need to be modified. For example, parameters such as MOTO_FORW_W, MOTO_BACK_W for controlling forward and reverse in the code, and MOTO_SPEED_V1, MOTO_SPEED_V2 for controlling speed may need to be adjusted. It is recommended to first modify the example program in [EP.2](https://youtu.be/7eG5W6a95h0) to ensure that this driver can drive the motor normally and that there is no abnormal noise from the slide during movement before transplanting it into the main program. Although I haven't tried it myself, there have been successful ports by other branch developers, which you can refer to in the [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer) project.
@@ -298,13 +298,13 @@ A: You can refer to the test program in [EP.3](https://youtu.be/pZT4ccE3bZk). Af
 A: Of course, you can use HX711 load cell amplifiers from other brands, but the premise is that they can pass the test program in [EP.3](https://youtu.be/pZT4ccE3bZk). In my experience, other brands' normal HX711s will be as stable as SparkFun's. Unfortunately, other brands may have many defective products that drift. If the drift exceeds 50 grams, it is an error value of 0.1 lb, which will cause repeated fine-tuning of the Constant-pull system.
 
 ## Q: Can I make my own bead clip head?
-A: This has also been something I've always wanted to do. The Wise 2086 bead clip easy head is the most expensive hardware in the entire project, but it's also because it can be easily installed on the NJ5 sensor and has excellent clamping functionality. So far, I haven't figured out how to replace it. If you have a good bead clip head design, you can install it yourself. Just make sure to pay attention to the precautions mentioned in [EP.9](https://youtu.be/Ax4agdsqyms).
+A: This has also been something I've always wanted to do. The Wise 2086 bead clip easy head is the most expensive hardware in the entire project, but it's also because it can be easily installed on the NJ5 load sensor and has excellent clamping functionality. So far, I haven't figured out how to replace it. If you have a good bead clip head design, you can install it yourself. Just make sure to pay attention to the precautions mentioned in [EP.9](https://youtu.be/Ax4agdsqyms).
 
 ## Q: How durable is this electronic tension head?
 A: Theoretically, if high-quality parts are used, the durability should be quite high. As of today (2024/05/22), the number of tensionings on the formal machine I made has exceeded 7500 times without any problems occurring. Even if maintenance is required in the future, all electronic components are quite inexpensive.
 
 ## Q: Can this project be used for stringing tennis rackets?
-A: In theory, it is possible, but some hardware needs to be upgraded, such as changing the NJ5 sensor from 20KG to 50KG, larger stepper motors, larger power supplies, stronger platforms and slides, and modifying some code parameters. If interested, you can develop your own branch project.
+A: In theory, it is possible, but some hardware needs to be upgraded, such as changing the load sensor from 20KG to 50KG, larger stepper motors, larger power supplies, stronger platforms and slides, and modifying some code parameters. If interested, you can develop your own branch project.
 
 ## Q: Are there English subtitles for the project compilation on the YouTube channel?
 A: I plan to add English subtitles in the future, but because my usual work is quite busy, I only have some time to work on projects each day. If possible, please give the video a thumbs up and subscribe, as this is a great encouragement for me.
