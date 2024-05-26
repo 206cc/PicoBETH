@@ -119,7 +119,7 @@ Main materials
 2. CBX/SGX 1610 ballscrew 200MM sliding table
 3. 57x56 stepper motor (2-phase 4-wire 1.8°)
 4. TB6600 stepper motor driver
-5. NJ5 20KG load sensor
+5. NJ5 20KG load sensor (YZC-133)
 6. HX711 module (SparkFun)
 7. 2004 i2c LCD
 8. Wise 2086 bead clip easy head
