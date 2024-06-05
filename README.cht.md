@@ -232,6 +232,12 @@ Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs
 Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-05-15.zip)
 
 > [!NOTE]
+> 您可以先在麵包板組裝測試，成功後再將電路轉移到電路板上或手工焊接板上，不建議長期使用麵包板會有一些問題。
+
+> [!NOTE]
+> 請將 Gerber 檔案下載後 EMAIL 給線上(露天、蝦皮)PCB製造廠商，備註單層雙面1.6mm、雙面焊盤，廠商報價後下單即可。
+
+> [!NOTE]
 > 相關製作影片 [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
 
 ## 全機功能測試
