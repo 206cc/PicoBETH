@@ -236,6 +236,12 @@ Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_Pi
 Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-05-15.zip)
 
 > [!NOTE]
+> You can first assemble and test on a breadboard. Once successful, transfer the circuit to a PCB or hand-soldered board. Long-term use of a breadboard is not recommended as it may cause some issues.
+
+> [!NOTE]
+> Please download the Gerber files and email them to an online (AliExpress, eBay) PCB manufacturer. Note that it is a single-layer, double-sided 1.6mm PCB with double-sided pads. Place the order once the manufacturer provides a quote.
+
+> [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
 
 ## Full System Function Test
