@@ -30,6 +30,9 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 > [!NOTE]
 > 如果你沒有穿線機，可以參考此專案做一個穿線機台 [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer)
 
+> [!NOTE]
+> 如果你目前正在選擇手動穿線機，我建議購買有六點固定和底座夾具的重錘式穿線機。重錘式有一定的恆拉效果，穿出來的球拍與電子機穿線的球拍不會有太大差別。在完成這個項目之前，可以先使用重錘熟悉穿線操作。未來如果電子穿線頭發生故障，也可以很快速的裝回重錘。
+
 ## 警告
 如果你的羽毛球穿線機結構不是強壯的，我非常不建議進行這個專案，不強壯的固定平台會在張緊時型變，造成球拍框架變圓、張緊度降低，結果是機器補強張力，循環之下，最終羽毛球拍斷裂。
 
