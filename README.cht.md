@@ -232,7 +232,7 @@ Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs
 
 ![images2-3](docs/images2-4_3.svg)
 
-Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-05-15.zip)
+Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-06-09.zip)
 
 > [!NOTE]
 > 您可以先在麵包板組裝測試，成功後再將電路轉移到電路板上或手工焊接板上，不建議長期使用麵包板會有一些問題。

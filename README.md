@@ -236,7 +236,7 @@ Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_Pi
 
 ![images2-3](docs/images2-4_3.svg)
 
-Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-05-15.zip)
+Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-06-09.zip)
 
 > [!NOTE]
 > You can first assemble and test on a breadboard. Once successful, transfer the circuit to a PCB or hand-soldered board. Long-term use of a breadboard is not recommended as it may cause some issues.
