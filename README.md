@@ -120,7 +120,7 @@ C/H: CC parameter/HX parameter.<br />
 Main materials
 1. Raspberry Pico H
 2. CBX/SGX 1610 ballscrew 200MM sliding table
-3. 57x56 stepper motor (2-phase 4-wire 1.8°)
+3. NEMA23 57x56 stepper motor (2-phase 4-wire 1.8° 1.2Nm)
 4. TB6600 stepper motor driver
 5. NJ5 20KG load sensor (YZC-133)
 6. HX711 module (SparkFun)
