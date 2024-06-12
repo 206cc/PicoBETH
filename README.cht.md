@@ -114,7 +114,7 @@ C/H: CC參數/HX參數
 主要材料
 1. Raspberry Pico H
 2. CBX/SGX 1610 200MM 滑台
-3. 57步進馬達(2相4線 1.8°)
+3. NEMA23 57步進馬達(2相4線 1.8° 1.2Nm)
 4. TB6600 步進馬達驅動器
 5. NJ5 20KG 張力傳感器 (YZC-133)
 6. HX711 模塊(SparkFun)
