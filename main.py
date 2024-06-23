@@ -74,14 +74,14 @@ ABORT_GRAM = 20000   # Maximum interrupt grams (about 44 lb)
 LOG_MAX = 50         # Maximum LOG retention records (Please do not set too large to avoid memory exhaustion and inability to boot)
                      # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
                     
-import time, _thread, machine
+import time, _thread, machine, os
 from machine import I2C, Pin
 from src.hx711 import hx711          # from https://github.com/endail/hx711-pico-mpy
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.02"
-VER_DATE = "2024-05-22"
+VERSION = "2.10"
+VER_DATE = "2024-06-23"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BB_SW'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -102,6 +102,8 @@ MOTO_SPEED_V2 = 0.001   # Stepper motor low speed 步進馬達低速
 FT_SUB_COEF = 0.5       # Compensation coefficient for reducing tension during constant-pull 恆拉時減少張力的補償系數
 BOTTON_SLEEP = 0.1      # Button waiting time in seconds 按鍵等待秒數
 CORR_COEF = 1.00        # Tension coefficient 張力系數
+CONFIG_FILE = 'config.cfg'
+LOGS_FILE = 'logs.txt'
 
 # Stepper motor 步進馬達
 IN1 = machine.Pin(4, machine.Pin.OUT) # PUL-
@@ -177,7 +179,7 @@ hx711.wait_settle(hx711.rate.rate_80)
 # Read file parameters 參數讀取
 def config_read():
     try:
-        file = open("config.cfg", "r")
+        file = open(CONFIG_FILE, "r")
         data = file.read()
         config_list = data.split(",")
         for val in config_list:
@@ -195,7 +197,7 @@ def config_read():
 # Writing file Parameter 參數寫入
 def config_save():
     try:
-        file = open("config.cfg", "w")
+        file = open(CONFIG_FILE, "w")
         save_cfg = ""
         for val in SAVE_CFG_ARRAY:
             if isinstance(globals()[val], int) or isinstance(globals()[val], float):
@@ -209,7 +211,7 @@ def config_save():
 # Writing file LOG 寫入LOG
 def logs_save(log_str, flag):
     try:
-        file = open("logs.txt", flag)
+        file = open(LOGS_FILE, flag)
         for element in reversed(log_str):
             save_log = ""
             for val in element:
@@ -224,7 +226,7 @@ def logs_save(log_str, flag):
 def logs_read():
     global LOGS
     try:
-        fp = open("logs.txt", "r")
+        fp = open(LOGS_FILE, "r")
         line = fp.readline()
         while line:
             log_list = line.strip().split(",")
@@ -408,7 +410,6 @@ def init():
     global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTO_RS_STEPS, MOTO_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, FT_ADD
     max_MOTO_MAX_STEPS = MOTO_MAX_STEPS
     config_read()
-    logs_read()
     lb_kg_select()
     show_lcd(" **** PicoBETH **** ", 0, 0, I2C_NUM_COLS)
     show_lcd("Version: " + VERSION, 0, 1, I2C_NUM_COLS)
@@ -457,9 +458,30 @@ def init():
         ERR_MSG = "ERR: HX711@"+ str(abs(TENSION_MON)) +"G #2"
     
     if ERR_MSG == "":
-        if FIRST_TEST == 1:
-            first_test()
+        if botton_list('BOTTON_EXIT'):
+            beepbeep(0.5)
+            show_lcd("Factory Reset?", 0, 2, I2C_NUM_COLS)
+            show_lcd("[UP=Y DOWN=N]", 0, 3, I2C_NUM_COLS)
+            while True:
+                if botton_list('BOTTON_UP'):
+                    if CONFIG_FILE in os.listdir():
+                        os.rename(CONFIG_FILE, CONFIG_FILE+'.bak')
+                    
+                    if LOGS_FILE in os.listdir():
+                        os.remove(LOGS_FILE)
+                    
+                    machine.reset()
+                elif botton_list('BOTTON_DOWN'):
+                    main_interface()
+                    break
+        elif botton_list('BOTTON_SETTING'):
+            beepbeep(0.5)
+            first_test(1)
         
+        if FIRST_TEST == 1:
+            first_test(0)
+        
+        logs_read()
         moto_goto_standby()
         show_lcd("Checking motor...", 0, 2, I2C_NUM_COLS)
         ori_MOTO_MAX_STEPS = MOTO_MAX_STEPS
@@ -675,7 +697,8 @@ def setting_ts():
         ps_kt_tmp = PRE_STRECH
     else:
         ps_kt_tmp = KNOT
-        
+    
+    beepbeep(0.04)
     while True:
         # Action of pressing the up or down button 按下上下鍵動作
         if BOTTON_UP.value() or BOTTON_DOWN.value():
@@ -815,7 +838,7 @@ def setting_ts():
             config_save()
             lcd.blink_cursor_off()
             time.sleep(BOTTON_SLEEP)
-            beepbeep(0.1)
+            beepbeep(0.04)
             return 0
 
 # Settings screen 設定頁面
@@ -1027,7 +1050,7 @@ def logs_interface(idx):
             show_lcd(" ------", 13, 0, 7)
             
         if int(LOGS[idx][2]) == 2:
-            show_lcd("KG:" + "{: >4.1f}".format(int(LOGS[idx][3]) * 0.45359237), 0, 1, 7)
+            show_lcd("KG:" + "{: >4.1f}".format(float(LOGS[idx][3]) * 0.45359237), 0, 1, 7)
             show_lcd("{: >4.1f}".format(int(LOGS[idx][4]) * 0.001), 8, 1, 4)
         else:
             show_lcd("LB:" + str(LOGS[idx][3]), 0, 1, 7)
@@ -1068,7 +1091,7 @@ def show_timer():
         show_lcd("{: >2d}".format(timer_diff % 60), 18, 1, 2)
 
 # Initial functionality test on first boot 第一次開機功能測試
-def first_test():
+def first_test(flag):
     global FIRST_TEST
     LED_RED.off()
     i = 1
@@ -1179,11 +1202,14 @@ def first_test():
                 i = i + 1
         elif i == 16:
             show_lcd("T"+ str(i) +": Head Over 1000G", 0, 2, I2C_NUM_COLS)
+            show_lcd(" ", 0, 3, 14)
             if abs(TENSION_MON) > 1000:
                 show_lcd("T"+ str(i) +": ALL PASS Reboot", 0, 2, I2C_NUM_COLS)
                 show_lcd("     Please", 0, 3, 14)
                 FIRST_TEST = 2
-                config_save()
+                if flag == 0:
+                    config_save()
+                
                 i = i + 1
         
         tension_info(None)
