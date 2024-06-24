@@ -80,8 +80,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.10"
-VER_DATE = "2024-06-23"
+VERSION = "2.11"
+VER_DATE = "2024-06-24"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BB_SW'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -407,9 +407,11 @@ def lb_kg_select():
 
 # Boot initialization 開機初始化
 def init():
-    global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTO_RS_STEPS, MOTO_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, FT_ADD
+    global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTO_RS_STEPS, MOTO_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, FT_ADD, BB_SW
     max_MOTO_MAX_STEPS = MOTO_MAX_STEPS
     config_read()
+    bb_sw_tmp = BB_SW
+    BB_SW = 1
     lb_kg_select()
     show_lcd(" **** PicoBETH **** ", 0, 0, I2C_NUM_COLS)
     show_lcd("Version: " + VERSION, 0, 1, I2C_NUM_COLS)
@@ -476,10 +478,10 @@ def init():
                     break
         elif botton_list('BOTTON_SETTING'):
             beepbeep(0.5)
-            first_test(1)
+            first_test(1, bb_sw_tmp)
         
         if FIRST_TEST == 1:
-            first_test(0)
+            first_test(0, bb_sw_tmp)
         
         logs_read()
         moto_goto_standby()
@@ -487,7 +489,7 @@ def init():
         ori_MOTO_MAX_STEPS = MOTO_MAX_STEPS
         MOTO_MAX_STEPS = max_MOTO_MAX_STEPS
         MOTO_MAX_STEPS = forward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 0, 1)
-        
+        BB_SW = bb_sw_tmp
         if MOTO_MAX_STEPS == "ABORT GRAM":
             ERR_MSG = "ERR: Abort Gram"
         else:
@@ -1091,8 +1093,8 @@ def show_timer():
         show_lcd("{: >2d}".format(timer_diff % 60), 18, 1, 2)
 
 # Initial functionality test on first boot 第一次開機功能測試
-def first_test(flag):
-    global FIRST_TEST
+def first_test(flag, bb_sw_tmp):
+    global FIRST_TEST, BB_SW
     LED_RED.off()
     i = 1
     while True:
@@ -1204,13 +1206,17 @@ def first_test(flag):
             show_lcd("T"+ str(i) +": Head Over 1000G", 0, 2, I2C_NUM_COLS)
             show_lcd(" ", 0, 3, 14)
             if abs(TENSION_MON) > 1000:
-                show_lcd("T"+ str(i) +": ALL PASS Reboot", 0, 2, I2C_NUM_COLS)
+                show_lcd("T"+ str(i) +": ALL TEST PASS", 0, 2, I2C_NUM_COLS)
                 show_lcd("     Please", 0, 3, 14)
                 FIRST_TEST = 2
                 if flag == 0:
+                    BB_SW = bb_sw_tmp
                     config_save()
                 
-                i = i + 1
+                show_lcd("[Pres EXIT Reboot]", 0, 3, I2C_NUM_COLS)
+                while True:
+                    if botton_list('BOTTON_EXIT'):
+                        machine.reset()
         
         tension_info(None)
     
