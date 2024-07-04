@@ -133,10 +133,15 @@ Main materials
 13. Tri-color LEDs
 14. 12V 18650 UPS Battery Box
 
-> [!WARNING]
-> Unless you have the ability to modify the code yourself, please purchase materials according to the specified models or specifications.
+Main [BOM List](https://docs.google.com/spreadsheets/d/1ML2syn-BDUk_CEcyjm62lMwHZluXPYK5swn7pdFXTbw) Price Reference
 
 ![images2-1](docs/images2-1.jpg)
+
+> [!WARNING]
+> Please make sure to read the next section on Hardware Procurement Recommendations
+
+> [!WARNING]
+> Unless you have the ability to modify the code yourself, please purchase materials according to the specified models or specifications.
 
 ## Hardware Procurement Recommendations
 
@@ -306,6 +311,9 @@ A: You can refer to the test program in [EP.3](https://youtu.be/pZT4ccE3bZk). Af
 ## Q: Do I have to use SparkFun's HX711 load cell amplifier?
 A: Of course, you can use HX711 load cell amplifiers from other brands, but the premise is that they can pass the test program in [EP.3](https://youtu.be/pZT4ccE3bZk). In my experience, other brands' normal HX711s will be as stable as SparkFun's. Unfortunately, other brands may have many defective products that drift. If the drift exceeds 50 grams, it is an error value of 0.1 lb, which will cause repeated fine-tuning of the Constant-pull system.
 
+## Q: About the ERR: HX711@Zero #3 error displayed during startup
+A: Recently, some people reported passing the [EP.3](https://youtu.be/pZT4ccE3bZk) HX711 test, but still encountering this error during startup. This check is performed on a value obtained by the Wheatstone bridge on the load sensor (YZC-133) after being amplified by the HX711, serving as the initial reference for zero-point calibration. In the EP3 test program, this output is displayed using V0. During development, I found that the value of the HX711 I purchased that tends to drift was negative, and after repairing these drifting boards, the value became positive again. Therefore, I added this check condition. Perhaps my test sample size was not large enough, and positive or negative values do not affect usage. If subsequent confirmation shows that negative values are not a problem, I will remove this check. If you encounter this issue now, please comment out this check (lines 447 and 448 in version v2.12), and then report back to me if it works properly.
+
 ## Q: Can I make my own bead clip head?
 A: This has also been something I've always wanted to do. The Wise 2086 bead clip easy head is the most expensive hardware in the entire project, but it's also because it can be easily installed on the NJ5 load sensor (YZC-133) and has excellent clamping functionality. So far, I haven't figured out how to replace it. If you have a good bead clip head design, you can install it yourself. Just make sure to pay attention to the precautions mentioned in [EP.9](https://youtu.be/Ax4agdsqyms).
 
@@ -313,7 +321,7 @@ A: This has also been something I've always wanted to do. The Wise 2086 bead cli
 A: Theoretically, if high-quality parts are used, the durability should be quite high. As of today (2024/05/22), the number of tensionings on the formal machine I made has exceeded 7500 times without any problems occurring. Even if maintenance is required in the future, all electronic components are quite inexpensive.
 
 ## Q: Can this project be used for stringing tennis rackets?
-A: In theory, it is possible, but some hardware needs to be upgraded, such as changing the load sensor from 20KG to 50KG, larger stepper motors, larger power supplies, stronger platforms and slides, and modifying some code parameters. If interested, you can develop your own branch project.
+A: In theory, it is possible, but some hardware needs to be upgraded, such as changing the load sensor (YZC-133) from 20KG to 50KG, larger stepper motors, larger power supplies, stronger platforms and slides, and modifying some code parameters. If interested, you can develop your own branch project.
 
 ## Q: Are there English subtitles for the project compilation on the YouTube channel?
 A: I plan to add English subtitles in the future, but because my usual work is quite busy, I only have some time to work on projects each day. If possible, please give the video a thumbs up and subscribe, as this is a great encouragement for me.
