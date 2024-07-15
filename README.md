@@ -294,6 +294,28 @@ Reference video
 > [!IMPORTANT]
 > Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
 
+## Maintenance
+
+### Screw Maintenance
+
+Observe for any abnormal vibrations or noises during each use. Visually inspect the screw's condition every month. Check for dust or other foreign substances on the screw and ensure sufficient lubrication. If yellowish-brown lubricating oil appears around the screw and the walking surface appears smooth, it indicates good lubrication. The recommended viscosity for the lubricating oil used in ball screw maintenance is 30~40 cSt.
+
+### Parts Replacement
+
+After replacing any components during maintenance, enter the test mode at startup to retest all components for proper functionality.
+
+**Usage:** When the version information appears at startup, press and hold the middle setting button until a long beep is heard, then release it.
+
+### Factory Reset
+
+You can restore the factory default settings without a computer by recreating the `config.cfg` file (the original configuration file will be renamed to `config.cfg.bak`). After restoring the default settings, be sure to set the FT parameters and recalibrate the HX tension parameters.
+
+**Usage:** When the version information appears at startup, press and hold the exit button until a long beep is heard, then release it.
+
+Reference video:
+
+[![DEMO](https://img.youtube.com/vi/iAgFXuEtak4/0.jpg)](https://www.youtube.com/watch?v=iAgFXuEtak4)
+
 # Frequently Asked Questions
 
 ## Q: I want to make this project, but I'm not sure if I can complete it.
