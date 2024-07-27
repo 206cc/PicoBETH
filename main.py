@@ -59,7 +59,7 @@ FT_ADD_MAX = 20      # Maximum value for Constant-pull adjustment parameter
                      # 恆拉微調參數最大值
 FT_ADD_MIN = 1       # Minimum value for Constant-pull adjustment parameter
                      # 恆拉微調參數最小值
-PU_PRECISE = 50      # Gram value for triggering constant tension adjustment
+PU_PRECISE = 60      # Gram value for triggering constant tension adjustment
                      # 觸發恆拉微調公克值
 PU_STAY = 0.3        # Pre-Strech hold time (using buzzer), return to the original tension setting after the specified number of seconds
                      # 預拉暫留秒數(使用蜂鳴器)，秒數過後退回原設定張力
@@ -80,8 +80,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.12"
-VER_DATE = "2024-06-30"
+VERSION = "2.2"
+VER_DATE = "2024-07-27"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BB_SW'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -159,6 +159,7 @@ TS_ARR = []
 LOGS = []
 TENSION_MON_TEMP = 0
 KNOT_FLAG = 0
+CP_HZ = 0.125
 
 # 2004 i2c LCD
 I2C_ADDR     = 0x27
@@ -365,7 +366,7 @@ def button_list(key):
     
 # Second core 第二核心
 def tension_monitoring():
-    global TENSION_MON, MOTO_WAIT, HX711, BUTTON_LIST, TENSION_MON_TEMP
+    global TENSION_MON, MOTO_WAIT, HX711, BUTTON_LIST, TENSION_MON_TEMP, CP_HZ
     # HX711 zeroing 歸零HX711
     v0_arr = []
     t0 = time.ticks_ms()
@@ -377,6 +378,7 @@ def tension_monitoring():
                 v0 = v0_arr[int((len(v0_arr)/2))]
                 HX711["DIFF"] = v0_arr[-1] - v0_arr[0]
                 HX711["RATE"] = len(v0_arr)
+                CP_HZ = round(1 / HX711["RATE"], 3) + 0.005
                 break
     
     while True:
@@ -676,7 +678,7 @@ def start_tensioning():
             tension_info(None)
             show_lcd("{: >3d}".format(min(time.time()-t0, 999)), 17, 1, 3)
         else:
-            time.sleep(0.02)
+            time.sleep(CP_HZ)
 
 # Main screen 主畫面
 def setting_ts():

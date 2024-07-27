@@ -60,7 +60,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 10. 張緊LOG的詳細記錄
 11. 二段速度設定(在TB6600馬達控制器上切換)
 12. UPS不斷電功能
-13. 0.1LB(50G)高精度
+13. 0.04LB 高精度 (@94Hz Sparkfun_HX711 及軟體版本 V2.2 之後)
 
 ## 待機畫面
 1. 使用左右鍵可設定磅、公斤及預拉的十位數、個位數、小數。
@@ -261,7 +261,13 @@ Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/
 
 FT參數: 達到指定張力後微調時的幅度，過大的值會造成反覆加減張力，過小的值微調次數會增加才能到達指定張力。
 
-以下是建議的 FT 參數
+軟體版本 V2.2 以後的建議的 FT 參數
+| 滑台螺杆規格  | TB6600一般模式 | TB6600快速模式 |
+| -------- |:-------:|:--------:|
+| 1605     |    4    |     2    |
+| 1610     |    2    |     1    |
+
+軟體版本 V2.12 以前的建議的 FT 參數
 | 滑台螺杆規格  | TB6600一般模式 | TB6600快速模式 |
 | -------- |:-------:|:--------:|
 | 1605     |  14~15  |   7~8    |
@@ -285,6 +291,13 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 參考影片
 
 [![DEMO](https://img.youtube.com/vi/r7JQPvqK3No/0.jpg)](https://www.youtube.com/watch?v=r7JQPvqK3No)
+
+
+在 V2.2 版本之後，因為微調細膩度的提升，可開啟自動恆拉功能校正會更為準確。
+
+參考影片
+
+[![DEMO](https://img.youtube.com/vi/nrXwF6YsGyc/0.jpg)](https://www.youtube.com/watch?v=nrXwF6YsGyc)
 
 > [!IMPORTANT]
 > 非常重要，如不做此校正，實際張力會與 LCD 上的張力會有誤差

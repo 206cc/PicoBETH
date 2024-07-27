@@ -65,7 +65,7 @@ Function demonstration video
 10. Detailed recording of tensioning logs
 11. Pull speed of the string(Switch on the TB6600 stepper motor driver)
 12. Real-time UPS Redundancy Feature
-13. 0.1LB(50G) accurate
+13. 0.04LB accurate (@94Hz Sparkfun_HX711 and SW V2.2 or later)
 
 ## Standby Screen
 1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
@@ -265,8 +265,13 @@ Upon completing assembly and powering on the machine for the first time, please 
 
 FT Parameter: It determines the magnitude of adjustments after reaching the specified tension. A too large value can cause repeated tension adjustments, while a too small value increases the number of fine-tuning iterations required to reach the specified tension.
 
-The recommended FT parameters:
+SW V2.2 and later have the recommended FT parameters:
+| Ballscrew | TB6600 Normal Mode | TB6600 Fast Mode |
+| -------------------- |:------------------:|:----------------:|
+| 1605                 |        4           |        2         |
+| 1610                 |        2           |        1         |
 
+SW prior to V2.12 have the recommended FT parameters:
 | Ballscrew | TB6600 Normal Mode | TB6600 Fast Mode |
 | -------------------- |:------------------:|:----------------:|
 | 1605                 |        14~15       |        7~8       |
@@ -290,6 +295,13 @@ Calibration method:
 Reference video
 
 [![Reference video](https://img.youtube.com/vi/r7JQPvqK3No/0.jpg)](https://www.youtube.com/watch?v=r7JQPvqK3No)
+
+
+After SW V2.2, the increased precision in fine-tuning allows for more accurate calibration when the Constant-pull system is enabled.
+
+Reference video
+
+[![DEMO](https://img.youtube.com/vi/nrXwF6YsGyc/0.jpg)](https://www.youtube.com/watch?v=nrXwF6YsGyc)
 
 > [!IMPORTANT]
 > Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
