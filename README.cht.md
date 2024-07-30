@@ -14,15 +14,6 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 正式機 [製作合集](https://youtu.be/uJVE3YFJtJA)
 ![images1-2](docs/images1-6.jpg)
 
-正式機的改進
-1. 增加螺杆防塵罩
-2. 螺杆改使用1610規格，增加張力速度
-3. 更合理的硬體佈局，各零件可單獨拆裝不需全拆
-4. 使用堆疊方式減少體積，不會擋到置物槽
-5. 改使用自行設計PCB電路板
-6. HX711模塊改用 SparkFun
-7. 新增UPS電池盒，可在無外部電源的狀況下繼續完成穿線
-
 穿線展示影片
 
 [![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
@@ -42,25 +33,33 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 ## 原由
 一年前因為公司社團關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想再購買電子拉線機頭，但後來想想我可以用我會的知識，在 Raspberry Pico 上使用張力傳感器、幾個微動開關、按鈕製作了這個專案。
 
-## 現有主要功能
-
-功能展示影片
+## 現有主要功能與特點
 
 [![DEMO VIDEO](https://img.youtube.com/vi/s5no9YdeNnc/0.jpg)](https://www.youtube.com/watch?v=s5no9YdeNnc)
 
-1. 磅/公斤顯示及設定
-2. 預拉(Pre-Strech)
-3. 自動恆拉(Constant-pull)
-4. 打結加磅(Knot)
-5. 張緊時手動調整張力
-6. 張力校正
-7. 穿線計時器
-8. 張力計時器
-9. 張力計數器和開機計數器
-10. 張緊LOG的詳細記錄
-11. 二段速度設定(在TB6600馬達控制器上切換)
-12. UPS不斷電功能
-13. 0.04LB 高精度 (@94Hz Sparkfun_HX711 及軟體版本 V2.2 之後)
+### 功能
+- **磅/公斤顯示及設定**
+- **預拉(Pre-Strech)**
+- **自動恆拉(Constant-Pull)**
+- **打結加磅(Knot)**
+- **張緊時手動調整張力**
+- **張力校正**
+- **穿線計時器**
+- **張力計時器**
+- **張力計數器和開機計數器**
+- **張緊LOG的詳細記錄**
+- **二段速度設定(在TB6600馬達控制器上切換)**
+
+### 特點
+- **0.05LB 高精度**
+  - 在 94Hz Sparkfun HX711 及軟體版本 V2.2 之後
+- **低功耗**
+  - 使用 DC12V3A 電源
+  - 在待機時功耗 7W，張緊35LB時功耗 15W
+- **UPS不斷電**
+  - 使用 18650x3 電池可保證至少完整的穿完一隻球拍
+- **緊湊不佔空間**
+  - 尺寸大小約為 38(L) x 10(W) x 9(H) CM(不含珠夾頭)
 
 ## 待機畫面
 1. 使用左右鍵可設定磅、公斤及預拉的十位數、個位數、小數。
@@ -301,6 +300,14 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 
 > [!IMPORTANT]
 > 非常重要，如不做此校正，實際張力會與 LCD 上的張力會有誤差
+
+## 張緊飄移測試
+
+完成張力校正後檢驗張緊時的飄移程度，正常的飄移應該如下方影片展示的一樣約在 +-0.5LB 之內，通過測試後先使用舊拍試穿幾次，沒問題後即可正式開始使用。
+
+參考影片
+
+[![DEMO VIDEO](https://img.youtube.com/vi/wPfW1ht--Y0/0.jpg)](https://www.youtube.com/watch?v=wPfW1ht--Y0)
 
 ## 保養維謢
 
