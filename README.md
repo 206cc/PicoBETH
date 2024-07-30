@@ -364,6 +364,9 @@ A: In theory, it is possible, but some hardware needs to be upgraded, such as ch
 ## Q: Are there English subtitles for the project compilation on the YouTube channel?
 A: I plan to add English subtitles in the future, but because my usual work is quite busy, I only have some time to work on projects each day. If possible, please give the video a thumbs up and subscribe, as this is a great encouragement for me.
 
+## Q: 2004 LCD has no display
+A: Please turn to the back and try adjusting the blue variable resistor to change the LCD contrast. Also, check if the jumper for the LCD backlight is inserted.
+
 # Conclusion
 If you have any questions about making, please leave a comment in the YouTube video.
 
