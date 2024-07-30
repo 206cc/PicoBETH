@@ -13,7 +13,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 Drop-weight stringing machine and modification parts
 ![images1-1](docs/images1-1.jpg)
 
-Modified prototype machine
+Modification completed (Under Development)
 ![images1-2](docs/images1-2.jpg)
 
 Final machine [How to make step by step](https://youtu.be/uJVE3YFJtJA)
@@ -267,17 +267,14 @@ FT Parameter: It determines the magnitude of adjustments after reaching the spec
 SW V2.2 and later have the recommended FT parameters:
 | Ballscrew | TB6600 Normal Mode | TB6600 Fast Mode |
 | -------------------- |:------------------:|:----------------:|
-| 1605                 |        4           |        2         |
-| 1610                 |        2           |        1         |
+| 1605                 |         X          |        2         |
+| 1610                 |         2          |        1         |
 
 SW prior to V2.12 have the recommended FT parameters:
 | Ballscrew | TB6600 Normal Mode | TB6600 Fast Mode |
 | -------------------- |:------------------:|:----------------:|
-| 1605                 |        14~15       |        7~8       |
+| 1605                 |         X          |        7~8       |
 | 1610                 |        7~8         |        3~4       |
-
-> [!WARNING]
-> Due to differences in hardware brands' precision, the correct FT parameters depend on actual testing.
 
 ### Step 2: Calibrate The HX Parameter
 
@@ -344,7 +341,7 @@ A: It is recommended to first watch EP.1 ~ EP.3 of the [project compilation](htt
 A: In theory, you can switch to DM542C, but the driving method may need to be modified. For example, parameters such as MOTO_FORW_W, MOTO_BACK_W for controlling forward and reverse in the code, and MOTO_SPEED_V1, MOTO_SPEED_V2 for controlling speed may need to be adjusted. It is recommended to first modify the example program in [EP.2](https://youtu.be/7eG5W6a95h0) to ensure that this driver can drive the motor normally and that there is no abnormal noise from the slide during movement before transplanting it into the main program. Although I haven't tried it myself, there have been successful ports by other branch developers, which you can refer to in the [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer) project.
 
 ## Q: My HX711 RATE is only 10Hz, not 80Hz. Can I still use it?
-A: Initially, this project was also made with a sampling frequency of 10Hz, which can be used normally. However, after testing, it was found that a sampling frequency of 80Hz provides more precise, delicate, and faster response control of tension (the time difference between detecting the specified tension and instructing the Raspberry Pico to stop the motor rotation at 10Hz is about 1.3 times that of 80Hz). Therefore, in version 1.96, I added a check for the 80Hz action. If you still want to use 10Hz, please comment out this check and change the tension coefficient CORR_COEF value to 1.3. There may be some parameters or code that need to be adjusted and corrected manually.
+A: No, you cannot. Initially, this project was also made with a sampling frequency of 10Hz, which can be used normally. However, after testing, it was found that a sampling frequency of 80Hz provides more precise, delicate, and faster response control of tension (the time difference between detecting the specified tension and instructing the Raspberry Pico to stop the motor rotation at 10Hz is about 1.3 times that of 80Hz). Therefore, in version 1.96, I added a check for the 80Hz action.
 
 ## Q: What is drift in HX711?
 A: You can refer to the test program in [EP.3](https://youtu.be/pZT4ccE3bZk). After testing, the normal drift value of HX711 at 80Hz is about 0.5 ~ 1 gram. Therefore, in version 1.96, I added a drift value sampling during startup for 1 second. If it exceeds 1 gram, it cannot be used. If the check passes, generally speaking, the real-time tension displayed in the lower right corner of the LCD within -1 ~ 10 grams during standby is normal linear drift.
