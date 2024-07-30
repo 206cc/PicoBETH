@@ -19,15 +19,6 @@ Modified prototype machine
 Final machine [How to make step by step](https://youtu.be/uJVE3YFJtJA)
 ![images1-2](docs/images1-6.jpg)
 
-Improvements in the final machine:
-1. Added screw dust cover.
-2. Upgraded to a 1610 ballscrew for increased tensioning speed.
-3. More rational hardware layout, allowing individual disassembly without the need for complete disassembly.
-4. Reduced volume by using a stacking approach, avoiding interference with the storage slot.
-5. Switched to a custom-designed PCB circuit board.
-6. Replacing the HX711 module with one produced by SparkFun.
-7. Addition of a UPS battery box that allows continued stringing even in the absence of an external power source.
-
 Stringing demonstration video
 
 [![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
@@ -47,25 +38,33 @@ If your badminton stringing machine structure is not robust, I strongly advise a
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
 
-## Current Main Features
-
-Function demonstration video
+## Current Main Functions and Features
 
 [![DEMO VIDEO](https://img.youtube.com/vi/s5no9YdeNnc/0.jpg)](https://www.youtube.com/watch?v=s5no9YdeNnc)
 
-1. LB/KG display and setting
-2. Pre-Stretch function
-3. Constant-pull system
-4. Knot function
-5. Tension adjustment manually during tensioning
-6. Tension calibration
-7. Stringing timer
-8. Tension timer
-9. Tension counter and boot counter
-10. Detailed recording of tensioning logs
-11. Pull speed of the string(Switch on the TB6600 stepper motor driver)
-12. Real-time UPS Redundancy Feature
-13. 0.04LB accurate (@94Hz Sparkfun_HX711 and SW V2.2 or later)
+### Functions
+- **LB/KG display and setting**
+- **Pre-Stretch function**
+- **Constant-Pull system**
+- **Knot function**
+- **Tension adjustment manually during tensioning**
+- **Tension calibration**
+- **Stringing timer**
+- **Tension timer**
+- **Tension counter and boot counter**
+- **Detailed recording of tensioning logs**
+- **Pull speed of the string(Switch on the TB6600 stepper motor driver)**
+
+### Features
+- **0.05LB High Precision**
+  - Achieved with the Sparkfun HX711 at 94Hz and software version V2.2 and later.
+- **Low Power Consumption**
+  - Uses a DC12V3A power supply.
+  - Power consumption is 7W in standby mode and 15W when tensioning at 35LB.
+- **Real-time UPS Redundancy (Uninterruptible Power Supply)**
+  - Uses 3 x 18650 batteries to ensure at least one complete racquet stringing.
+- **Compact and Space-Saving**
+  - Dimensions are approximately 38(L) x 10(W) x 9(H) CM.(excluding clamp head)
 
 ## Standby Screen
 1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
@@ -305,6 +304,14 @@ Reference video
 
 > [!IMPORTANT]
 > Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
+
+## Tension Drift Test
+
+After completing the tension calibration, check the degree of drift in the tension. The normal drift should be within approximately ±0.5LB, as shown in the video below. After passing the test, use the old racquet stringer to test a few times. If there are no issues, you can officially start using it.
+
+Reference video
+
+[![DEMO VIDEO](https://img.youtube.com/vi/wPfW1ht--Y0/0.jpg)](https://www.youtube.com/watch?v=wPfW1ht--Y0)
 
 ## Maintenance
 
