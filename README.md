@@ -64,7 +64,7 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 - **Real-time UPS Redundancy (Uninterruptible Power Supply)**
   - Uses 3 x 18650 batteries to ensure at least one complete racquet stringing.
 - **Compact and Space-Saving**
-  - Dimensions are approximately 38(L) x 10(W) x 9(H) CM.(excluding clamp head)
+  - Dimensions are approximately 38(L) x 15(W) x 9(H) CM.(excluding clamp head)
 
 ## Standby Screen
 1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.

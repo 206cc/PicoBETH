@@ -59,7 +59,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 - **UPS不斷電**
   - 使用 18650x3 電池可保證至少完整的穿完一隻球拍
 - **緊湊不佔空間**
-  - 尺寸大小約為 38(L) x 10(W) x 9(H) CM(不含珠夾頭)
+  - 尺寸大小約為 38(L) x 15(W) x 9(H) CM(不含珠夾頭)
 
 ## 待機畫面
 1. 使用左右鍵可設定磅、公斤及預拉的十位數、個位數、小數。
