@@ -80,8 +80,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.21"
-VER_DATE = "2024-07-30"
+VERSION = "2.22"
+VER_DATE = "2024-08-01"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -99,7 +99,6 @@ MOTO_MAX_STEPS = 1000000
 MOTO_RS_STEPS = 2000    # Number of steps to retreat during slider reset 滑台復位時退回的步數
 MOTO_SPEED_V1 = 0.0001  # Stepper motor high speed 步進馬達高速
 MOTO_SPEED_V2 = 0.001   # Stepper motor low speed 步進馬達低速
-FT_SUB_COEF = 0.5       # Compensation coefficient for reducing tension during constant-pull 恆拉時減少張力的補償系數
 BUTTON_SLEEP = 0.1      # Button waiting time in seconds 按鍵等待秒數
 CORR_COEF = 1.00        # Tension coefficient 張力系數
 PRE_STEP = 25
@@ -145,7 +144,6 @@ BEEP = Pin(22, machine.Pin.OUT)
 LB_CONV_G = 0
 TENSION_MON = 0
 MOTO_MOVE = 0
-MOTO_BACK = 0
 MOTO_WAIT = 0
 MOTO_STEPS = 0
 CURSOR_XY_TMP = 0
@@ -324,9 +322,8 @@ def forward(delay, steps, check, init):
 
 # Tension decrease 張力減少
 def backward(delay, steps, check, init):
-    global MOTO_BACK, MOTO_STEPS
+    global MOTO_STEPS
     LED_GREEN.off()
-    MOTO_BACK = 1
     for i in range(0, steps):
         if check == 1:
             if MOTO_SW_FRONT.value():
@@ -335,7 +332,6 @@ def backward(delay, steps, check, init):
                     
                 time.sleep(0.1)
                 forward(MOTO_SPEED_V1, MOTO_RS_STEPS, 0, 0)
-                MOTO_BACK = 0
                 return 0 
             
         setStep(MOTO_BACK_W[0])
@@ -605,8 +601,8 @@ def start_tensioning():
         # Constant-pull decrease 恆拉減少張力
         if (tmp_LB_CONV_G + CP_SLOW) < TENSION_MON and (manual_flag == 1 or over_flag == 0):
             diff_g =  TENSION_MON - tmp_LB_CONV_G
-            abort_flag = backward(MOTO_SPEED_V2, FT_ADD * FT_SUB_COEF, 0, 0)
-            if diff_g < CP_FAST * 6:
+            abort_flag = backward(MOTO_SPEED_V2, FT_ADD, 0, 0)
+            if diff_g < CP_FAST * (4.5 - (PRE_STRECH / 10)):
                 cp_flag = 0
             else:
                 cp_flag = 1
@@ -617,14 +613,14 @@ def start_tensioning():
         # Manually increase tension 手動增加張力
         if button_list('BUTTON_UP'):
             manual_flag = 0
-            forward(MOTO_SPEED_V2, FT_ADD, 0, 0)
+            forward(MOTO_SPEED_V2, (FT_ADD * 12), 0, 0)
             show_lcd(MA_ARR[manual_flag], 11, 3, 1)
             count_add = count_add + 1
                 
         # Manually decrease tension 手動減少張力
         if button_list('BUTTON_DOWN'):
             manual_flag = 0
-            backward(MOTO_SPEED_V2, FT_ADD * FT_SUB_COEF, 1, 0)
+            backward(MOTO_SPEED_V2, (FT_ADD * 10), 1, 0)
             show_lcd(MA_ARR[manual_flag], 11, 3, 1)
             count_sub = count_sub + 1
                 
