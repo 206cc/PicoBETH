@@ -304,7 +304,7 @@ Reference video
 
 ## Tension Drift Test
 
-After completing the tension calibration, check the degree of drift in the tension. The normal drift should be within approximately ±0.5LB, as shown in the video below. After passing the test, use the old racquet stringer to test a few times. If there are no issues, you can officially start using it.
+After completing the tension calibration, check the degree of drift in the tension. The normal drift should be within approximately ±0.05LB, as shown in the video below. After passing the test, use the old racquet stringer to test a few times. If there are no issues, you can officially start using it.
 
 Reference video
 
