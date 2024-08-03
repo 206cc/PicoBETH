@@ -69,10 +69,14 @@ CP_FAST = 40         # Gram value for triggering the fast constant-pull mechanis
                      # 觸發快速恆拉微調公克值
 BZ_SW = 1            # Buzzer switch 0=off, 1=on
                      # 蜂鳴器開關 0=關閉，1=啟用
-ABORT_GRAM = 20000   # Maximum interrupt grams (about 44 lb)
+ABORT_GRAM = 20000   # Maximum abort grams (about 44 lb)
                      # 最大中斷公克(約44磅)
 LOG_MAX = 50         # Maximum LOG retention records (Please do not set too large to avoid memory exhaustion and inability to boot)
                      # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
+CA_REM = 0.1         # LB value for HX711 Tension calibration reminder
+                     # 張力校正提醒(磅)
+HX711_DIFRT = 1.0    # Check the HX711 difrt in grams.
+                     # 檢查HX711飄移值(公克)
                     
 import time, _thread, machine, os
 from machine import I2C, Pin
@@ -80,10 +84,10 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.22"
-VER_DATE = "2024-08-01"
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW'] # Saved variables 存檔變數
-MENU_ARR = [[4,0],[4,1],[4,2],[15,0],[16,0],[15,1],[16,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
+VERSION = "2.30"
+VER_DATE = "2024-08-05"
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
+MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
 ONOFF_ARR = ['Off', 'On ']
 MA_ARR = ['M', 'A']
@@ -101,7 +105,8 @@ MOTO_SPEED_V1 = 0.0001  # Stepper motor high speed 步進馬達高速
 MOTO_SPEED_V2 = 0.001   # Stepper motor low speed 步進馬達低速
 BUTTON_SLEEP = 0.1      # Button waiting time in seconds 按鍵等待秒數
 CORR_COEF = 1.00        # Tension coefficient 張力系數
-PRE_STEP = 25
+PRE_STEP = 30
+HX711_V0 = 0
 CONFIG_FILE = 'config.cfg'
 LOG_FILE = 'logs.txt'
 
@@ -148,7 +153,7 @@ MOTO_WAIT = 0
 MOTO_STEPS = 0
 CURSOR_XY_TMP = 0
 CURSOR_XY_TS_TMP = 1
-HX711 = {"RATE":0, "DIFF":0, "V0":[], "CP_HZ":0.125}
+HX711 = {"RATE":0, "DIFF":0, "V0":[], "CP_HZ":0.125, "HX711_CAL": 20.00}
 TENSION_COUNT = 0
 BOOT_COUNT = 0
 TIMER = 0
@@ -161,10 +166,9 @@ KNOT_FLAG = 0
 
 # 2004 i2c LCD
 I2C_ADDR     = 0x27
-I2C_NUM_ROWS = 4
 I2C_NUM_COLS = 20
 i2c = I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
-lcd = I2cLcd(i2c, I2C_ADDR, I2C_NUM_ROWS, I2C_NUM_COLS)
+lcd = I2cLcd(i2c, I2C_ADDR, 4, I2C_NUM_COLS)
 
 # HX711
 hx = hx711(Pin(27), Pin(26))
@@ -177,6 +181,7 @@ hx711.wait_settle(hx711.rate.rate_80)
 
 # Read file parameters 參數讀取
 def config_read():
+    global HX711
     try:
         file = open(CONFIG_FILE, "r")
         data = file.read()
@@ -190,12 +195,21 @@ def config_read():
                     globals()[cfg[0]] = int(cfg[1])
                     
         file.close()
+        HX711['HX711_CAL'] = HX711_CAL
     except OSError:  # failed
        pass
 
 # Writing file Parameter 參數寫入
-def config_save():
+def config_save(flag):
+    global HX711_CAL, HX711
     try:
+        if flag == 1:
+            HX711['HX711_CAL'] = HX711_CAL
+            
+        elif flag == 0:
+            tmp_HX711_CAL = HX711_CAL
+            HX711_CAL = HX711['HX711_CAL']
+        
         file = open(CONFIG_FILE, "w")
         save_cfg = ""
         for val in SAVE_CFG_ARRAY:
@@ -204,6 +218,8 @@ def config_save():
 
         file.write(save_cfg)
         file.close()
+        if flag == 0:
+            HX711_CAL = tmp_HX711_CAL
     except OSError:  # failed
        pass
 
@@ -381,6 +397,7 @@ def tension_monitoring():
             if (time.ticks_ms() - t0) > 1000:
                 v0_arr = sorted(HX711["V0"])
                 v0 = v0_arr[int((len(v0_arr)/2))]
+                HX711["HX711_V0"] = v0
                 HX711["DIFF"] = v0_arr[-1] - v0_arr[0]
                 HX711["RATE"] = len(v0_arr)
                 HX711["CP_HZ"] = round(1 / HX711["RATE"], 3)
@@ -458,9 +475,9 @@ def init():
     if HX711["RATE"] < 75:
         ERR_MSG = "ERR: HX711@"+ str(HX711["RATE"]) +"Hz"
 
-    # Sampling error exceeds 1 gram (unstable) 取樣誤差過大超過 1公克(不穩定)
-    if HX711["DIFF"] > 1000:
-        ERR_MSG = "ERR: HX711@"+ str(int(HX711["DIFF"]/1000)) +"G #1"
+    # Sampling error exceeds HX711_DIFRT gram (unstable) 取樣誤差過大超過 HX711_DIFRT 公克(不穩定)
+    if HX711["DIFF"] > (HX711_DIFRT * 1000):
+        ERR_MSG = "ERR: HX_DIFRT@"+ str(round(HX711["DIFF"]/1000,1)) +"G"
 
     # Standby error exceeds 5 grams (unstable) 待機誤差過大超過 5公克(不穩定)
     if abs(TENSION_MON) > 5:
@@ -509,14 +526,14 @@ def init():
             
             moto_goto_standby()
             LED_RED.off()
-            if FIRST_TEST == 2:
-                show_lcd("Check HX Coeffs!", 0, 2, I2C_NUM_COLS)
+            if abs(HX711_V0 - HX711["HX711_V0"]) > (CA_REM * 15000):
+                show_lcd("HX Need Calibration!", 0, 2, I2C_NUM_COLS)
             else:
                 show_lcd("Ready", 0, 2, I2C_NUM_COLS)
                 
             beepbeep(0.3)
             BOOT_COUNT = BOOT_COUNT + 1
-            config_save()
+            config_save(0)
 
 # Start increasing tension 開始增加張力
 def start_tensioning():
@@ -574,7 +591,7 @@ def start_tensioning():
                     over_flag = 1
                     
         elif over_flag == 1:
-            if (abs(tmp_LB_CONV_G - TENSION_MON) < CP_SLOW) and (time.time()-t0) > 0.5:
+            if (abs(tmp_LB_CONV_G - TENSION_MON) < (CP_SLOW * 2)) and (time.time()-t0) > 0.5:
                 beepbeep(0.1)
                 t0 = time.time()
                 over_flag = 2
@@ -596,13 +613,13 @@ def start_tensioning():
                     cc_count_add = cc_count_add + 1
                 
                 if over_flag == 0:
-                    count_add = count_add + 1    
+                    count_add = count_add + 1
         
         # Constant-pull decrease 恆拉減少張力
-        if (tmp_LB_CONV_G + CP_SLOW) < TENSION_MON and (manual_flag == 1 or over_flag == 0):
+        if (tmp_LB_CONV_G + (CP_SLOW * 2)) < TENSION_MON and (manual_flag == 1 or over_flag == 0):
             diff_g =  TENSION_MON - tmp_LB_CONV_G
             abort_flag = backward(MOTO_SPEED_V2, FT_ADD, 0, 0)
-            if diff_g < CP_FAST * (4.5 - (PRE_STRECH / 10)):
+            if diff_g < CP_FAST * (5 - (PRE_STRECH / 10)):
                 cp_flag = 0
             else:
                 cp_flag = 1
@@ -673,7 +690,7 @@ def start_tensioning():
                 show_lcd(PSKT_ARR[KNOT_FLAG], 14, 0, 2)
                 show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
             
-            config_save()
+            config_save(0)
             return 0
         
         if abort_flag == 1:
@@ -815,8 +832,8 @@ def setting_ts():
                 show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
                 ps_kt_show = DEFAULT_LB * ((PRE_STRECH + 100) / 100)
             
-            show_lcd("{: >4.1f}".format(ps_kt_show), 9, 0, 4)
-            show_lcd("{: >4.1f}".format(ps_kt_show * 0.45359237), 9, 1, 4)
+            show_lcd("{: >4.1f}".format(min(ps_kt_show, LB_MAX)), 9, 0, 4)
+            show_lcd("{: >4.1f}".format(min(ps_kt_show * 0.45359237, LB_MAX * 0.45359237)), 9, 1, 4)
             show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
             show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
             lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
@@ -846,7 +863,7 @@ def setting_ts():
 
         # Action of pressing the exit button 按下離開鍵動作
         if button_list('BUTTON_EXIT') or ((time.ticks_ms() - last_set_time) > (1.8 * 1000)):
-            config_save()
+            config_save(0)
             lcd.blink_cursor_off()
             time.sleep(BUTTON_SLEEP)
             beepbeep(0.04)
@@ -854,7 +871,7 @@ def setting_ts():
 
 # Settings screen 設定頁面
 def setting():
-    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP, CP_SW, BZ_SW, FIRST_TEST
+    global CURSOR_XY_TMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, FT_ADD, CURSOR_XY_TS_TMP, CP_SW, BZ_SW, FIRST_TEST, HX711_V0
     set_count = len(MENU_ARR)
     i = CURSOR_XY_TMP
     cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
@@ -890,7 +907,7 @@ def setting():
                     lb_kg_select()
 
             # Tension adjustment FT parameter ten-digit 張力微調 FT參數十位數
-            elif cursor_xy == (15, 0):
+            elif cursor_xy == (14, 0):
                 flag = 2
                 if BUTTON_UP.value():
                     FT_ADD = FT_ADD + 10
@@ -898,7 +915,7 @@ def setting():
                     FT_ADD = FT_ADD - 10
 
             # Tension adjustment FT parameter single-digit 張力微調 FT參數個位數
-            elif cursor_xy == (16, 0):
+            elif cursor_xy == (15, 0):
                 flag = 2
                 if BUTTON_UP.value():
                     FT_ADD = FT_ADD + 1
@@ -926,7 +943,7 @@ def setting():
                     show_lcd(ONOFF_ARR[BZ_SW], 4, 2, 3)
 
             # HX711 calibration coefficient ten-digit 校正系數十位數HX711
-            elif cursor_xy == (15, 1):
+            elif cursor_xy == (14, 1):
                 flag = 1
                 if BUTTON_UP.value():
                     HX711_CAL = HX711_CAL + 10
@@ -934,7 +951,7 @@ def setting():
                     HX711_CAL = HX711_CAL - 10
                     
             # HX711 calibration coefficient single-digit 校正系數個位數HX711
-            elif cursor_xy == (16, 1):
+            elif cursor_xy == (15, 1):
                 flag = 1
                 if BUTTON_UP.value():
                     HX711_CAL = HX711_CAL + 1
@@ -942,7 +959,7 @@ def setting():
                     HX711_CAL = HX711_CAL - 1
             
             # HX711 calibration coefficient first decimal 校正系數第一位小數HX711
-            elif cursor_xy == (18, 1):
+            elif cursor_xy == (17, 1):
                 flag = 1
                 if BUTTON_UP.value():
                     HX711_CAL = HX711_CAL + 0.1
@@ -950,12 +967,19 @@ def setting():
                     HX711_CAL = HX711_CAL - 0.1
                     
             # HX711 calibration coefficient second decimal 校正系數第二位小數HX711
-            elif cursor_xy == (19, 1):
+            elif cursor_xy == (18, 1):
                 flag = 1
                 if BUTTON_UP.value():
                     HX711_CAL = HX711_CAL + 0.01
                 elif BUTTON_DOWN.value():
                     HX711_CAL = HX711_CAL - 0.01
+                    
+            # HX711 tension calibration save 張力校正儲存HX711
+            elif cursor_xy == (19, 1):
+                if BUTTON_SETTING.value():
+                    beepbeep(0.1)
+                    HX711_V0 = HX711["HX711_V0"]
+                    config_save(1)
 
             # Display LOG 顯示LOG
             elif cursor_xy == (19, 3):
@@ -1005,8 +1029,8 @@ def setting():
                 elif FT_ADD <= FT_ADD_MIN:
                     FT_ADD = FT_ADD_MIN
             
-            show_lcd("{: >2.2f}".format(HX711_CAL), 15, 1, 5)
-            show_lcd("{:02d}".format(FT_ADD), 15, 0, 2)
+            show_lcd("{: >2.2f}".format(HX711_CAL), 14, 1, 5)
+            show_lcd("{:02d}".format(FT_ADD), 14, 0, 2)
             lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
             beepbeep(0.1)
             time.sleep(BUTTON_SLEEP)
@@ -1032,7 +1056,7 @@ def setting():
 
         # Action of pressing the exit button 按下離開鍵動作
         if button_list('BUTTON_EXIT'):
-            config_save()
+            config_save(0)
             lcd.blink_cursor_off()
             time.sleep(BUTTON_SLEEP)
             beepbeep(0.1)
@@ -1040,9 +1064,9 @@ def setting():
      
 # Settings interface display 設定介面顯示
 def setting_interface():
-    show_lcd("UN:        FT: "+ "{:02d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
+    show_lcd("UN:       FT: "+ "{:02d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
     show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
-    show_lcd("AT: "+ ONOFF_ARR[CP_SW] +"    HX: "+ "{: >2.2f}".format(HX711_CAL), 0, 1, I2C_NUM_COLS)
+    show_lcd("AT: "+ ONOFF_ARR[CP_SW] +"   HX: "+ "{: >2.2f}".format(HX711_CAL) +"S", 0, 1, I2C_NUM_COLS)
     show_lcd("BZ: "+ ONOFF_ARR[BZ_SW], 0, 2, I2C_NUM_COLS)
     show_lcd("<PicoBETH> I "+ "{: >6d}".format(TENSION_COUNT) +"T", 0, 3, I2C_NUM_COLS)
     
@@ -1220,7 +1244,7 @@ def first_test(flag, bz_sw_tmp):
                 FIRST_TEST = 2
                 if flag == 0:
                     BZ_SW = bz_sw_tmp
-                    config_save()
+                    config_save(0)
                 
                 show_lcd("[Pres EXIT Reboot]", 0, 3, I2C_NUM_COLS)
                 while True:
