@@ -84,8 +84,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.30"
-VER_DATE = "2024-08-05"
+VERSION = "2.31"
+VER_DATE = "2024-08-04"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -475,8 +475,8 @@ def init():
     if HX711["RATE"] < 75:
         ERR_MSG = "ERR: HX711@"+ str(HX711["RATE"]) +"Hz"
 
-    # Sampling error exceeds HX711_DIFRT gram (unstable) 取樣誤差過大超過 HX711_DIFRT 公克(不穩定)
-    if HX711["DIFF"] > (HX711_DIFRT * 1000):
+    # Sampling error exceeds HX711_DIFRT gram or is less than 0.3G. (unstable) 取樣誤差過大超過 HX711_DIFRT 或小於 0.3公克(不穩定)
+    if HX711["DIFF"] > (HX711_DIFRT * 1000) or HX711["DIFF"] < 300:
         ERR_MSG = "ERR: HX_DIFRT@"+ str(round(HX711["DIFF"]/1000,1)) +"G"
 
     # Standby error exceeds 5 grams (unstable) 待機誤差過大超過 5公克(不穩定)
