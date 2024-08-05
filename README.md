@@ -85,7 +85,7 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 ## Settings Screen
 1. UN: Select pounds or kilograms when setting.
 2. AT: Default Constant-Pull Switch.
-3. BB: Active buzzer Switch.
+3. BZ: Active buzzer Switch.
 4. FT: Amplitude of fine-tuning when reaching the specified tension.
 5. HX: Calibration of the load sensor for HX711 (see the Final Settings chapter for details).
 6. I: System information.
@@ -166,7 +166,7 @@ I tested the HX711 circuit board
 ![images2-2](docs/images2-2.png)
 
 > [!WARNING]
-> Please add safety measures as needed, such as adding pull-up resistors to buttons, fuses to stepper motors, limiting resistors to LEDs, etc., to protect the Raspberry Pi Pico and motors.
+> The button and microcontroller switch should have a 10k ohm resistor connected in series with the 3.3V supply, and the LED should have a 330 ohm resistor connected in series.
 
 # How To Make
 
@@ -265,13 +265,13 @@ Upon completing assembly and powering on the machine for the first time, please 
 FT Parameter: It determines the magnitude of adjustments after reaching the specified tension. A too large value can cause repeated tension adjustments, while a too small value increases the number of fine-tuning iterations required to reach the specified tension.
 
 SW V2.2 and later have the recommended FT parameters:
-| Ballscrew | TB6600 Normal Mode | TB6600 Fast Mode |
+| Ballscrew | TB6600 Slow Mode | TB6600 Fast Mode |
 | -------------------- |:------------------:|:----------------:|
 | 1605                 |         X          |        2         |
 | 1610                 |         2          |        1         |
 
 SW prior to V2.12 have the recommended FT parameters:
-| Ballscrew | TB6600 Normal Mode | TB6600 Fast Mode |
+| Ballscrew | TB6600 Slow Mode | TB6600 Fast Mode |
 | -------------------- |:------------------:|:----------------:|
 | 1605                 |         X          |        7~8       |
 | 1610                 |        7~8         |        3~4       |
@@ -280,8 +280,25 @@ SW prior to V2.12 have the recommended FT parameters:
 
 HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
 
+After version V2.2, due to the improved fine-tuning accuracy, enabling the auto-calibration feature will result in more precise corrections.
+
+Calibration Steps:
+1. Go to the settings page and ensure the Constant-Pull feature is enabled.
+2. Set the HX parameter to 20.00 on the settings page.
+3. Return to the main menu and set the tension to 20.0 lb with a Pre-Stretch of 10%.
+4. Attach one end of the external tension gauge to the stringing machine and the other end to the badminton string.
+5. Start tensioning, and once it stabilizes, record the lowest reading from the external tension gauge.
+6. Enter the recorded tension gauge value on the settings page and press the S button to save.
+
+Reference video
+
+[![DEMO](https://img.youtube.com/vi/nrXwF6YsGyc/0.jpg)](https://www.youtube.com/watch?v=nrXwF6YsGyc)
+
+
+Calibration steps for versions prior to V2.12:
+
 Calibration method:
-1. Temporarily disable the Constant-pull function on the settings page.
+1. Temporarily disable the Constant-Pull function on the settings page.
 2. Set the HX parameter to 20.00 on the settings page.
 3. Return to the main menu and set the tension to 20.3 lb with a Pre-Stretch of 10%.
 4. Attach one end of the external tension gauge to the stringing machine and the other end to the badminton string.
@@ -291,13 +308,6 @@ Calibration method:
 Reference video
 
 [![Reference video](https://img.youtube.com/vi/r7JQPvqK3No/0.jpg)](https://www.youtube.com/watch?v=r7JQPvqK3No)
-
-
-After SW V2.2, the increased precision in fine-tuning allows for more accurate calibration when the Constant-pull system is enabled.
-
-Reference video
-
-[![DEMO](https://img.youtube.com/vi/nrXwF6YsGyc/0.jpg)](https://www.youtube.com/watch?v=nrXwF6YsGyc)
 
 > [!IMPORTANT]
 > Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
@@ -344,7 +354,7 @@ A: In theory, you can switch to DM542C, but the driving method may need to be mo
 A: No, you cannot. Initially, this project was also made with a sampling frequency of 10Hz, which can be used normally. However, after testing, it was found that a sampling frequency of 80Hz provides more precise, delicate, and faster response control of tension (the time difference between detecting the specified tension and instructing the Raspberry Pico to stop the motor rotation at 10Hz is about 1.3 times that of 80Hz). Therefore, in version 1.96, I added a check for the 80Hz action.
 
 ## Q: What is drift in HX711?
-A: You can refer to the test program in [EP.3](https://youtu.be/pZT4ccE3bZk). After testing, the normal drift value of HX711 at 80Hz is about 0.5 ~ 1 gram. Therefore, in version 1.96, I added a drift value sampling during startup for 1 second. If it exceeds 1 gram, it cannot be used. If the check passes, generally speaking, the real-time tension displayed in the lower right corner of the LCD within -1 ~ 10 grams during standby is normal linear drift.
+A: You can refer to the test program in [EP.3](https://youtu.be/pZT4ccE3bZk). After testing, the normal drift value of HX711 at 80Hz is about 0.5 ~ 1 gram. Therefore, in version 1.96, I added a drift value sampling during startup for 1 second. If it exceeds 1 gram, it cannot be used. If the check passes, generally speaking, the real-time tension displayed in the lower right corner of the LCD within -10 ~ 10 grams during standby is normal linear drift.
 
 ## Q: Do I have to use SparkFun's HX711 load cell amplifier?
 A: Of course, you can use HX711 load cell amplifiers from other brands, but the premise is that they can pass the test program in [EP.3](https://youtu.be/pZT4ccE3bZk). In my experience, other brands' normal HX711s will be as stable as SparkFun's. Unfortunately, other brands may have many defective products that drift. If the drift exceeds 50 grams, it is an error value of 0.1 lb, which will cause repeated fine-tuning of the Constant-pull system.
