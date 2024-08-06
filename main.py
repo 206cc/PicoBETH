@@ -55,9 +55,9 @@ HX711_MAX = 25.00    # Maximum value for HX711 calibration parameter
                      # HX711校正參數最大值
 HX711_MIN = 15.00    # Minimum value for HX711 calibration parameter
                      # HX711校正參數最小值
-FT_ADD_MAX = 4       # Maximum value for Constant-pull adjustment parameter
+FT_STEP_MAX = 3       # Maximum value for Constant-pull adjustment parameter
                      # 恆拉微調參數最大值
-FT_ADD_MIN = 1       # Minimum value for Constant-pull adjustment parameter
+FT_STEP_MIN = 1       # Minimum value for Constant-pull adjustment parameter
                      # 恆拉微調參數最小值
 FT_ADD = 1           # Number of steps for stepper motor during constant-pull adjustment
                      # 恆拉微調時步進馬達的步數
@@ -84,8 +84,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.31"
-VER_DATE = "2024-08-04"
+VERSION = "2.32"
+VER_DATE = "2024-08-06"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -107,8 +107,10 @@ BUTTON_SLEEP = 0.1      # Button waiting time in seconds 按鍵等待秒數
 CORR_COEF = 1.00        # Tension coefficient 張力系數
 PRE_STEP = 30
 HX711_V0 = 0
-CONFIG_FILE = 'config.cfg'
-LOG_FILE = 'logs.txt'
+
+# Initialize all GPIO pins to low 初始化所有 GPIO
+for pin in range(28):
+    Pin(pin, Pin.OUT).low()
 
 # Stepper motor 步進馬達
 IN1 = machine.Pin(4, machine.Pin.OUT) # PUL-
@@ -134,7 +136,9 @@ BUTTON_LIST = {"BUTTON_HEAD":0,
                "BUTTON_UP":0,
                "BUTTON_DOWN":0,
                "BUTTON_LEFT":0,
-               "BUTTON_RIGHT":0}                # Button list 按鈕列表
+               "BUTTON_RIGHT":0,
+               "MOTO_SW_FRONT":0,
+               "MOTO_SW_REAR":0}                # Button list 按鈕列表
 BUTTON_CLICK_MS = 500                           # Button click milliseconds 按鈕點擊毫秒
 
 # LED
@@ -183,9 +187,9 @@ hx711.wait_settle(hx711.rate.rate_80)
 def config_read():
     global HX711
     try:
-        file = open(CONFIG_FILE, "r")
+        file = open('config.cfg', 'r')
         data = file.read()
-        config_list = data.split(",")
+        config_list = data.split(',')
         for val in config_list:
             cfg = val.split("=")
             if cfg[0]:
@@ -210,7 +214,7 @@ def config_save(flag):
             tmp_HX711_CAL = HX711_CAL
             HX711_CAL = HX711['HX711_CAL']
         
-        file = open(CONFIG_FILE, "w")
+        file = open('config.cfg', 'w')
         save_cfg = ""
         for val in SAVE_CFG_ARRAY:
             if isinstance(globals()[val], int) or isinstance(globals()[val], float):
@@ -226,7 +230,7 @@ def config_save(flag):
 # Writing file LOG 寫入LOG
 def logs_save(log_str, flag):
     try:
-        file = open(LOG_FILE, flag)
+        file = open('logs.txt', flag)
         for element in reversed(log_str):
             save_log = ""
             for val in element:
@@ -241,7 +245,7 @@ def logs_save(log_str, flag):
 def logs_read():
     global LOGS
     try:
-        fp = open(LOG_FILE, "r")
+        fp = open('logs.txt', "r")
         line = fp.readline()
         while line:
             log_list = line.strip().split(",")
@@ -490,11 +494,11 @@ def init():
             show_lcd("[UP=Y DOWN=N]", 0, 3, I2C_NUM_COLS)
             while True:
                 if button_list('BUTTON_UP'):
-                    if CONFIG_FILE in os.listdir():
-                        os.rename(CONFIG_FILE, CONFIG_FILE+'.bak')
+                    if 'config.cfg' in os.listdir():
+                        os.rename('config.cfg', 'config.cfg'+'.bak')
                     
-                    if LOG_FILE in os.listdir():
-                        os.remove(LOG_FILE)
+                    if 'logs.txt' in os.listdir():
+                        os.remove('logs.txt')
                     
                     machine.reset()
                 elif button_list('BUTTON_DOWN'):
@@ -515,25 +519,32 @@ def init():
         MOTO_MAX_STEPS = forward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 0, 1)
         BZ_SW = bz_sw_tmp
         if MOTO_MAX_STEPS == "ABORT GRAM":
-            ERR_MSG = "ERR: Abort Gram"
+            ERR_MSG = "ERR: MMS=ABORT"
         else:
             MOTO_RS_STEPS = int(int(MOTO_MAX_STEPS) / 20)
             ABORT_LM = int(int(MOTO_MAX_STEPS) * 0.3)
             ABORT_GRAM = ori_ABORT_GRAM
-            tmp_FT_ADD = round(FT_ADD * MOTO_MAX_STEPS / ori_MOTO_MAX_STEPS)
-            if tmp_FT_ADD != 0:
-                FT_ADD = tmp_FT_ADD
+            tmp_FT_STEP = round(FT_ADD * MOTO_MAX_STEPS / ori_MOTO_MAX_STEPS)
+            if tmp_FT_STEP >= FT_STEP_MIN and tmp_FT_STEP <= FT_STEP_MAX:
+                FT_ADD = tmp_FT_STEP
+            
+            if MOTO_MAX_STEPS < 5000 or MOTO_MAX_STEPS > 30000:
+                ERR_MSG = "ERR: MMS=" + str(MOTO_MAX_STEPS) + " FT=" + str(tmp_FT_STEP)
             
             moto_goto_standby()
             LED_RED.off()
             if abs(HX711_V0 - HX711["HX711_V0"]) > (CA_REM * 15000):
                 show_lcd("HX Need Calibration!", 0, 2, I2C_NUM_COLS)
+            elif tmp_FT_STEP < FT_STEP_MIN or tmp_FT_STEP > FT_STEP_MAX:
+                FT_ADD = 1
+                show_lcd("FT Need Check!", 0, 2, I2C_NUM_COLS) 
             else:
                 show_lcd("Ready", 0, 2, I2C_NUM_COLS)
                 
             beepbeep(0.3)
             BOOT_COUNT = BOOT_COUNT + 1
-            config_save(0)
+            if ERR_MSG == "":
+                config_save(0)
 
 # Start increasing tension 開始增加張力
 def start_tensioning():
@@ -1024,10 +1035,10 @@ def setting():
                     FIRST_TEST = 0
             
             if flag == 2:
-                if FT_ADD >= FT_ADD_MAX:
-                    FT_ADD = FT_ADD_MAX  
-                elif FT_ADD <= FT_ADD_MIN:
-                    FT_ADD = FT_ADD_MIN
+                if FT_ADD >= FT_STEP_MAX:
+                    FT_ADD = FT_STEP_MAX  
+                elif FT_ADD <= FT_STEP_MIN:
+                    FT_ADD = FT_STEP_MIN
             
             show_lcd("{: >2.2f}".format(HX711_CAL), 14, 1, 5)
             show_lcd("{:02d}".format(FT_ADD), 14, 0, 2)
