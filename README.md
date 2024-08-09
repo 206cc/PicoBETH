@@ -251,7 +251,7 @@ Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerbe
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/0bb_qs8acqc/0.jpg)](https://www.youtube.com/watch?v=0bb_qs8acqc)
 
-## Full System Function Test
+## Hardware Function Testing Mode
 
 Upon completing assembly and powering on the machine for the first time, please conduct tests on all buttons, front and rear limits, and HX711 sensors as instructed on the screen.
 
@@ -275,6 +275,9 @@ SW prior to V2.12 have the recommended FT parameters:
 | -------------------- |:------------------:|:----------------:|
 | 1605                 |         X          |        7~8       |
 | 1610                 |        7~8         |        3~4       |
+
+> [!NOTE]
+> For the configuration of slow mode and fast mode, please refer to the [TB6600 Stepper Motor Parameters](https://github.com/206cc/PicoBETH#tb6600-stepper-motor-parameters) section.
 
 ### Step 2: Calibrate The HX Parameter
 
@@ -328,9 +331,12 @@ Observe for any abnormal vibrations or noises during each use. Visually inspect 
 
 ### Parts Replacement
 
-After replacing any components during maintenance, enter the test mode at startup to retest all components for proper functionality.
+After replacing any components during maintenance, enter the hardware function testing mode at startup to retest all components for proper functionality.
 
 **Usage:** When the version information appears at startup, press and hold the middle setting button until a long beep is heard, then release it.
+
+> [!IMPORTANT]
+> If you replace any hardware components, be sure to run **hardware function testing mode** to verify that all hardware functions are working properly.
 
 ### Factory Reset
 
@@ -375,7 +381,10 @@ A: In theory, it is possible, but some hardware needs to be upgraded, such as ch
 A: I plan to add English subtitles in the future, but because my usual work is quite busy, I only have some time to work on projects each day. If possible, please give the video a thumbs up and subscribe, as this is a great encouragement for me.
 
 ## Q: 2004 LCD has no display
-A: Please turn to the back and try adjusting the blue variable resistor to change the LCD contrast. Also, check if the jumper for the LCD backlight is inserted.
+A: Please turn to the back and try adjusting the blue variable resistor to change the LCD contrast. Also, check if the jumper for the LCD backlight is inserted. If everything is functioning normally, you can try connecting only the 5V power, GND, and the 4 pins of the LCD to the Raspberry Pi Pico, if there are no issues, the boot screen should appear when powered on. If it still doesn't work, please check if the four necessary files—`main.py`, `src/hx711.py`, `src/lcd_api.py`, and `src/pico_i2c_lcd.py`—are present on the Raspberry Pi Pico.
+
+## Q: The stringing function works fine, but the buzzer keeps sounding continuously.
+A: Please check if you mistakenly purchased the Active Low Trigger version. The correct version should be the Active High Trigger.
 
 # Conclusion
 If you have any questions about making, please leave a comment in the YouTube video.
