@@ -27,56 +27,50 @@
 # Basic parameters (settings saved in CFG_NAME will take precedence if there are stored parameter values)
 # 第一次開機請至 https://github.com/206cc/PicoBETH?tab=readme-ov-file#final-settings 觀看如何設定 FT、HX 參數
 # 基本參數(如 CFG_NAME 內有儲存參數值會以的存檔的設定為主)
-FIRST_TEST = 1       # Self-test check on first boot
-                     # 第一次開機自我測試檢查
-HX711_CAL = 20.00    # Calibration coefficients for HX711 load cell amplifier
-                     # HX711張力放大器校正系數
-CORR_COEF_AUTO = 1   # Self-learning tension parameter 0=off 1=on
-                     # 自我學習張力參數 0=off 1=on
-LB_KG_SELECT = 0     # Setting for pounds or kilograms, 0=both can be set, 1=only pounds, 2=only kilograms
-                     # 磅或公斤的設定，0=皆可設定，1=只設定磅，2=只設定公斤
-DEFAULT_LB = 20.0    # Default weight in LB
-                     # 預設磅數
-PRE_STRECH = 10      # Default Pre-Strech
-                     # 預設預拉
-KNOT = 15            # Default Knot
-                     # 預設打結
-LB_MAX = 35.0        # Maximum tension in LB
-                     # 設定張緊的最高磅數
-LB_MIN = 15.0        # Minimum tension in LB
-                     # 設定張緊的最低磅數
-PS_MAX = 30          # Maximum percentage in Pre-Strech
-                     # 設定預拉的最高%數
-KNOT_MIN = 5         # Minimum percentage for knot
-                     # 打結增最低%數
-KNOT_MAX = 30        # Maximum percentage for knot
-                     # 打結增最高%數
-HX711_MAX = 25.00    # Maximum value for HX711 calibration parameter
-                     # HX711校正參數最大值
-HX711_MIN = 15.00    # Minimum value for HX711 calibration parameter
-                     # HX711校正參數最小值
-FT_STEP_MAX = 3       # Maximum value for Constant-pull adjustment parameter
-                     # 恆拉微調參數最大值
-FT_STEP_MIN = 1       # Minimum value for Constant-pull adjustment parameter
-                     # 恆拉微調參數最小值
-FT_ADD = 1           # Number of steps for stepper motor during constant-pull adjustment
-                     # 恆拉微調時步進馬達的步數
-CP_SW = 1            # Constant-pull switch 0=off, 1=on
-                     # 恆拉開關 0=關閉，1=啟用
-CP_SLOW = 30         # Gram value for triggering constant tension adjustment
-                     # 觸發恆拉微調公克值
-CP_FAST = 40         # Gram value for triggering the fast constant-pull mechanism
-                     # 觸發快速恆拉微調公克值
-BZ_SW = 1            # Buzzer switch 0=off, 1=on
-                     # 蜂鳴器開關 0=關閉，1=啟用
-ABORT_GRAM = 20000   # Maximum abort grams (about 44 lb)
-                     # 最大中斷公克(約44磅)
-LOG_MAX = 50         # Maximum LOG retention records (Please do not set too large to avoid memory exhaustion and inability to boot)
-                     # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
-CA_REM = 0.1         # LB value for HX711 Tension calibration reminder
-                     # 張力校正提醒(磅)
-HX711_DIFRT = 1.0    # Check the HX711 difrt in grams.
-                     # 檢查HX711飄移值(公克)
+FIRST_TEST = 1               # Self-test check on first boot
+                             # 第一次開機自我測試檢查
+HX711_CAL = 20.00            # Calibration coefficients for HX711 load cell amplifier
+                             # HX711張力放大器校正系數
+LB_KG_SELECT = 0             # Setting for pounds or kilograms, 0=both can be set, 1=only pounds, 2=only kilograms
+                             # 磅或公斤的設定，0=皆可設定，1=只設定磅，2=只設定公斤
+DEFAULT_LB = 20.0            # Default weight in LB
+                             # 預設磅數
+PRE_STRECH = 10              # Default Pre-Strech
+                             # 預設預拉
+KNOT = 15                    # Default Knot
+                             # 預設打結
+LB_RANGE = [15.0,35.0]       # Minimum/Maximum tension in LB
+                             # 設定張緊的低磅/最高磅數
+PS_MAX = 30                  # Maximum percentage in Pre-Strech
+                             # 設定預拉的最高%數
+KNOT_RANG = [5,30]           # Minimum/Maximum percentage for knot
+                             # 打結增最低/高%數
+HX711_RANGE = [15.00,25.00]  # Minimum/Maximum value for HX711 calibration parameter
+                             # HX711校正參數最小/最大值
+FT_STEP = [1,3]              # Minimum/Maximum value for Constant-pull adjustment parameter
+                             # 恆拉微調參數最小值
+FT_ADD = 1                   # Number of steps for stepper motor during constant-pull adjustment
+                             # 恆拉微調時步進馬達的步數
+CP_SW = 1                    # Constant-pull switch 0=off, 1=on
+                             # 恆拉開關 0=關閉，1=啟用
+CP_SLOW = 30                 # Gram value for triggering constant tension adjustment
+                             # 觸發恆拉微調公克值
+CP_FAST = 40                 # Gram value for triggering the fast constant-pull mechanism
+                             # 觸發快速恆拉微調公克值
+BZ_SW = 1                    # Buzzer switch 0=off, 1=on
+                             # 蜂鳴器開關 0=關閉，1=啟用
+CORR_COEF_AUTO = 1           # Self-learning tension parameter 0=off 1=on
+                             # 自我學習張力參數 0=off 1=on
+ABORT_GRAM = 18143           # Maximum abort grams (40LB)
+                             # 最大中斷公克(40磅)
+LOG_MAX = 50                 # Maximum LOG retention records (Please do not set too large to avoid memory exhaustion and inability to boot)
+                             # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
+CA_REM = 0.1                 # LB value for HX711 Tension calibration reminder
+                             # 張力校正提醒(磅)
+HX711_DIFRT = 1.0            # Check the HX711 difrt in grams.
+                             # 檢查HX711飄移值(公克)
+RT_MODE = 0                  # Reliability Testing Mode
+                             # 可靠性測試模式
                     
 import time, _thread, machine, os
 from machine import I2C, Pin
@@ -84,8 +78,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.32"
-VER_DATE = "2024-08-06"
+VERSION = "2.40"
+VER_DATE = "2024-08-10"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -275,7 +269,11 @@ def tension_info(tension):
     
     show_lcd("{: >4.1f}".format(tension * 0.0022), 9, 0, 4)
     show_lcd("{: >4.1f}".format(tension / 1000), 9, 1, 4)
-    show_lcd("{: >5d}G".format(tension), 14, 3, 6)
+    if RT_MODE == 0:
+        show_lcd("{: >5d}G".format(tension), 14, 3, 6)
+    else:
+        show_lcd("{: >5d}R".format(RT_MODE), 14, 3, 6)
+        
     return tension
 
 # Stepper motor operation 步進馬達作動
@@ -287,7 +285,7 @@ def setStep(in_w):
 
 # Increase in tension 張力增加
 def forward(delay, steps, check, init):
-    global MOTO_MOVE, MOTO_WAIT
+    global MOTO_MOVE, MOTO_WAIT, RT_MODE
     LED_GREEN.off()
     MOTO_MOVE = 1
     for i in range(0, steps):
@@ -306,7 +304,7 @@ def forward(delay, steps, check, init):
                 return("Abort")
             
             # Tension sensor anomaly or no string (tension less than 5 lb after ABORT_LM) 張力傳感器異常、無夾線(行程已過ABORT_LM時張力小於5磅)
-            if i > ABORT_LM and TENSION_MON < 2267:
+            if i > ABORT_LM and TENSION_MON < 2267 and RT_MODE == 0:
                 moto_goto_standby()
                 MOTO_MOVE = 0
                 MOTO_WAIT = 0
@@ -320,6 +318,7 @@ def forward(delay, steps, check, init):
                 
             MOTO_MOVE = 0
             MOTO_WAIT = 0
+            RT_MODE = 0
             return("Over Limits")
         
         # Exceeding the maximum specified tension 超過最大指定張力
@@ -327,6 +326,7 @@ def forward(delay, steps, check, init):
             moto_goto_standby()
             MOTO_MOVE = 0
             MOTO_WAIT = 0
+            RT_MODE = 0
             return("ABORT GRAM")
         
         setStep(MOTO_FORW_W[0])
@@ -435,7 +435,7 @@ def lb_kg_select():
 
 # Boot initialization 開機初始化
 def init():
-    global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTO_RS_STEPS, MOTO_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, FT_ADD, BZ_SW
+    global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTO_RS_STEPS, MOTO_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, FT_ADD, BZ_SW, RT_MODE
     max_MOTO_MAX_STEPS = MOTO_MAX_STEPS
     config_read()
     bz_sw_tmp = BZ_SW
@@ -450,7 +450,7 @@ def init():
     main_interface()
     ori_ABORT_GRAM = ABORT_GRAM
     ABORT_GRAM = 1000
-    LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100)), int(LB_MAX * 453.59237))
+    LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100)), int(LB_RANGE[1] * 453.59237))
     show_lcd("Tension monitoring...", 0, 2, I2C_NUM_COLS)
     _thread.start_new_thread(tension_monitoring, ())
     
@@ -489,7 +489,7 @@ def init():
     
     if ERR_MSG == "":
         if button_list('BUTTON_EXIT'):
-            beepbeep(0.5)
+            beepbeep(2)
             show_lcd("Factory Reset?", 0, 2, I2C_NUM_COLS)
             show_lcd("[UP=Y DOWN=N]", 0, 3, I2C_NUM_COLS)
             while True:
@@ -505,11 +505,14 @@ def init():
                     main_interface()
                     break
         elif button_list('BUTTON_SETTING'):
-            beepbeep(0.5)
-            first_test(1, bz_sw_tmp)
+            beepbeep(2)
+            hw_test(1, bz_sw_tmp)
+        elif button_list('BUTTON_UP'):
+            beepbeep(2)
+            RT_MODE = 1
         
         if FIRST_TEST == 1:
-            first_test(0, bz_sw_tmp)
+            hw_test(0, bz_sw_tmp)
         
         logs_read()
         moto_goto_standby()
@@ -519,13 +522,13 @@ def init():
         MOTO_MAX_STEPS = forward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 0, 1)
         BZ_SW = bz_sw_tmp
         if MOTO_MAX_STEPS == "ABORT GRAM":
-            ERR_MSG = "ERR: MMS=ABORT"
+            ERR_MSG = "ERR: MMS ABORT"
         else:
             MOTO_RS_STEPS = int(int(MOTO_MAX_STEPS) / 20)
             ABORT_LM = int(int(MOTO_MAX_STEPS) * 0.3)
             ABORT_GRAM = ori_ABORT_GRAM
             tmp_FT_STEP = round(FT_ADD * MOTO_MAX_STEPS / ori_MOTO_MAX_STEPS)
-            if tmp_FT_STEP >= FT_STEP_MIN and tmp_FT_STEP <= FT_STEP_MAX:
+            if tmp_FT_STEP >= FT_STEP[0] and tmp_FT_STEP <= FT_STEP[1]:
                 FT_ADD = tmp_FT_STEP
             
             if MOTO_MAX_STEPS < 5000 or MOTO_MAX_STEPS > 30000:
@@ -535,7 +538,7 @@ def init():
             LED_RED.off()
             if abs(HX711_V0 - HX711["HX711_V0"]) > (CA_REM * 15000):
                 show_lcd("HX Need Calibration!", 0, 2, I2C_NUM_COLS)
-            elif tmp_FT_STEP < FT_STEP_MIN or tmp_FT_STEP > FT_STEP_MAX:
+            elif tmp_FT_STEP < FT_STEP[0] or tmp_FT_STEP > FT_STEP[1]:
                 FT_ADD = 1
                 show_lcd("FT Need Check!", 0, 2, I2C_NUM_COLS) 
             else:
@@ -548,12 +551,13 @@ def init():
 
 # Start increasing tension 開始增加張力
 def start_tensioning():
-    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNT, LOGS, CORR_COEF, FT_ADD, KNOT_FLAG, LB_CONV_G
+    global MOTO_MOVE, MOTO_WAIT, TENSION_COUNT, LOGS, CORR_COEF, FT_ADD, KNOT_FLAG, LB_CONV_G, RT_MODE
     show_lcd("Tensioning", 0, 2, I2C_NUM_COLS)
+    show_lcd("     ", 15, 1, 5)
     if KNOT_FLAG == 0:
-        LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100)), int(LB_MAX * 453.59237))
+        LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100)), int(LB_RANGE[1] * 453.59237))
     else:
-        LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((KNOT + 100) / 100)), int(LB_MAX * 453.59237))
+        LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((KNOT + 100) / 100)), int(LB_RANGE[1] * 453.59237))
     
     if TIMER:
         timer_diff = time.time() - TIMER
@@ -639,21 +643,21 @@ def start_tensioning():
                 count_sub = count_sub + 1
             
         # Manually increase tension 手動增加張力
-        if button_list('BUTTON_UP'):
+        if button_list('BUTTON_UP') and RT_MODE == 0:
             manual_flag = 0
             forward(MOTO_SPEED_V2, (FT_ADD * 12), 0, 0)
             show_lcd(MA_ARR[manual_flag], 11, 3, 1)
             count_add = count_add + 1
                 
         # Manually decrease tension 手動減少張力
-        if button_list('BUTTON_DOWN'):
+        if button_list('BUTTON_DOWN') and RT_MODE == 0:
             manual_flag = 0
             backward(MOTO_SPEED_V2, (FT_ADD * 10), 1, 0)
             show_lcd(MA_ARR[manual_flag], 11, 3, 1)
             count_sub = count_sub + 1
                 
         # Manual & automatic adjustment toggle 手動&自動微調切換
-        if button_list('BUTTON_SETTING'):
+        if button_list('BUTTON_SETTING') and RT_MODE == 0:
             if manual_flag == 0:
                 manual_flag = 1
             else:
@@ -670,10 +674,11 @@ def start_tensioning():
             show_lcd("String Broken?", 0, 2, I2C_NUM_COLS)
             show_lcd("     ", 15, 1, 5)
             MOTO_WAIT = 0
+            RT_MODE = 0
             return 0
         
         # Exit & head button 取消與珠夾頭按鈕
-        if button_list('BUTTON_HEAD') or button_list('BUTTON_EXIT'):
+        if button_list('BUTTON_HEAD') or button_list('BUTTON_EXIT') or (RT_MODE != 0 and ((time.time()-t0) >= 3 and over_flag == 2)):
             #CC參數自動調整
             cc_add_sub = 0
             if CORR_COEF_AUTO == 1:
@@ -689,19 +694,20 @@ def start_tensioning():
             show_lcd("Ready", 0, 2, I2C_NUM_COLS)
             show_lcd("     ", 15, 1, 5)
             MOTO_WAIT = 0
-            TENSION_COUNT = TENSION_COUNT + 1
-            # Writing to LOG 寫入LOG
-            LOGS.insert(0, [TENSION_COUNT, timer_diff, LB_KG_SELECT, DEFAULT_LB, log_lb_max, PRE_STRECH, log_s, count_add, count_sub, CORR_COEF, HX711_CAL, FT_ADD, KNOT_FLAG, KNOT])
-            logs_save([LOGS[0]], "a")
-            if len(LOGS) > LOG_MAX:
-                LOGS = LOGS[:LOG_MAX]
+            if over_flag == 2: 
+                TENSION_COUNT = TENSION_COUNT + 1
+                # Writing to LOG 寫入LOG
+                LOGS.insert(0, [TENSION_COUNT, timer_diff, LB_KG_SELECT, DEFAULT_LB, log_lb_max, PRE_STRECH, log_s, count_add, count_sub, CORR_COEF, HX711_CAL, FT_ADD, KNOT_FLAG, KNOT])
+                logs_save([LOGS[0]], "a")
+                if len(LOGS) > LOG_MAX:
+                    LOGS = LOGS[:LOG_MAX]
+                    
+                if KNOT_FLAG == 1:
+                    KNOT_FLAG = 0
+                    show_lcd(PSKT_ARR[KNOT_FLAG], 14, 0, 2)
+                    show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
                 
-            if KNOT_FLAG == 1:
-                KNOT_FLAG = 0
-                show_lcd(PSKT_ARR[KNOT_FLAG], 14, 0, 2)
-                show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
-            
-            config_save(0)
+                config_save(0)
             return 0
         
         if abort_flag == 1:
@@ -710,7 +716,10 @@ def start_tensioning():
         # Slow Constant-Pull 慢速恆拉
         if cp_flag == 0:
             tension_info(None)
-            show_lcd("{: >3d}".format(min(time.time()-t0, 999)), 17, 1, 3)
+            if over_flag == 2:
+                show_lcd("{: >3d}".format(min(time.time()-t0, 999)), 17, 1, 3)
+            else:
+                show_lcd("   ", 17, 1, 3)
         # Fast Constant-Pull 快速恆拉
         else:
             time.sleep(HX711["CP_HZ"])
@@ -817,17 +826,17 @@ def setting_ts():
                     show_lcd(PSKT_ARR[KNOT_FLAG], 14, 0, 2)
                     show_lcd("{: >2d}".format(ps_kt_tmp), 17, 0, 2)
             
-            if DEFAULT_LB >= LB_MAX:
-                DEFAULT_LB = LB_MAX  
-            elif DEFAULT_LB <= LB_MIN:
-                DEFAULT_LB = LB_MIN
+            if DEFAULT_LB >= LB_RANGE[1]:
+                DEFAULT_LB = LB_RANGE[1]  
+            elif DEFAULT_LB <= LB_RANGE[0]:
+                DEFAULT_LB = LB_RANGE[0]
             
             if KNOT_FLAG == 1:
                 KNOT = ps_kt_tmp
-                if KNOT >= KNOT_MAX:
-                    KNOT = KNOT_MAX
-                elif KNOT <= KNOT_MIN:
-                    KNOT = KNOT_MIN
+                if KNOT >= KNOT_RANG[1]:
+                    KNOT = KNOT_RANG[1]
+                elif KNOT <= KNOT_RANG[0]:
+                    KNOT = KNOT_RANG[0]
                     
                 ps_kt_tmp = KNOT
                 show_lcd("{: >2d}".format(KNOT), 17, 0, 2)
@@ -843,8 +852,8 @@ def setting_ts():
                 show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
                 ps_kt_show = DEFAULT_LB * ((PRE_STRECH + 100) / 100)
             
-            show_lcd("{: >4.1f}".format(min(ps_kt_show, LB_MAX)), 9, 0, 4)
-            show_lcd("{: >4.1f}".format(min(ps_kt_show * 0.45359237, LB_MAX * 0.45359237)), 9, 1, 4)
+            show_lcd("{: >4.1f}".format(min(ps_kt_show, LB_RANGE[1])), 9, 0, 4)
+            show_lcd("{: >4.1f}".format(min(ps_kt_show * 0.45359237, LB_RANGE[1] * 0.45359237)), 9, 1, 4)
             show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
             show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
             lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
@@ -1026,19 +1035,19 @@ def setting():
                         lcd.blink_cursor_on()
             
             if flag == 1:
-                if HX711_CAL >= HX711_MAX:
-                    HX711_CAL = HX711_MAX  
-                elif HX711_CAL <= HX711_MIN:
-                    HX711_CAL = HX711_MIN
+                if HX711_CAL >= HX711_RANGE[1]:
+                    HX711_CAL = HX711_RANGE[1]  
+                elif HX711_CAL <= HX711_RANGE[0]:
+                    HX711_CAL = HX711_RANGE[0]
                 
                 if FIRST_TEST == 2:
                     FIRST_TEST = 0
             
             if flag == 2:
-                if FT_ADD >= FT_STEP_MAX:
-                    FT_ADD = FT_STEP_MAX  
-                elif FT_ADD <= FT_STEP_MIN:
-                    FT_ADD = FT_STEP_MIN
+                if FT_ADD >= FT_STEP[1]:
+                    FT_ADD = FT_STEP[1]  
+                elif FT_ADD <= FT_STEP[0]:
+                    FT_ADD = FT_STEP[0]
             
             show_lcd("{: >2.2f}".format(HX711_CAL), 14, 1, 5)
             show_lcd("{:02d}".format(FT_ADD), 14, 0, 2)
@@ -1077,7 +1086,7 @@ def setting():
 def setting_interface():
     show_lcd("UN:       FT: "+ "{:02d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
     show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
-    show_lcd("AT: "+ ONOFF_ARR[CP_SW] +"   HX: "+ "{: >2.2f}".format(HX711_CAL) +"S", 0, 1, I2C_NUM_COLS)
+    show_lcd("CP: "+ ONOFF_ARR[CP_SW] +"   HX: "+ "{: >2.2f}".format(HX711_CAL) +"S", 0, 1, I2C_NUM_COLS)
     show_lcd("BZ: "+ ONOFF_ARR[BZ_SW], 0, 2, I2C_NUM_COLS)
     show_lcd("<PicoBETH> I "+ "{: >6d}".format(TENSION_COUNT) +"T", 0, 3, I2C_NUM_COLS)
     
@@ -1136,8 +1145,8 @@ def show_timer():
         show_lcd("{: >3d}".format(int(timer_diff / 60)), 14, 1, 3)
         show_lcd("{: >2d}".format(timer_diff % 60), 18, 1, 2)
 
-# Initial functionality test on first boot 第一次開機功能測試
-def first_test(flag, bz_sw_tmp):
+# Hardware Functional Testing 硬體功能測試
+def hw_test(flag, bz_sw_tmp):
     global FIRST_TEST, BZ_SW
     LED_RED.off()
     i = 1
@@ -1263,57 +1272,113 @@ def first_test(flag, bz_sw_tmp):
                         machine.reset()
         
         tension_info(None)
+
+# Reliability Testing Mode 穩定性測試模式
+def rt_mode():
+    global BUTTON_LIST, RT_MODE, PRE_STRECH, DEFAULT_LB, TIMER, CP_SW
+    tmp_TENSION_COUNT = TENSION_COUNT
+    tmp_RT_MODE = RT_MODE
+    if RT_MODE == 1:
+        CP_SW = 1
+        PRE_STRECH = 10
+        TIMER = time.time()
+        show_lcd("Pres SET Run RTM", 0, 2, I2C_NUM_COLS)
+        show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
+        while True:
+            if button_list('BUTTON_SETTING'):
+                break
+    
+    DEFAULT_LB = 20 + (RT_MODE % 11)
+    show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
+    show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)            
+    t0 = time.time()
+    start_tensioning()
+    show_lcd("{: >4d}".format(min(int((time.time() - TIMER) / 60), 9999)) + "m", 15, 1, 5)
+    rtm_time = (time.time() - t0)
+    tension_info(None)
+    show_lcd("TC: " + str(TENSION_COUNT) + "T", 0, 2, I2C_NUM_COLS)
+    time.sleep(1)
+    show_lcd("Pres SET Stop RTM", 0, 2, I2C_NUM_COLS)
+    time.sleep(1)
+    if button_list('BUTTON_SETTING'):
+        RT_MODE = 0
+        show_lcd("RTM: Manual Stop", 0, 2, I2C_NUM_COLS)
+    elif rtm_time >= 20:
+        RT_MODE = 0
+        show_lcd("RTM: Timeout " + str(rtm_time) + "S", 0, 2, I2C_NUM_COLS)
+    elif (tmp_TENSION_COUNT + 1) != TENSION_COUNT:
+        RT_MODE = 0
+        show_lcd("RTM: Tensioning ERR", 0, 2, I2C_NUM_COLS)
+    
+    if RT_MODE != 0:
+        RT_MODE = RT_MODE + 1
+    else:
+        show_lcd("{: >4d}".format(min(int((time.time() - TIMER) / 60), 9999)) + "m", 15, 1, 5)
+        show_lcd("{: >5d}R".format(tmp_RT_MODE - 1), 14, 3, 6)
+        while True:
+            if button_list('BUTTON_EXIT'):
+                break
+        
+        TIMER = 0
+        show_lcd("     ", 15, 1, 5)
+        show_lcd("Ready", 0, 2, I2C_NUM_COLS)
+        beepbeep(0.1)
     
 init()
 ts_info_time = time.ticks_ms()
 timer_flag = 0
 while True:
-    # Start tensioning 開始張緊
-    if button_list('BUTTON_HEAD'):
-        start_tensioning()
-        show_timer()
-    
-    # Setting mode 設定模式
-    if button_list('BUTTON_SETTING'):
-        beepbeep(0.1)
-        setting_interface()
-        setting()
-        main_interface()
-        show_lcd("Ready", 0, 2, I2C_NUM_COLS)
-        beepbeep(0.1)
-        show_timer()
-    
-    # Timer switch 計時器開關
-    if button_list('BUTTON_EXIT'):
-        if TIMER:
-            if timer_flag:
-                TIMER = 0
-                timer_flag = 0
-                show_lcd("      ", 14, 1, 6)
-            else:
-                timer_flag = time.time()
-        else:
-            TIMER = time.time()
-            show_lcd("   m  ", 14, 1, 6)
-            
-        beepbeep(0.5)
-    
-    # Tension increment/decrement setting 加減張力設定
-    if button_list('BUTTON_UP') or button_list('BUTTON_DOWN') or button_list('BUTTON_LEFT') or button_list('BUTTON_RIGHT'):
-        setting_ts()
-    
-    # Tension display update 張力顯示更新
-    if (time.ticks_ms() - ts_info_time) > 100:
-        tension_info(None)
-        if TIMER:
-            if timer_flag == 0:
-                timer_diff = time.time() - TIMER
-                show_lcd("{: >3d}".format(int(timer_diff / 60)), 14, 1, 3)
-                show_lcd("{: >2d}".format(timer_diff % 60), 18, 1, 2)
+    if RT_MODE == 0:
+        # Start tensioning 開始張緊
+        if button_list('BUTTON_HEAD'):
+            start_tensioning()
+            show_timer()
         
-        lcd.move_to(TS_ARR[CURSOR_XY_TS_TMP][0], TS_ARR[CURSOR_XY_TS_TMP][1])
-        lcd.show_cursor()
-        ts_info_time = time.ticks_ms()
+        # Setting mode 設定模式
+        if button_list('BUTTON_SETTING'):
+            beepbeep(0.1)
+            setting_interface()
+            setting()
+            main_interface()
+            show_lcd("Ready", 0, 2, I2C_NUM_COLS)
+            beepbeep(0.1)
+            show_timer()
+        
+        # Timer switch 計時器開關
+        if button_list('BUTTON_EXIT'):
+            if TIMER:
+                if timer_flag:
+                    TIMER = 0
+                    timer_flag = 0
+                    show_lcd("      ", 14, 1, 6)
+                else:
+                    timer_flag = time.time()
+            else:
+                TIMER = time.time()
+                show_lcd("   m  ", 14, 1, 6)
+                
+            beepbeep(0.5)
+        
+        # Tension increment/decrement setting 加減張力設定
+        if button_list('BUTTON_UP') or button_list('BUTTON_DOWN') or button_list('BUTTON_LEFT') or button_list('BUTTON_RIGHT'):
+            setting_ts()
+        
+        # Tension display update 張力顯示更新
+        if (time.ticks_ms() - ts_info_time) > 100:
+            tension_info(None)
+            if TIMER:
+                if timer_flag == 0:
+                    timer_diff = time.time() - TIMER
+                    show_lcd("{: >3d}".format(int(timer_diff / 60)), 14, 1, 3)
+                    show_lcd("{: >2d}".format(timer_diff % 60), 18, 1, 2)
+            
+            lcd.move_to(TS_ARR[CURSOR_XY_TS_TMP][0], TS_ARR[CURSOR_XY_TS_TMP][1])
+            lcd.show_cursor()
+            ts_info_time = time.ticks_ms()
+        
+    # Reliability Testing Mode 穩定性測試模式
+    else:
+        rt_mode()
         
     if ERR_MSG:
         LED_RED.on()

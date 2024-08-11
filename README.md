@@ -323,6 +323,23 @@ Reference video
 
 [![DEMO VIDEO](https://img.youtube.com/vi/wPfW1ht--Y0/0.jpg)](https://www.youtube.com/watch?v=wPfW1ht--Y0)
 
+## Reliability Testing Mode
+
+The Reliability Testing Mode, introduced in version V2.4, can automatically simulate stringing tensioning to check for any abnormalities in newly assembled or hardware-modified machines.
+
+### Usage Instructions
+
+When the version information appears at startup, press and hold the Up button until you hear a long beep, then release it. After securing the string, press the Set button to start the test.
+
+### Testing Method
+The system will automatically cycle through tensioning from 20LB to 30LB, with a fixed 10% pre-stretch. After holding the tension for 3 seconds, the tension will release. If any abnormalities are detected, the process will stop automatically, and an error message will be displayed. The test will continue indefinitely unless the Set button is pressed when prompted.
+
+### Qualification Criteria
+It is recommended to test at least 1000 tensioning cycles (approximately 4 hours) without any abnormal interruptions. A properly assembled machine should not experience any interruptions during this period.
+
+> [!WARNING]
+> Do not run this version directly in Thonny. Please write the program to the Raspberry Pi Pico and run it independently.
+
 ## Maintenance
 
 ### Screw Maintenance
@@ -372,7 +389,7 @@ A: Recently, some people reported passing the [EP.3](https://youtu.be/pZT4ccE3bZ
 A: This has also been something I've always wanted to do. The Wise 2086 bead clip easy head is the most expensive hardware in the entire project, but it's also because it can be easily installed on the NJ5 load sensor (YZC-133) and has excellent clamping functionality. So far, I haven't figured out how to replace it. If you have a good bead clip head design, you can install it yourself. Just make sure to pay attention to the precautions mentioned in [EP.9](https://youtu.be/Ax4agdsqyms).
 
 ## Q: How durable is this electronic tension head?
-A: Theoretically, if high-quality parts are used, the durability should be quite high. As of today (2024/05/22), the number of tensionings on the formal machine I made has exceeded 7500 times without any problems occurring. Even if maintenance is required in the future, all electronic components are quite inexpensive.
+A: Theoretically, if high-quality parts are used, the durability should be quite high. As of today (2024/08/12), the number of tensionings on the formal machine I made has exceeded 18500 times without any problems occurring. Even if maintenance is required in the future, all electronic components are quite inexpensive.
 
 ## Q: Can this project be used for stringing tennis rackets?
 A: In theory, it is possible, but some hardware needs to be upgraded, such as changing the load sensor (YZC-133) from 20KG to 50KG, larger stepper motors, larger power supplies, stronger platforms and slides, and modifying some code parameters. If interested, you can develop your own branch project.
