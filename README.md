@@ -340,6 +340,10 @@ It is recommended to test at least 1000 tensioning cycles (approximately 4 hours
 > [!WARNING]
 > Do not run this version directly in Thonny. Please write the program to the Raspberry Pi Pico and run it independently.
 
+Reference video
+
+[![DEMO VIDEO](https://img.youtube.com/vi/ypDOEKCdW9U/0.jpg)](https://www.youtube.com/watch?v=ypDOEKCdW9U)
+
 ## Maintenance
 
 ### Screw Maintenance
