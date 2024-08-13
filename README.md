@@ -1,3 +1,5 @@
+![images1-1](docs/Pico_Logo.png)
+
 [![cht](https://img.shields.io/badge/lang-cht-green.svg)](https://github.com/206cc/PicoBETH/blob/main/README.cht.md)
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/206cc/PicoBETH/blob/main/README.md)
 
@@ -393,7 +395,7 @@ A: Recently, some people reported passing the [EP.3](https://youtu.be/pZT4ccE3bZ
 A: This has also been something I've always wanted to do. The Wise 2086 bead clip easy head is the most expensive hardware in the entire project, but it's also because it can be easily installed on the NJ5 load sensor (YZC-133) and has excellent clamping functionality. So far, I haven't figured out how to replace it. If you have a good bead clip head design, you can install it yourself. Just make sure to pay attention to the precautions mentioned in [EP.9](https://youtu.be/Ax4agdsqyms).
 
 ## Q: How durable is this electronic tension head?
-A: Theoretically, if high-quality parts are used, the durability should be quite high. As of today (2024/08/12), the number of tensionings on the formal machine I made has exceeded 18500 times without any problems occurring. Even if maintenance is required in the future, all electronic components are quite inexpensive.
+A: If all high-quality components are used, the durability should theoretically be quite high. Even if repairs are needed in the future, all the parts are relatively inexpensive and easy to replace. The machine is currently undergoing reliability testing. As of today (2024/08/13), the tensioning count has exceeded 30,000 cycles, and no abnormal failures have occurred. I will update the test results here once the testing is complete.
 
 ## Q: Can this project be used for stringing tennis rackets?
 A: In theory, it is possible, but some hardware needs to be upgraded, such as changing the load sensor (YZC-133) from 20KG to 50KG, larger stepper motors, larger power supplies, stronger platforms and slides, and modifying some code parameters. If interested, you can develop your own branch project.
