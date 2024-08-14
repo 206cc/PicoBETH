@@ -7,34 +7,6 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 > 設計理念：便宜、簡單、精準
 
-重錘式穿線機與改裝零件
-![images1-1](docs/images1-1.jpg)
-
-改裝完成（開發中）
-![images1-2](docs/images1-2.jpg)
-
-正式機 [製作合集](https://youtu.be/uJVE3YFJtJA)
-![images1-2](docs/images1-6.jpg)
-
-穿線展示影片
-
-[![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
-
-> [!NOTE]
-> 如果你沒有穿線機，可以參考此專案做一個穿線機台 [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer)
-
-> [!NOTE]
-> 如果你目前正在選擇手動穿線機，我建議購買有六點固定和底座夾具的重錘式穿線機。重錘式有一定的恆拉效果，穿出來的球拍與電子機穿線的球拍不會有太大差別。在完成這個項目之前，可以先使用重錘熟悉穿線操作。未來如果電子穿線頭發生故障，也可以很快速的裝回重錘。
-
-## 警告
-如果你的羽毛球穿線機結構不是強壯的，我非常不建議進行這個專案，不強壯的固定平台會在張緊時型變，造成球拍框架變圓、張緊度降低，結果是機器補強張力，循環之下，最終羽毛球拍斷裂。
-
-> [!CAUTION]
-> 非常重要，如果您的穿線機台是簡易型的，請務必補強結構。
-
-## 原由
-一年前因為公司社團關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想再購買電子拉線機頭，但後來想想我可以用我會的知識，在 Raspberry Pico 上使用張力傳感器、幾個微動開關、按鈕製作了這個專案。
-
 ## 現有主要功能與特點
 
 [![DEMO VIDEO](https://img.youtube.com/vi/s5no9YdeNnc/0.jpg)](https://www.youtube.com/watch?v=s5no9YdeNnc)
@@ -62,6 +34,34 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
   - 使用 18650x3 電池可保證至少完整的穿完一隻球拍
 - **緊湊不佔空間**
   - 尺寸大小約為 38(L) x 15(W) x 9(H) CM(不含珠夾頭)
+
+## 原由
+一年前因為公司社團關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想再購買電子拉線機頭，但後來想想我可以用我會的知識，在 Raspberry Pico 上使用張力傳感器、幾個微動開關、按鈕製作了這個專案。
+
+重錘式穿線機與改裝零件
+![images1-1](docs/images1-1.jpg)
+
+改裝完成（開發中）
+![images1-2](docs/images1-2.jpg)
+
+正式機 [製作合集](https://youtu.be/uJVE3YFJtJA)
+![images1-2](docs/images1-6.jpg)
+
+穿線展示影片
+
+[![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
+
+> [!NOTE]
+> 如果你沒有穿線機，可以參考此專案做一個穿線機台 [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer)
+
+> [!NOTE]
+> 如果你目前正在選擇手動穿線機，我建議購買有六點固定和底座夾具的重錘式穿線機。重錘式有一定的恆拉效果，穿出來的球拍與電子機穿線的球拍不會有太大差別。在完成這個項目之前，可以先使用重錘熟悉穿線操作。未來如果電子穿線頭發生故障，也可以很快速的裝回重錘。
+
+## 警告
+如果你的羽毛球穿線機結構不是強壯的，我非常不建議進行這個專案，不強壯的固定平台會在張緊時型變，造成球拍框架變圓、張緊度降低，結果是機器補強張力，循環之下，最終羽毛球拍斷裂。
+
+> [!CAUTION]
+> 非常重要，如果您的穿線機台是簡易型的，請務必補強結構。
 
 ## 待機畫面
 1. 使用左右鍵可設定磅、公斤及預拉的十位數、個位數、小數。
