@@ -12,34 +12,6 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 > Design philosophy: Affordable, Easy , Precision
 
-Drop-weight stringing machine and modification parts
-![images1-1](docs/images1-1.jpg)
-
-Modification completed (Under Development)
-![images1-2](docs/images1-2.jpg)
-
-Final machine [How to make step by step](https://youtu.be/uJVE3YFJtJA)
-![images1-2](docs/images1-6.jpg)
-
-Stringing demonstration video
-
-[![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
-
-> [!NOTE]
-> If you don't have a stringing machine, you can refer to this project to make one: [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer)
-
-> [!NOTE]
-> If you are choosing a manual badminton stringing machine. I recommend purchasing a drop-weight machine with a six-point fixed and base clamp. Drop-weight machines have a somewhat constant-pull effect, and the rackets strung with a drop-weight machine are not much different from those strung with an electronic machine. Before completing this project, you can use a drop-weight machine to become familiar with stringing. In the future, if the electronic stringing head malfunctions, you can quickly switch back to using the drop-weight machine head. 
-
-## Warning
-If your badminton stringing machine structure is not robust, I strongly advise against undertaking this project. A weak fixing platform can deform when under tension, causing the racket frame to become rounded and the tension to decrease. As a result, the machine compensates by reinforcing the tension, leading to a cycle that ultimately results in the badminton racket breaking.
-
-> [!CAUTION]
-> Extremely important: If your stringing machine is of a simple type, please make sure to reinforce the structure.
-
-## Background
-A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
-
 ## Current Main Functions and Features
 
 [![DEMO VIDEO](https://img.youtube.com/vi/s5no9YdeNnc/0.jpg)](https://www.youtube.com/watch?v=s5no9YdeNnc)
@@ -67,6 +39,34 @@ A year ago, due to company club activities, I started playing badminton. Althoug
   - Uses 3 x 18650 batteries to ensure at least one complete racquet stringing.
 - **Compact and Space-Saving**
   - Dimensions are approximately 38(L) x 15(W) x 9(H) CM.(excluding clamp head)
+
+## Background
+A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
+
+Drop-weight stringing machine and modification parts
+![images1-1](docs/images1-1.jpg)
+
+Modification completed (Under Development)
+![images1-2](docs/images1-2.jpg)
+
+Final machine [How to make step by step](https://youtu.be/uJVE3YFJtJA)
+![images1-2](docs/images1-6.jpg)
+
+Stringing demonstration video
+
+[![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
+
+> [!NOTE]
+> If you don't have a stringing machine, you can refer to this project to make one: [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer)
+
+> [!NOTE]
+> If you are choosing a manual badminton stringing machine. I recommend purchasing a drop-weight machine with a six-point fixed and base clamp. Drop-weight machines have a somewhat constant-pull effect, and the rackets strung with a drop-weight machine are not much different from those strung with an electronic machine. Before completing this project, you can use a drop-weight machine to become familiar with stringing. In the future, if the electronic stringing head malfunctions, you can quickly switch back to using the drop-weight machine head. 
+
+## Warning
+If your badminton stringing machine structure is not robust, I strongly advise against undertaking this project. A weak fixing platform can deform when under tension, causing the racket frame to become rounded and the tension to decrease. As a result, the machine compensates by reinforcing the tension, leading to a cycle that ultimately results in the badminton racket breaking.
+
+> [!CAUTION]
+> Extremely important: If your stringing machine is of a simple type, please make sure to reinforce the structure.
 
 ## Standby Screen
 1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
