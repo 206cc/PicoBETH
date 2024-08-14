@@ -10,7 +10,7 @@
 # PicoBETH
 PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source project that allows hobbyist stringers who enjoy stringing but only have mechanical stringing machines (drop-weight, manual crank) to create their own electronic tensioning head. If you have basic programming skills, this project can be easily completed.
 
-> Design philosophy: Affordable, Easy , Precision
+> Design philosophy: Economical, Intuitive, Accurate 
 
 ## Current Main Functions and Features
 
