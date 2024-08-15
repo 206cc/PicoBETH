@@ -409,6 +409,14 @@ A: Please turn to the back and try adjusting the blue variable resistor to chang
 ## Q: The stringing function works fine, but the buzzer keeps sounding continuously.
 A: Please check if you mistakenly purchased the Active Low Trigger version. The correct version should be the Active High Trigger.
 
+# Future Plans
+
+Below are some of the future development plans for this project:
+
+- **Reliability Testing**: Currently has reached 40,000 cycles, ongoing. (2024/08/15)
+- **Tennis Compatibility**: Modifying hardware and software to support tennis racket stringing.
+
+
 # Conclusion
 If you have any questions about making, please leave a comment in the YouTube video.
 
