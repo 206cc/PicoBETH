@@ -78,7 +78,7 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.42"
+VERSION = "2.43"
 VER_DATE = "2024-08-16"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
@@ -676,8 +676,8 @@ def start_tensioning():
             #CC參數自動調整
             cc_add_sub = 0
             if CORR_COEF_AUTO == 1:
-                if cc_count_add >= 1000:
-                    CORR_COEF = CORR_COEF - 0.1
+                if cc_count_add >= 1000 and CORR_COEF >= 1.1:
+                    CORR_COEF = CORR_COEF - 0.05
                 elif cc_count_add > 20:
                     CORR_COEF = CORR_COEF - 0.01
                 elif cc_count_add < 10:
