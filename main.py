@@ -63,8 +63,8 @@ CORR_COEF_AUTO = 1           # Self-learning tension parameter 0=off 1=on
                              # 自我學習張力參數 0=off 1=on
 ABORT_GRAM = 18143           # Maximum abort grams (40LB)
                              # 最大中斷公克(40磅)
-LOG_MAX = 50                 # Maximum LOG retention records (Please do not set too large to avoid memory exhaustion and inability to boot)
-                             # 最大LOG保留記錄(請勿太大，以免記憶體耗盡無法開機)
+LOG_MAX = 50                 # Maximum LOG retention records (Please do not set too large to avoid memory exhaustion)
+                             # 最大LOG保留記錄(請勿太大，以免記憶體耗盡)
 CA_REM = 0.1                 # LB value for HX711 Tension calibration reminder
                              # 張力校正提醒(磅)
 HX711_DIFRT = 1.0            # Check the HX711 difrt in grams.
@@ -78,8 +78,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.41"
-VER_DATE = "2024-08-15"
+VERSION = "2.42"
+VER_DATE = "2024-08-16"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -195,7 +195,7 @@ def config_read():
         file.close()
         HX711['HX711_CAL'] = HX711_CAL
     except OSError:  # failed
-       pass
+        pass
 
 # Writing file Parameter 參數寫入
 def config_save(flag):
@@ -219,7 +219,7 @@ def config_save(flag):
         if flag == 0:
             HX711_CAL = tmp_HX711_CAL
     except OSError:  # failed
-       pass
+        pass
 
 # Writing file LOG 寫入LOG
 def logs_save(log_str, flag):
@@ -235,23 +235,13 @@ def logs_save(log_str, flag):
     except OSError:  # failed
        pass
 
-# Read file LOG 讀取LOG
+# Remove file LOG 刪除LOG
 def logs_read():
-    global LOGS
     try:
-        fp = open('logs.txt', "r")
-        line = fp.readline()
-        while line:
-            log_list = line.strip().split(",")
-            LOGS.insert(0, log_list)
-            line = fp.readline()
-            if len(LOGS) > LOG_MAX:
-                LOGS = LOGS[:LOG_MAX]
-        
-        fp.close()
-        logs_save(LOGS, "w")
+        if 'logs.txt' in os.listdir():
+            os.remove('logs.txt')
     except OSError:  # failed
-       pass
+        pass
 
 # Active buzzer 有源蜂鳴器
 def beepbeep(run_time):
