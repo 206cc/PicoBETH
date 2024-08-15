@@ -78,8 +78,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.40"
-VER_DATE = "2024-08-10"
+VERSION = "2.41"
+VER_DATE = "2024-08-15"
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -619,7 +619,11 @@ def start_tensioning():
         if tmp_LB_CONV_G > TENSION_MON and (manual_flag == 1 or over_flag == 0):
             diff_g = tmp_LB_CONV_G - TENSION_MON
             abort_flag = forward(MOTO_SPEED_V2, FT_ADD, 0 ,0)
-            if diff_g < CP_FAST:
+            if diff_g > 250:
+                cp_flag = 2
+                if cc_add_flag == 0:
+                    cc_count_add = cc_count_add + 1000
+            elif diff_g < CP_FAST:
                 cp_flag = 0
                 cc_add_flag = 1  
             else:
@@ -682,7 +686,9 @@ def start_tensioning():
             #CC參數自動調整
             cc_add_sub = 0
             if CORR_COEF_AUTO == 1:
-                if cc_count_add > 20:
+                if cc_count_add >= 1000:
+                    CORR_COEF = CORR_COEF - 0.1
+                elif cc_count_add > 20:
                     CORR_COEF = CORR_COEF - 0.01
                 elif cc_count_add < 10:
                     CORR_COEF = CORR_COEF + 0.01
@@ -720,6 +726,9 @@ def start_tensioning():
                 show_lcd("{: >3d}".format(min(time.time()-t0, 999)), 17, 1, 3)
             else:
                 show_lcd("   ", 17, 1, 3)
+        # Super Fast Constant-Pull 超快速恆拉
+        elif cp_flag == 2:
+            pass
         # Fast Constant-Pull 快速恆拉
         else:
             time.sleep(HX711["CP_HZ"])
