@@ -168,7 +168,7 @@ I tested the HX711 circuit board
 ![images2-2](docs/images2-2.png)
 
 > [!WARNING]
-> The button and microcontroller switch should have a 10k ohm resistor connected in series with the 3.3V supply, and the LED should have a 330 ohm resistor connected in series.
+> The LED should have a 330 ohm resistor connected in series.
 
 # How To Make
 
@@ -238,7 +238,10 @@ Components can be freely arranged. The diagram below shows the positioning hole 
 ## PCB Circuit Board
 ![images2-3](docs/images2-4.svg)
 
-Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-05-15.zip)
+Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-08-17.zip)
+
+> [!WARNING]  
+> Version 1.3a has removed the 10K resistors for buttons and micro switches, as the Raspberry Pi Pico already includes built-in pull-down resistors for buttons. Using both may cause issues.
 
 ![images2-3](docs/images2-4_3.svg)
 
@@ -371,6 +374,19 @@ Reference video:
 
 [![DEMO](https://img.youtube.com/vi/iAgFXuEtak4/0.jpg)](https://www.youtube.com/watch?v=iAgFXuEtak4)
 
+### Firmware Update
+
+Please follow the steps below to update the firmware:
+
+- **Back up all files from the Raspberry Pi Pico to your computer.**
+- **Upload the new version of `main.py` to the Raspberry Pi Pico.**
+- [**Perform hardware testing**](https://github.com/206cc/PicoBETH/blob/main/README.md#hardware-function-testing-mode)
+- [**Conduct reliability testing**](https://github.com/206cc/PicoBETH/blob/main/README.md#reliability-testing-mode)
+- **Test stringing with an old racket at least once.**
+
+> [!IMPORTANT]  
+> All of the above steps are crucial.
+
 # Frequently Asked Questions
 
 ## Q: I want to make this project, but I'm not sure if I can complete it.
@@ -395,7 +411,7 @@ A: Recently, some people reported passing the [EP.3](https://youtu.be/pZT4ccE3bZ
 A: This has also been something I've always wanted to do. The Wise 2086 bead clip easy head is the most expensive hardware in the entire project, but it's also because it can be easily installed on the NJ5 load sensor (YZC-133) and has excellent clamping functionality. So far, I haven't figured out how to replace it. If you have a good bead clip head design, you can install it yourself. Just make sure to pay attention to the precautions mentioned in [EP.9](https://youtu.be/Ax4agdsqyms).
 
 ## Q: How durable is this electronic tension head?
-A: If all high-quality components are used, the durability should theoretically be quite high. Even if repairs are needed in the future, all the parts are relatively inexpensive and easy to replace. The machine is currently undergoing reliability testing. As of today (2024/08/13), the tensioning count has exceeded 30,000 cycles, and no abnormal failures have occurred. I will update the test results here once the testing is complete.
+A: If all high-quality components are used, the durability should theoretically be quite high. Even if repairs are needed in the future, all the parts are relatively inexpensive and easy to replace. The machine is currently undergoing reliability testing. As of today (2024/08/17), the tensioning count has exceeded 50,000 cycles, and no abnormal failures have occurred. I will update the test results here once the testing is complete.
 
 ## Q: Can this project be used for stringing tennis rackets?
 A: In theory, it is possible, but some hardware needs to be upgraded, such as changing the load sensor (YZC-133) from 20KG to 50KG, larger stepper motors, larger power supplies, stronger platforms and slides, and modifying some code parameters. If interested, you can develop your own branch project.
@@ -413,7 +429,7 @@ A: Please check if you mistakenly purchased the Active Low Trigger version. The 
 
 Below are some of the future development plans for this project:
 
-- **Reliability Testing**: Currently has reached 40,000 cycles, ongoing. (2024/08/15)
+- **Reliability Testing**: Currently has reached 50,000 cycles, ongoing. (2024/08/17)
 - **Tennis Compatibility**: Modifying hardware and software to support tennis racket stringing.
 
 
