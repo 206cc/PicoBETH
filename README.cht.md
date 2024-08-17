@@ -163,7 +163,7 @@ HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度�
 ![images2-2](docs/images2-2.png)
 
 > [!WARNING]
-> 按鍵與微控開關需在 3.3V 處串連一個 10K 歐姆電阻，LED 需串接 330 歐姆電阻。
+> LED 需串接 330 歐姆電阻。
 
 # 製作教學
 
@@ -234,11 +234,15 @@ SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭
 ## PCB 電路板
 ![images2-3](docs/images2-4.svg)
 
-Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-05-15.zip)
+Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-08-17.zip)
+
+> [!WARNING]
+> 1.3a 版本已移除按鍵與微控開關的 10K 電阻，因 Raspberry Pi Pico 已內建按鍵的下拉電阻，同時使用可能會有問題。
 
 ![images2-3](docs/images2-4_3.svg)
 
 Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-06-09.zip)
+
 
 > [!NOTE]
 > 您可以先在麵包板組裝測試，成功後再將電路轉移到電路板上或手工焊接板上，不建議長期使用麵包板會有一些問題。
@@ -364,10 +368,22 @@ HX711 飄移的影響
 
 使用方式：在開機時出現版本資訊時，長按離開鍵直到出現長音放開。
 
-
 參考影片
 
 [![DEMO](https://img.youtube.com/vi/iAgFXuEtak4/0.jpg)](https://www.youtube.com/watch?v=iAgFXuEtak4)
+
+### 韌體更新
+
+韌體更新請依照以下步驟執行：
+
+- **備份 Raspberry Pi Pico 上的所有檔案至電腦上**
+- **上傳新版本的 main.py 至 Raspberry Pi Pico**
+- [**執行硬體測試**](https://github.com/206cc/PicoBETH/blob/main/README.cht.md#%E7%A1%AC%E9%AB%94%E6%B8%AC%E8%A9%A6%E6%A8%A1%E5%BC%8F)
+- [**可靠度測試**](https://github.com/206cc/PicoBETH/blob/main/README.cht.md#%E5%8F%AF%E9%9D%A0%E5%BA%A6%E6%B8%AC%E8%A9%A6reliability-testing)
+- **用舊的球拍至少試穿一次**
+
+> [!IMPORTANT]
+> 以上步驟都很重要。
 
 # 常見問與答
 
@@ -393,7 +409,7 @@ A: 最近有些人回報已通過 [EP.3](https://youtu.be/pZT4ccE3bZk) HX711 測
 A: 這也一直是我想做的事，2086 珠夾頭是整個專案成本最高的硬體，但也是因為他能很容易的安裝在 NJ5傳感器(YZC-133)上以及很好的夾線功能，讓我暫時還沒想到如何取代，如果你有好的珠夾頭設計可以自行裝上，只要注意好 [EP.9](https://youtu.be/Ax4agdsqyms) 中提到的注意事項即可。
 
 ## Q: 此電腦拉線機頭的耐用度如何？
-A: 如果都使用高品質的零件，理論上耐用度會蠻高的，就算未來需要維修，所有的零件也都相當的便宜，更換也相當簡單。目前機器正在做可靠度測試(Reliability Testing)，截至今日(2024/08/13)張緊次數已達 30000多次，還沒有出現異常故障，待測試結束我會在此更新測試結果。
+A: 如果都使用高品質的零件，理論上耐用度會蠻高的，就算未來需要維修，所有的零件也都相當的便宜，更換也相當簡單。目前機器正在做可靠度測試(Reliability Testing)，截至今日(2024/08/17)張緊次數已達 50000多次，還沒有出現異常故障，待測試結束我會在此更新測試結果。
 
 ## Q: 這個專案可以給網球拍穿線嗎？
 A: 理論上是可以的，但有些硬體需要升級，例如 NJ5傳感器(YZC-133)需從 20KG 換成 50KG、更大的步進馬達、更大的電源、更強狀的平台與滑台，並修改一些程式碼參數，如果有興趣的可以自行開分支專案開發。
@@ -411,7 +427,7 @@ A: 請確認是否錯誤的買到低平電觸發的版本(Active Low Trigger)，
 
 以下是這個項目中的一些未來開發計劃：
  
-- **可靠度測試**: 目前已達 40000 次，正在進行中。(2024/08/15)
+- **可靠度測試**: 目前已達 50000 次，正在進行中。(2024/08/17)
 - **適用網球**: 修改軟硬體以支持穿網球拍。
 
 # 最後
