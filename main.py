@@ -24,11 +24,11 @@
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
 # Please go to https://github.com/206cc/PicoBETH?tab=readme-ov-file#final-settings for instructions on how to configure FT and HX parameters.
+# For code updates, please visit https://github.com/206cc/PicoBETH#firmware-update to view the update steps.
 # Basic parameters (settings saved in CFG_NAME will take precedence if there are stored parameter values)
 # 第一次開機請至 https://github.com/206cc/PicoBETH?tab=readme-ov-file#final-settings 觀看如何設定 FT、HX 參數
+# 軟體升級請至 https://github.com/206cc/PicoBETH#firmware-update 觀看升級步驟
 # 基本參數(如 CFG_NAME 內有儲存參數值會以的存檔的設定為主)
-FIRST_TEST = 1               # Self-test check on first boot
-                             # 第一次開機自我測試檢查
 HX711_CAL = 20.00            # Calibration coefficients for HX711 load cell amplifier
                              # HX711張力放大器校正系數
 LB_KG_SELECT = 0             # Setting for pounds or kilograms, 0=both can be set, 1=only pounds, 2=only kilograms
@@ -69,17 +69,16 @@ CA_REM = 0.1                 # LB value for HX711 Tension calibration reminder
                              # 張力校正提醒(磅)
 HX711_DIFRT = 1.0            # Check the HX711 difrt in grams.
                              # 檢查HX711飄移值(公克)
-RT_MODE = 0                  # Reliability Testing Mode
-                             # 可靠性測試模式
                     
-import time, _thread, machine, os
+import time, _thread, machine, os, random
 from machine import I2C, Pin
 from src.hx711 import hx711          # from https://github.com/endail/hx711-pico-mpy
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.43"
-VER_DATE = "2024-08-16"
+VERSION = "2.50"
+VER_DATE = "2024-08-17"
+FIRST_TEST = 1
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
 UNIT_ARR = ['LB&KG', 'LB', 'KG']
@@ -101,6 +100,7 @@ BUTTON_SLEEP = 0.1      # Button waiting time in seconds 按鍵等待秒數
 CORR_COEF = 1.00        # Tension coefficient 張力系數
 PRE_STEP = 30
 HX711_V0 = 0
+RT_MODE = 0
 
 # Initialize all GPIO pins to low 初始化所有 GPIO
 for pin in range(28):
@@ -155,12 +155,13 @@ HX711 = {"RATE":0, "DIFF":0, "V0":[], "CP_HZ":0.125, "HX711_CAL": 20.00}
 TENSION_COUNT = 0
 BOOT_COUNT = 0
 TIMER = 0
-ERR_MSG = ""
+ERR_MSG = ["", ""]
 ABORT_LM = 0
 TS_ARR = []
 LOGS = []
 TENSION_MON_TEMP = 0
 KNOT_FLAG = 0
+RT_CC = [1.0, 1.0]
 
 # 2004 i2c LCD
 I2C_ADDR     = 0x27
@@ -223,23 +224,39 @@ def config_save(flag):
 
 # Writing file LOG 寫入LOG
 def logs_save(log_str, flag):
+    global ERR_MSG
     try:
-        file = open('logs.txt', flag)
-        for element in reversed(log_str):
-            save_log = ""
-            for val in element:
-                save_log = save_log + str(val) + ","
+        if flag == 0:
+            file = open('logs.txt', 'a')
+            for element in reversed(log_str):
+                save_log = ""
+                for val in element:
+                    save_log = save_log + str(val) + ","
 
-            file.write(save_log[:-1] + "\n") 
-        file.close()
+                file.write(save_log[:-1] +"\n") 
+            file.close()
+        else:
+            ERR_MSG[1] = str(log_str)
+            file = open('ts_err.txt', 'a')
+            file.write(str(TENSION_COUNT) +"/"+ str(log_str) +"/"+ str(flag) +"\n") 
+            file.close()
     except OSError:  # failed
        pass
 
-# Remove file LOG 刪除LOG
+# Rename file LOG 更名 LOG
 def logs_read():
     try:
         if 'logs.txt' in os.listdir():
-            os.remove('logs.txt')
+            os.rename('logs.txt', 'log.1.txt')
+            
+        if 'rt_logs.txt' in os.listdir():
+            os.rename('rt_logs.txt', 'rt_logs.1.txt')
+            
+        if 'hx_logs.txt' in os.listdir():
+            os.rename('hx_logs.txt', 'hx_logs.1.txt')
+            
+        if 'ts_err.txt' in os.listdir():
+            os.rename('ts_err.txt', 'ts_err.1.txt')
     except OSError:  # failed
         pass
 
@@ -291,6 +308,7 @@ def forward(delay, steps, check, init):
                 moto_goto_standby()
                 MOTO_MOVE = 0
                 MOTO_WAIT = 0
+                logs_save("Abort", 1)
                 return("Abort")
             
             # Tension sensor anomaly or no string (tension less than 5 lb after ABORT_LM) 張力傳感器異常、無夾線(行程已過ABORT_LM時張力小於5磅)
@@ -298,6 +316,7 @@ def forward(delay, steps, check, init):
                 moto_goto_standby()
                 MOTO_MOVE = 0
                 MOTO_WAIT = 0
+                logs_save("No String?", 1)
                 return("No String?")
         
         # Exceeding the rear limit switch 超過後限位SW
@@ -309,6 +328,7 @@ def forward(delay, steps, check, init):
             MOTO_MOVE = 0
             MOTO_WAIT = 0
             RT_MODE = 0
+            logs_save("Over Limits", 1)
             return("Over Limits")
         
         # Exceeding the maximum specified tension 超過最大指定張力
@@ -317,6 +337,7 @@ def forward(delay, steps, check, init):
             MOTO_MOVE = 0
             MOTO_WAIT = 0
             RT_MODE = 0
+            logs_save("ABORT GRAM", 1)
             return("ABORT GRAM")
         
         setStep(MOTO_FORW_W[0])
@@ -451,33 +472,37 @@ def init():
             break
         
         if i > 20:
-            ERR_MSG = "ERR: HX711@Zero #1"
+            ERR_MSG[0] = "ERR: HX711@Zero #1"
             break
         
         i = i + 1
         time.sleep(0.1)
-        
+    
     # Sampling error less than 0.01 grams (HX711 damaged?) 取樣誤差過小於 0.01公克(HX711損壞?)
     if HX711["DIFF"] < 10:
-        ERR_MSG = "ERR: HX711@Zero #2"
+        ERR_MSG[0] = "ERR: HX711@Zero #2"
         
     # Sampling value too small (HX711 damaged?) 取樣值過小(HX711損壞?)
     if HX711["V0"][0] < 0:
-        ERR_MSG = "ERR: HX711@Zero #3"
+        ERR_MSG[0] = "ERR: HX711@Zero #3"
 
     # Check if HX711 RATE exceeds 75Hz 檢查 HX711 RATE 是否超過 75Hz
     if HX711["RATE"] < 75:
-        ERR_MSG = "ERR: HX711@"+ str(HX711["RATE"]) +"Hz"
+        ERR_MSG[0] = "ERR: HX711@"+ str(HX711["RATE"]) +"Hz"
 
     # Sampling error exceeds HX711_DIFRT gram or is less than 0.3G. (unstable) 取樣誤差過大超過 HX711_DIFRT 或小於 0.3公克(不穩定)
     if HX711["DIFF"] > (HX711_DIFRT * 1000) or HX711["DIFF"] < 300:
-        ERR_MSG = "ERR: HX_DIFRT@"+ str(round(HX711["DIFF"]/1000,1)) +"G"
+        ERR_MSG[0] = "ERR: HX_DIFRT@"+ str(round(HX711["DIFF"]/1000,1)) +"G"
 
     # Standby error exceeds 5 grams (unstable) 待機誤差過大超過 5公克(不穩定)
     if abs(TENSION_MON) > 5:
-        ERR_MSG = "ERR: HX711@"+ str(abs(TENSION_MON)) +"G #2"
+        ERR_MSG[0] = "ERR: HX711@"+ str(abs(TENSION_MON)) +"G #2"
     
-    if ERR_MSG == "":
+    # HX711 init log
+    file = open('hx_logs.txt', 'w')
+    file.write(str(TENSION_COUNT) +"T/" +str(HX711_V0) +"/"+ str(HX711["HX711_V0"]) +"/"+ str(HX711["DIFF"]) +"/"+ str(HX711["RATE"]))
+    file.close()
+    if ERR_MSG[0] == "":
         if button_list('BUTTON_EXIT'):
             beepbeep(2)
             show_lcd("Factory Reset?", 0, 2, I2C_NUM_COLS)
@@ -512,7 +537,7 @@ def init():
         MOTO_MAX_STEPS = forward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 0, 1)
         BZ_SW = bz_sw_tmp
         if MOTO_MAX_STEPS == "ABORT GRAM":
-            ERR_MSG = "ERR: MMS ABORT"
+            ERR_MSG[0] = "ERR: MMS ABORT"
         else:
             MOTO_RS_STEPS = int(int(MOTO_MAX_STEPS) / 20)
             ABORT_LM = int(int(MOTO_MAX_STEPS) * 0.3)
@@ -522,7 +547,7 @@ def init():
                 FT_ADD = tmp_FT_STEP
             
             if MOTO_MAX_STEPS < 5000 or MOTO_MAX_STEPS > 30000:
-                ERR_MSG = "ERR: MMS=" + str(MOTO_MAX_STEPS) + " FT=" + str(tmp_FT_STEP)
+                ERR_MSG[0] = "ERR: MMS=" + str(MOTO_MAX_STEPS) + " FT=" + str(tmp_FT_STEP)
             
             moto_goto_standby()
             LED_RED.off()
@@ -536,7 +561,7 @@ def init():
                 
             beepbeep(0.3)
             BOOT_COUNT = BOOT_COUNT + 1
-            if ERR_MSG == "":
+            if ERR_MSG[0] == "":
                 config_save(0)
 
 # Start increasing tension 開始增加張力
@@ -557,6 +582,7 @@ def start_tensioning():
     rel = forward(MOTO_SPEED_V1, MOTO_MAX_STEPS, 1, 0)
     if rel:
         show_lcd(str(rel), 0, 2, I2C_NUM_COLS)
+        logs_save("ts_err#0", 2)
         return 0
 
     MOTO_MOVE = 0
@@ -608,7 +634,6 @@ def start_tensioning():
         # Constant-pull increase 恆拉增加張力
         if tmp_LB_CONV_G > TENSION_MON and (manual_flag == 1 or over_flag == 0):
             diff_g = tmp_LB_CONV_G - TENSION_MON
-            abort_flag = forward(MOTO_SPEED_V2, FT_ADD, 0 ,0)
             if diff_g > 250:
                 cp_flag = 2
                 if cc_add_flag == 0:
@@ -623,11 +648,12 @@ def start_tensioning():
                 
                 if over_flag == 0:
                     count_add = count_add + 1
+            
+            abort_flag = forward(MOTO_SPEED_V2, FT_ADD, 0 ,0)
         
         # Constant-pull decrease 恆拉減少張力
         if (tmp_LB_CONV_G + (CP_SLOW * 2)) < TENSION_MON and (manual_flag == 1 or over_flag == 0):
             diff_g =  TENSION_MON - tmp_LB_CONV_G
-            abort_flag = backward(MOTO_SPEED_V2, FT_ADD, 0, 0)
             if diff_g < CP_FAST * (5 - (PRE_STRECH / 10)):
                 cp_flag = 0
             else:
@@ -635,6 +661,8 @@ def start_tensioning():
             
             if over_flag == 0:
                 count_sub = count_sub + 1
+                
+            abort_flag = backward(MOTO_SPEED_V2, FT_ADD, 0, 0)
             
         # Manually increase tension 手動增加張力
         if button_list('BUTTON_UP') and RT_MODE == 0:
@@ -669,10 +697,15 @@ def start_tensioning():
             show_lcd("     ", 15, 1, 5)
             MOTO_WAIT = 0
             RT_MODE = 0
+            logs_save("ts_err#3", 2)
             return 0
         
         # Exit & head button 取消與珠夾頭按鈕
-        if button_list('BUTTON_HEAD') or button_list('BUTTON_EXIT') or (RT_MODE != 0 and ((time.time()-t0) >= 3 and over_flag == 2)):
+        button_head_pressed = button_list('BUTTON_HEAD')
+        button_exit_pressed = button_list('BUTTON_EXIT')
+        rt_mode_time = time.time() - t0
+        rt_mode_pressed = (over_flag == 2 and rt_mode_time >= 3 and RT_MODE != 0)
+        if button_head_pressed or button_exit_pressed or rt_mode_pressed:
             #CC參數自動調整
             cc_add_sub = 0
             if CORR_COEF_AUTO == 1:
@@ -680,8 +713,12 @@ def start_tensioning():
                     CORR_COEF = CORR_COEF - 0.05
                 elif cc_count_add > 20:
                     CORR_COEF = CORR_COEF - 0.01
+                elif cc_count_add == 0 and CORR_COEF <= 1.0:
+                    CORR_COEF = CORR_COEF + 0.03
                 elif cc_count_add < 10:
                     CORR_COEF = CORR_COEF + 0.01
+                
+                CORR_COEF = max(0.9, min(CORR_COEF, 1.2))
             
             log_s = time.time() - t0
             show_lcd(MA_ARR[CP_SW], 11, 3, 1)
@@ -691,10 +728,9 @@ def start_tensioning():
             show_lcd("     ", 15, 1, 5)
             MOTO_WAIT = 0
             if over_flag == 2: 
-                TENSION_COUNT = TENSION_COUNT + 1
                 # Writing to LOG 寫入LOG
                 LOGS.insert(0, [TENSION_COUNT, timer_diff, LB_KG_SELECT, DEFAULT_LB, log_lb_max, PRE_STRECH, log_s, count_add, count_sub, CORR_COEF, HX711_CAL, FT_ADD, KNOT_FLAG, KNOT])
-                logs_save([LOGS[0]], "a")
+                logs_save([LOGS[0]], 0)
                 if len(LOGS) > LOG_MAX:
                     LOGS = LOGS[:LOG_MAX]
                     
@@ -703,10 +739,14 @@ def start_tensioning():
                     show_lcd(PSKT_ARR[KNOT_FLAG], 14, 0, 2)
                     show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
                 
+                TENSION_COUNT = TENSION_COUNT + 1
                 config_save(0)
+            else:
+                logs_save("ts_err#2/"+ str(int(button_head_pressed)) +"/"+ str(int(button_exit_pressed)) +"/"+ str(int(rt_mode_pressed)) +"/"+ str(over_flag) +"/"+ str(rt_mode_time) +"/"+ str(RT_MODE), 2)
             return 0
         
         if abort_flag == 1:
+            logs_save("ts_err#1", 2)
             return 0  
         
         # Slow Constant-Pull 慢速恆拉
@@ -1087,7 +1127,7 @@ def setting_interface():
     show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
     show_lcd("CP: "+ ONOFF_ARR[CP_SW] +"   HX: "+ "{: >2.2f}".format(HX711_CAL) +"S", 0, 1, I2C_NUM_COLS)
     show_lcd("BZ: "+ ONOFF_ARR[BZ_SW], 0, 2, I2C_NUM_COLS)
-    show_lcd("<PicoBETH> I "+ "{: >6d}".format(TENSION_COUNT) +"T", 0, 3, I2C_NUM_COLS)
+    show_lcd("<PicoBETH> I "+ "{: >6d}".format(TENSION_COUNT - 1) +"T", 0, 3, I2C_NUM_COLS)
     
 # LOG interface display 介面顯示LOG
 def logs_interface(idx):
@@ -1095,7 +1135,7 @@ def logs_interface(idx):
         show_lcd("  LOG  TIMER:   m  s", 0, 0, I2C_NUM_COLS)
         show_lcd("LB:    /        :  %", 0, 1, I2C_NUM_COLS)
         show_lcd("FT:  /  /      S:   ", 0, 2, I2C_NUM_COLS)
-        show_lcd("C/H:    /          T", 0, 3, I2C_NUM_COLS)
+        show_lcd("CH:    /           T", 0, 3, I2C_NUM_COLS)
     else:
         show_lcd("{:0>2d}".format((idx + 1)), 0, 0, 2)
         if int(LOGS[idx][1]):
@@ -1119,8 +1159,8 @@ def logs_interface(idx):
         show_lcd("{: >2d}".format(int(LOGS[idx][7])), 3, 2, 2)
         show_lcd("{: >2d}".format(int(LOGS[idx][8])), 6, 2, 2)
         show_lcd("{:02d}".format(int(LOGS[idx][11])), 9, 2, 2)
-        show_lcd("{:.2f}".format(float(LOGS[idx][9])), 4, 3, 4)
-        show_lcd("{:.2f}".format(float(LOGS[idx][10])), 9, 3, 5)
+        show_lcd("{:.2f}".format(float(LOGS[idx][9])), 3, 3, 4)
+        show_lcd("{:.2f}".format(float(LOGS[idx][10])), 8, 3, 5)
         show_lcd("{: >5d}".format(int(LOGS[idx][0])), 14, 3, 5)
 
 # Main screen display 主畫面顯示
@@ -1274,18 +1314,23 @@ def hw_test(flag, bz_sw_tmp):
 
 # Reliability Testing Mode 穩定性測試模式
 def rt_mode():
-    global BUTTON_LIST, RT_MODE, PRE_STRECH, DEFAULT_LB, TIMER, CP_SW
+    global BUTTON_LIST, RT_MODE, PRE_STRECH, DEFAULT_LB, TIMER, CP_SW, CORR_COEF, RT_CC    
     tmp_TENSION_COUNT = TENSION_COUNT
     tmp_RT_MODE = RT_MODE
     if RT_MODE == 1:
         CP_SW = 1
         PRE_STRECH = 10
+        RT_CC[0], RT_CC[1] = CORR_COEF, CORR_COEF
         TIMER = time.time()
         show_lcd("Pres SET Run RTM", 0, 2, I2C_NUM_COLS)
         show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
         while True:
             if button_list('BUTTON_SETTING'):
                 break
+            
+    if RT_MODE % 10 == 0:
+        RT_CC[0] = random.uniform(0.9, 1.2)
+        CORR_COEF = RT_CC[0]
     
     DEFAULT_LB = 20 + (RT_MODE % 11)
     show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
@@ -1295,30 +1340,38 @@ def rt_mode():
     show_lcd("{: >4d}".format(min(int((time.time() - TIMER) / 60), 9999)) + "m", 15, 1, 5)
     rtm_time = (time.time() - t0)
     tension_info(None)
-    show_lcd("TC: " + str(TENSION_COUNT) + "T", 0, 2, I2C_NUM_COLS)
+    rt_str = "TC: " + str(TENSION_COUNT) + "T/"+ "{:.2f}".format(CORR_COEF) +"/"+ "{:.2f}".format(RT_CC[0])
+    show_lcd(rt_str, 0, 2, I2C_NUM_COLS)
     time.sleep(1)
     show_lcd("Pres SET Stop RTM", 0, 2, I2C_NUM_COLS)
     time.sleep(1)
     if button_list('BUTTON_SETTING'):
         RT_MODE = 0
+        beepbeep(0.1)
         show_lcd("RTM: Manual Stop", 0, 2, I2C_NUM_COLS)
     elif rtm_time >= 20:
         RT_MODE = 0
+        beepbeep(0.1)
         show_lcd("RTM: Timeout " + str(rtm_time) + "S", 0, 2, I2C_NUM_COLS)
     elif (tmp_TENSION_COUNT + 1) != TENSION_COUNT:
         RT_MODE = 0
-        show_lcd("RTM: Tensioning ERR", 0, 2, I2C_NUM_COLS)
+        beepbeep(0.1)
+        show_lcd(ERR_MSG[1], 0, 2, I2C_NUM_COLS)
     
     if RT_MODE != 0:
+        file = open('rt_logs.txt', 'a')
+        file.write(str(RT_MODE) +"/"+ rt_str[4:] +"/"+ str(rtm_time) + "\n")
+        file.close()
         RT_MODE = RT_MODE + 1
     else:
         show_lcd("{: >4d}".format(min(int((time.time() - TIMER) / 60), 9999)) + "m", 15, 1, 5)
-        show_lcd("{: >5d}R".format(tmp_RT_MODE - 1), 14, 3, 6)
+        show_lcd("{: >5d}R".format(tmp_RT_MODE), 14, 3, 6)
         while True:
             if button_list('BUTTON_EXIT'):
                 break
         
         TIMER = 0
+        CORR_COEF = RT_CC[1]
         show_lcd("     ", 15, 1, 5)
         show_lcd("Ready", 0, 2, I2C_NUM_COLS)
         beepbeep(0.1)
@@ -1379,9 +1432,9 @@ while True:
     else:
         rt_mode()
         
-    if ERR_MSG:
+    if ERR_MSG[0]:
         LED_RED.on()
         beepbeep(3)
-        show_lcd(ERR_MSG, 0, 2, I2C_NUM_COLS)
+        show_lcd(ERR_MSG[0], 0, 2, I2C_NUM_COLS)
         break
     
