@@ -76,8 +76,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.51"
-VER_DATE = "2024-08-19"
+VERSION = "2.52"
+VER_DATE = "2024-08-20"
 FIRST_TEST = 1
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
@@ -267,18 +267,23 @@ def beepbeep(run_time):
         time.sleep(run_time)
 
 # Tension display 張力顯示
-def tension_info(tension):
+def tension_info(tension, flag):
+    
     if tension is None:
         tension = TENSION_MON
     
+    if flag == 0:
+        show_lcd("{: >5d}G".format(tension), 14, 3, 6)
+    elif flag == 3:
+        show_lcd("     G", 14, 3, 6)
+    elif flag == 1:
+        show_lcd("{:+03d}".format(max(min(tension, 99), -99))[-3:], 16, 3, 3)
+        tension  = TENSION_MON
+    elif flag == 2:
+        show_lcd("{: >5d}R".format(RT_MODE), 14, 3, 6)
+    
     show_lcd("{: >4.1f}".format(tension * 0.0022), 9, 0, 4)
     show_lcd("{: >4.1f}".format(tension / 1000), 9, 1, 4)
-    if RT_MODE == 0:
-        show_lcd("{: >5d}G".format(tension), 14, 3, 6)
-    else:
-        show_lcd("{: >5d}R".format(RT_MODE), 14, 3, 6)
-        
-    return tension
 
 # Stepper motor operation 步進馬達作動
 def setStep(in_w):
@@ -607,7 +612,7 @@ def start_tensioning():
             if abs(tmp_LB_CONV_G - TENSION_MON) < CP_FAST:
                 beepbeep(0.3)
                 log_lb_max = tmp_LB_CONV_G
-                tension_info(log_lb_max)
+                tension_info(log_lb_max, 3)
                 show_lcd("Target Tension", 0, 2, I2C_NUM_COLS)
                 show_lcd("S:   ", 15, 1, 5)
                 if KNOT_FLAG == 0:
@@ -634,7 +639,7 @@ def start_tensioning():
                     manual_flag = 0
         
         # Constant-pull increase 恆拉增加張力
-        if (tmp_LB_CONV_G + 20) > TENSION_MON and (manual_flag == 1 or over_flag == 0):
+        if (tmp_LB_CONV_G + 15) > TENSION_MON and (manual_flag == 1 or over_flag == 0):
             diff_g = tmp_LB_CONV_G - TENSION_MON
             if diff_g > 250:
                 cp_flag = 2
@@ -756,7 +761,7 @@ def start_tensioning():
         
         # Slow Constant-Pull 慢速恆拉
         if cp_flag == 0:
-            tension_info(None)
+            tension_info((TENSION_MON - tmp_LB_CONV_G), 1)
             if over_flag == 2:
                 show_lcd("{: >3d}".format(min(time.time()-t0, 999)), 17, 1, 3)
             else:
@@ -1315,7 +1320,7 @@ def hw_test(flag, bz_sw_tmp):
                     if button_list('BUTTON_EXIT'):
                         machine.reset()
         
-        tension_info(None)
+        tension_info(None, 0)
 
 # Reliability Testing Mode 穩定性測試模式
 def rt_mode():
@@ -1344,12 +1349,13 @@ def rt_mode():
     
     DEFAULT_LB = 20 + (RT_MODE % 11)
     show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
-    show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)            
+    show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
+    show_lcd("--G", 17, 3, 3)
     t0 = time.time()
     start_tensioning()
     rtm_time = (time.time() - t0)
     show_lcd("{: >4d}".format(min(int((time.time() - TIMER) / 60), 9999)) + "m", 15, 1, 5)
-    tension_info(None)
+    tension_info(None, 2)
     rt_str = str(TENSION_COUNT) + "T/"+ "{:.2f}".format(CORR_COEF) +"/"+ "{:.2f}".format(RT_CC[0]) +"/"+ str(rtm_time)
     show_lcd(rt_str, 0, 2, I2C_NUM_COLS)
     time.sleep(1)
@@ -1431,7 +1437,7 @@ while True:
         
         # Tension display update 張力顯示更新
         if (time.ticks_ms() - ts_info_time) > 100:
-            tension_info(None)
+            tension_info(None, 0)
             if TIMER:
                 if timer_flag == 0:
                     timer_diff = time.time() - TIMER
