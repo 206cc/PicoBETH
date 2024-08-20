@@ -387,6 +387,67 @@ Please follow the steps below to update the firmware:
 > [!IMPORTANT]  
 > All of the above steps are crucial.
 
+## Logging System
+
+Starting from version V2.5, a simple logging system has been introduced to help with troubleshooting, recording important events, and facilitating future review and analysis.
+
+### System Log `sys_log.txt`
+
+This log file is viewable on a computer. You can customize the log's storage location using the built-in `logs_save()` function. When the log file reaches 100KB, the system will automatically rename and overwrite it.
+
+**Format:**
+```
+Triggered function: Total tension count / Custom information
+```
+
+**Example:**
+```
+init(HX711):55863T/21188/21465/401/90
+forward():55863T/No String?
+start_tensioning():55863T/ts_err#0
+forward():55863T/No String?
+start_tensioning():55863T/ts_err#0
+init(HX711):55863T/21188/21493/487/90
+```
+
+### Stringing Log `logs.txt`
+
+This log can be viewed directly on the LCD screen. The maximum log value is defined by the `LOG_MAX` parameter.
+
+**Format:**
+```
+Total tension count, Timer time, Tension unit, Set tension (LB), Max tension (G), Pre-stretch (%), Tension time, Number of tension increases, Number of tension decreases, Tension parameter, Tension calibration parameter, FT parameter, Knotting function SW, Knot (%)
+```
+
+**Example:**
+```
+60384,72719,1,21,10477,10,3,0,0,1.03852,18.17,1,0,15
+60385,72736,1,22,10976,10,3,0,37,1.048519,18.17,1,0,15
+60386,72753,1,23,11475,10,3,4,23,1.03852,18.17,1,0,15
+60387,72770,1,24,11974,10,3,5,41,1.02852,18.17,1,0,15
+60388,72785,1,25,12473,10,3,7,43,1.03852,18.17,1,0,15
+60389,72803,1,26,12972,10,3,6,49,1.048519,18.17,1,0,15
+```
+
+### Reliability Testing Log `rt_logs.txt`
+
+This log file is viewable on a computer. It automatically renames and overwrites when the test count reaches 1000.
+
+**Format:**
+```
+Reliability test count / Total tension count / Automatic tension parameter / Test tension parameter / Tension completion time (seconds)
+```
+
+**Example:**
+```
+4521/60384T/1.03/0.97/13
+4522/60385T/1.04/0.97/12
+4523/60386T/1.05/0.97/13
+4524/60387T/1.04/0.97/13
+4525/60388T/1.03/0.97/12
+4526/60389T/1.04/0.97/13
+```
+
 # Frequently Asked Questions
 
 ## Q: I want to make this project, but I'm not sure if I can complete it.
