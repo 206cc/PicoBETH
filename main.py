@@ -76,8 +76,8 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 # Other parameters 其它參數
-VERSION = "2.52"
-VER_DATE = "2024-08-20"
+VERSION = "2.53"
+VER_DATE = "2024-08-21"
 FIRST_TEST = 1
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','CORR_COEF','MOTO_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','FT_ADD','CORR_COEF_AUTO','KNOT','MOTO_MAX_STEPS','FIRST_TEST','BZ_SW','HX711_V0'] # Saved variables 存檔變數
 MENU_ARR = [[4,0],[4,1],[4,2],[14,0],[15,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
@@ -574,6 +574,7 @@ def init():
 # Start increasing tension 開始增加張力
 def start_tensioning():
     global MOTO_MOVE, MOTO_WAIT, TENSION_COUNT, LOGS, CORR_COEF, FT_ADD, KNOT_FLAG, LB_CONV_G, RT_MODE
+    lcd.hide_cursor()
     show_lcd("Tensioning", 0, 2, I2C_NUM_COLS)
     show_lcd("     ", 15, 1, 5)
     if KNOT_FLAG == 0:
@@ -799,6 +800,8 @@ def setting_ts():
     while True:
         # Action of pressing the up or down button 按下上下鍵動作
         if BUTTON_UP.value() or BUTTON_DOWN.value():
+            lcd.show_cursor()
+            lcd.blink_cursor_on()
             kg = round(DEFAULT_LB * 0.45359237, 1)
             # LB 10-digit setting 設定 LB十位數
             if cursor_xy == (4, 0):
@@ -901,17 +904,23 @@ def setting_ts():
                 show_lcd("{: >2d}".format(PRE_STRECH), 17, 0, 2)
                 ps_kt_show = DEFAULT_LB * ((PRE_STRECH + 100) / 100)
             
+            lcd.blink_cursor_off()
+            lcd.hide_cursor()
             show_lcd("{: >4.1f}".format(min(ps_kt_show, LB_RANGE[1])), 9, 0, 4)
             show_lcd("{: >4.1f}".format(min(ps_kt_show * 0.45359237, LB_RANGE[1] * 0.45359237)), 9, 1, 4)
             show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
             show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
             lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
+            lcd.show_cursor()
+            lcd.blink_cursor_on()
             last_set_time = time.ticks_ms()
             beepbeep(0.1)
             time.sleep(BUTTON_SLEEP)
 
         # Action of pressing the left or right button 按下左右鍵動作
         if BUTTON_RIGHT.value() or BUTTON_LEFT.value():
+            lcd.hide_cursor()
+            lcd.blink_cursor_on()
             if BUTTON_RIGHT.value():
                 if (i+1) < set_count:
                     i = i + 1
@@ -934,6 +943,7 @@ def setting_ts():
         if button_list('BUTTON_EXIT') or ((time.ticks_ms() - last_set_time) > (1.8 * 1000)):
             config_save(0)
             lcd.blink_cursor_off()
+            lcd.hide_cursor()
             time.sleep(BUTTON_SLEEP)
             beepbeep(0.04)
             return 0
@@ -951,20 +961,25 @@ def setting():
     while True:
         # Action of pressing the up or down button 按下上下鍵動作
         if BUTTON_UP.value() or BUTTON_DOWN.value() or button_list('BUTTON_SETTING'):
+            lcd.hide_cursor()
+            lcd.blink_cursor_off()
             flag = 0
             # System information 系統資訊
             if cursor_xy == (11, 3):
                 if BUTTON_SETTING.value():
+                    lcd.blink_cursor_off()
                     beepbeep(0.1)
                     show_lcd("SW:V"+ VERSION +"_"+ VER_DATE, 0, 0, I2C_NUM_COLS)
                     show_lcd("HX:"+ str(HX711["DIFF"]) +"mg/"+ str(sorted(HX711["V0"])[0]) +"/"+ str(HX711["RATE"]) +"Hz", 0, 1, I2C_NUM_COLS)
                     show_lcd("CC:"+ ML_ARR[CORR_COEF_AUTO] + "{: >1.2f}".format(CORR_COEF) +"      " + "{: >5d}".format(BOOT_COUNT) +"B", 0, 2, I2C_NUM_COLS)
                     lcd.move_to(11, 3)
+                    lcd.blink_cursor_on()
                     beepbeep(0.1)
                     while True:
                         if BUTTON_EXIT.value():
                             beepbeep(0.1)
                             setting_interface()
+                            lcd.blink_cursor_on()
                             break
             
             # LB or KG setting selection 磅、公斤設定選擇
@@ -1053,12 +1068,14 @@ def setting():
             # Display LOG 顯示LOG
             elif cursor_xy == (19, 3):
                 if BUTTON_SETTING.value():
+                    lcd.blink_cursor_off()
                     beepbeep(0.1)
                     if len(LOGS) != 0:
                         logs_idx = 0
                         lcd.hide_cursor()
                         logs_interface("init")
                         logs_interface(logs_idx)
+                        lcd.blink_cursor_on()
                         log_flag = 0
                         beepbeep(0.1)
                         while True:
@@ -1080,8 +1097,8 @@ def setting():
                                 log_flag = logs_idx
                             
                         setting_interface()
-                        lcd.show_cursor()
-                        lcd.blink_cursor_on()
+                        
+                    lcd.blink_cursor_on()
             
             if flag == 1:
                 if HX711_CAL >= HX711_RANGE[1]:
@@ -1101,6 +1118,8 @@ def setting():
             show_lcd("{: >2.2f}".format(HX711_CAL), 14, 1, 5)
             show_lcd("{:02d}".format(FT_ADD), 14, 0, 2)
             lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
+            lcd.show_cursor()
+            lcd.blink_cursor_on()
             beepbeep(0.1)
             time.sleep(BUTTON_SLEEP)
 
@@ -1127,12 +1146,14 @@ def setting():
         if button_list('BUTTON_EXIT'):
             config_save(0)
             lcd.blink_cursor_off()
+            lcd.hide_cursor()
             time.sleep(BUTTON_SLEEP)
             beepbeep(0.1)
             return 0
      
 # Settings interface display 設定介面顯示
 def setting_interface():
+    lcd.hide_cursor()
     show_lcd("UN:       FT: "+ "{:02d}".format(FT_ADD), 0, 0, I2C_NUM_COLS)
     show_lcd(UNIT_ARR[LB_KG_SELECT], 4, 0, 5) 
     show_lcd("CP: "+ ONOFF_ARR[CP_SW] +"   HX: "+ "{: >2.2f}".format(HX711_CAL) +"S", 0, 1, I2C_NUM_COLS)
@@ -1141,6 +1162,7 @@ def setting_interface():
     
 # LOG interface display 介面顯示LOG
 def logs_interface(idx):
+    lcd.hide_cursor()
     if idx=="init":
         show_lcd("  LOG  TIMER:   m  s", 0, 0, I2C_NUM_COLS)
         show_lcd("LB:    /        :  %", 0, 1, I2C_NUM_COLS)
@@ -1175,6 +1197,7 @@ def logs_interface(idx):
 
 # Main screen display 主畫面顯示
 def main_interface():
+    lcd.hide_cursor()
     show_lcd("LB:     /--.- "+ PSKT_ARR[KNOT_FLAG] +":  %", 0, 0, I2C_NUM_COLS)
     show_lcd("KG:     /--.-       ", 0, 1, I2C_NUM_COLS)
     show_lcd("                    ", 0, 2, I2C_NUM_COLS)
@@ -1186,6 +1209,7 @@ def main_interface():
 # Timer display 計時器顯示
 def show_timer():
     if TIMER:
+        lcd.hide_cursor()
         show_lcd("   m  ", 14, 1, 6)
         timer_diff = timer_flag - TIMER
         if timer_diff < 0:
@@ -1350,7 +1374,7 @@ def rt_mode():
     DEFAULT_LB = 20 + (RT_MODE % 11)
     show_lcd("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
     show_lcd("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
-    show_lcd("--G", 17, 3, 3)
+    show_lcd("    --G", 13, 3, 7)
     t0 = time.time()
     start_tensioning()
     rtm_time = (time.time() - t0)
@@ -1437,6 +1461,7 @@ while True:
         
         # Tension display update 張力顯示更新
         if (time.ticks_ms() - ts_info_time) > 100:
+            lcd.hide_cursor()
             tension_info(None, 0)
             if TIMER:
                 if timer_flag == 0:
