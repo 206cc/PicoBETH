@@ -31,14 +31,23 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 ### Features
 - **0.05LB High Precision**
-  - Achieved with the Sparkfun HX711 at 94Hz and software version V2.2 and later.
+  - Achieved with the Sparkfun HX711 at 94Hz and software version V2.2 and later in fast mode.
 - **Low Power Consumption**
   - Uses a DC12V3A power supply.
-  - Power consumption is 7W in standby mode and 15W when tensioning at 35LB.
 - **Real-time UPS Redundancy (Uninterruptible Power Supply)**
   - Uses 3 x 18650 batteries to ensure at least one complete racquet stringing.
 - **Compact and Space-Saving**
   - Dimensions are approximately 38(L) x 15(W) x 9(H) CM.(excluding clamp head)
+
+## Development Project Plan
+
+| Project Item        | Progress   | Remarks                                      |
+| ------------------- | ---------- | -------------------------------------------- |
+| Reliability Testing | In Progress| Current tension count: 75,000+ (2024/08/22)  |
+| Motor Speed Increase| Testing    | 8% increase, to be released in v2.6          |
+| Remove FT Parameter | Not Started| Slow mode to be replaced with high-precision mode |
+| Tennis Racket Compatibility | Not Started | Parts procurement in progress          |
+| Pico 2 Compatibility | Not Started |                                             |
 
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
@@ -472,7 +481,7 @@ A: Recently, some people reported passing the [EP.3](https://youtu.be/pZT4ccE3bZ
 A: This has also been something I've always wanted to do. The Wise 2086 bead clip easy head is the most expensive hardware in the entire project, but it's also because it can be easily installed on the NJ5 load sensor (YZC-133) and has excellent clamping functionality. So far, I haven't figured out how to replace it. If you have a good bead clip head design, you can install it yourself. Just make sure to pay attention to the precautions mentioned in [EP.9](https://youtu.be/Ax4agdsqyms).
 
 ## Q: How durable is this electronic tension head?
-A: If all high-quality components are used, the durability should theoretically be quite high. Even if repairs are needed in the future, all the parts are relatively inexpensive and easy to replace. The machine is currently undergoing reliability testing. As of today (2024/08/17), the tensioning count has exceeded 50,000 cycles, and no abnormal failures have occurred. I will update the test results here once the testing is complete.
+A: If all high-quality components are used, the durability should theoretically be quite high. Even if repairs are needed in the future, all the parts are relatively inexpensive and easy to replace.
 
 ## Q: Can this project be used for stringing tennis rackets?
 A: In theory, it is possible, but some hardware needs to be upgraded, such as changing the load sensor (YZC-133) from 20KG to 50KG, larger stepper motors, larger power supplies, stronger platforms and slides, and modifying some code parameters. If interested, you can develop your own branch project.
@@ -485,14 +494,6 @@ A: Please turn to the back and try adjusting the blue variable resistor to chang
 
 ## Q: The stringing function works fine, but the buzzer keeps sounding continuously.
 A: Please check if you mistakenly purchased the Active Low Trigger version. The correct version should be the Active High Trigger.
-
-# Future Plans
-
-Below are some of the future development plans for this project:
-
-- **Reliability Testing**: Currently has reached 50,000 cycles, ongoing. (2024/08/17)
-- **Tennis Compatibility**: Modifying hardware and software to support tennis racket stringing.
-
 
 # Conclusion
 If you have any questions about making, please leave a comment in the YouTube video.
