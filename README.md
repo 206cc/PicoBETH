@@ -138,7 +138,7 @@ The following demonstrates the user interface of version V2.60.
 
 1. LOG Number
 2. Tensioning Information for this Log, Set Value/Maximum Value
-3. Micro-adjustment counts of increasing/decreasing tension for the constant-pull system/adjustment parameters
+3. constant-pull counts of increasing/constant-pull counts of decreasing/adjustment parameters
 4. Tension Coefficient
 5. If the timing function is enabled, it shows the time for this tensioning
 6. Pre-stretch % for this tensioning
