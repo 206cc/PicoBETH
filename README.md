@@ -78,53 +78,91 @@ If your badminton stringing machine structure is not robust, I strongly advise a
 > [!CAUTION]
 > Extremely important: If your stringing machine is of a simple type, please make sure to reinforce the structure.
 
-## Standby Screen
-1. Use left and right keys to set pounds, kilograms, and the tens, units, and decimal places of pre-stretch.
-2. Use up and down keys to adjust the selected settings.
-3. Stringing timer function: Start timing by pressing the exit key, stop timing by pressing it again, and reset the timer on the third press.
-4. The Pre-Stretch function (PS) and Knot function (KT) are switched using the up and down keys. After using the Knot function, it will automatically switch back to the Pre-Stretch function.
-![images1-3](docs/images1-3.png)
+## User Interface
 
-## Tensioning Screen
-1. When the set tension is reached, automatically enter the constant-pull mode. Increase tension if it's insufficient, decrease tension if it's too high, until pressing the button on the clamp or exit button to end the tensioning mode.
-2. Press the center button of the five-way key to enter manual fine-tuning mode. The constant-pull mode will be canceled at this time, and tension can be manually adjusted with the up and down keys. Press the center button of the five-way key again to re-enter constant-pull mode.
-3. When the specified tension is reached, the countdown timer will appear.
-![images1-4](docs/images1-4.png)
+The following demonstrates the user interface of version V2.60.
 
-> [!WARNING]
-> If the tension fine-tuning amplitude is too high or too low, you can adjust the FT parameter yourself.
+### Main Screen
 
-## Settings Screen
-1. UN: Select pounds or kilograms when setting.
-2. AT: Default Constant-Pull Switch.
-3. BZ: Active buzzer Switch.
-4. FT: Amplitude of fine-tuning when reaching the specified tension.
-5. HX: Calibration of the load sensor for HX711 (see the Final Settings chapter for details).
-6. I: System information.
-7. T: Tensioning Count/Log interface
-![images1-5](docs/images1-5.png)
+- Use the Exit button to start the timer function. Press it again to stop the timer, and a third time to reset the timer.
 
+1. Set LB
+2. Set KG
+3. Status Display
+4. PS = Pre-stretch Function, KT = Knotting Function
+5. Stringing Timer Time
+6. Current Tension Value (Grams)
 
-## Detailed Recording Of Tensioning Logs
-On the settings screen, use the left and right keys to select the tensioning count, then press the center key of the five-way key to enter the tensioning log recording page.
-On the page, use the left and right keys to browse through the log records.
+![img_main](docs/img_main.png)
 
-TIMER: If the timing function is enabled, display the time of tensioning.<br />
-LB: Set tension/stop tension.<br />
-PS: Set pre-stretch value.<br />
-FT: Increase tension fine-tuning count/decrease tension fine-tuning count/fine-tuning parameters.<br />
-C/H: CC parameter/HX parameter.<br />
-![images1-7](docs/images1-7.png)
+### Tension Setting Screen
+
+- Press the five-way button to enter the tension setting mode. The first press only displays the maximum tension with pre-stretch included. The second press begins adjusting the tension and pre-stretch.
+- The pre-stretch function (PS) and knotting function (KT) can be toggled using the up and down buttons. After using the knotting function, it will automatically switch back to the pre-stretch function.
+
+1. LB Setting, minimum unit 0.1 / Maximum tension including pre-stretch
+2. KG Setting, minimum unit 0.1 / Maximum tension including pre-stretch
+3. Status Display
+4. Pre-stretch/Knotting % Setting 0 ~ 30%, in increments of 5%
+5. Stringing Timer Time
+6. Current Tension Value (Grams)
+
+![img_lbset](docs/img_lbset.png)
+
+### Tensioning Screen
+
+- When the set tension is reached, the constant-pull mode is activated. Tension will increase if it's too low, or decrease if it's too high until the tensioning mode is ended by pressing the button on the clamp head or the Exit button.
+- Pressing the middle button of the five-way button will disable the constant-pull system. Pressing the middle button again will re-enable the constant-pull system.
+- Pressing the up or down buttons of the five-way button once will increase or decrease the tension by 0.5LB.
+
+1. Set Tension
+2. Current Tension
+3. A countdown starts when the set tension is reached
+4. Constant-pull Status C = Enabled, M = Disabled
+5. Difference from Set Tension in Grams, displays +++ if over 99G, displays --- if below 99G
+
+![img_tensioning](docs/img_tensioning.png)
+
+### Settings Screen
+
+1. UN: Set LB or KG on the main screen.
+2. CP: Constant-pull On/Off
+3. BZ: Buzzer On/Off
+4. HX: HX711 Tension Sensor Calibration (see final settings section for details)
+5. I: System Information
+6. T: Total Tension Count/Log Record
+
+![img_setting](docs/img_setting.png)
+
+### Detailed Log of Tensioning
+
+1. LOG Number
+2. Tensioning Information for this Log, Set Value/Maximum Value
+3. Micro-adjustment counts of increasing/decreasing tension for the constant-pull system/adjustment parameters
+4. Tension Coefficient
+5. If the timing function is enabled, it shows the time for this tensioning
+6. Pre-stretch % for this tensioning
+7. Tensioning Seconds
+8. Tensioning Count
+
+![img_tslog](docs/img_tslog.png)
 
 > [!NOTE]
-> The default display is 1-50 log records. If you need to adjust, please modify the LOG_MAX parameter.
+> By default, 1-50 log entries are displayed. To adjust this, modify the LOG_MAX parameter.
 
 > [!WARNING]
-> Do not set the LOG_MAX parameter too large, as loading too many logs during startup will cause insufficient memory and result in failure to boot.
+> Do not set the LOG_MAX parameter too high, as it may cause memory shortages.
 
-## System information
+### System Information
 
-![images1-8](docs/images1-8.png)
+1. Software Version and Date
+2. HX711 Tension Amplifier Info - Drift Value/Tension Baseline Value/RATE Hz
+3. Tension Parameters
+4. Stepper Motor Speed
+5. Boot Count
+6. Total Tension Count
+
+![img_sysinfo](docs/img_sysinfo.png)
 
 ## Hardware
 
