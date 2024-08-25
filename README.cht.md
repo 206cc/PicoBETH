@@ -144,10 +144,11 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 1. 軟體版本及日期
 2. HX711張力放大器參數 開機飄移值/張力基準值/取樣頻率
-3. 張力參數
-4. 步進馬達速度
-5. 開機次數
-6. 總張緊計數
+3. 珠夾頭移動速度，開機時 全行程步數/移動毫秒 越高越快
+4. 步進馬達轉速，越低越快
+5. 張力參數
+6. 開機次數
+7. 總張緊計數
 ![img_sysinfo](docs/img_sysinfo.png)
 
 ## 硬體

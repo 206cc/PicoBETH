@@ -154,10 +154,11 @@ The following demonstrates the user interface of version V2.60.
 
 1. Software Version and Date
 2. HX711 Tension Amplifier Info - Drift Value/Tension Baseline Value/RATE Hz
-3. Tension Parameters
-4. Stepper Motor Speed
-5. Boot Count
-6. Total Tension Count
+3. The movement speed of the clamp head, the higher it is, the faster it goes.
+4. Stepper motor speed, the lower it is, the faster it goes.
+5. Tension Parameters
+6. Boot Count
+7. Total Tension Count
 
 ![img_sysinfo](docs/img_sysinfo.png)
 
