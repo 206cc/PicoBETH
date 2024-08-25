@@ -75,6 +75,12 @@ If your badminton stringing machine structure is not robust, I strongly advise a
 > [!CAUTION]
 > Extremely important: If your stringing machine is of a simple type, please make sure to reinforce the structure.
 
+> [!CAUTION]
+> Extremely important: If your stringing machine is of a simple type, please make sure to reinforce the structure.
+
+> [!CAUTION]
+> Extremely important, so I’ll remind you three times: If your stringing machine is of a simple type, please make sure to reinforce the structure.
+
 ## User Interface
 
 The following demonstrates the user interface of version V2.60.
@@ -210,11 +216,31 @@ HX711 is a simple and easy-to-use amplifier for weight sensors, commonly used in
 I tested the HX711 circuit board 
 ![hx711](docs/hx711.jpg)
 
+### NJ5 (YZC-133) Load Sensor
+
+The load sensor doesn't necessarily have to be the NJ5 (YZC-133). I chose this model because it can be easily installed on the Wise 2086 bead clip head. If you are using other clamps, there are many different styles available, just make sure to select a 20KG model. Please refer to the SparkFun HX711 guide linked below for detailed instructions.
+
+[https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all](https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all)
+
+### Front and Rear Limit Switches on sliding table
+
+If the limit micro switches on the sliding table are too small, the buffer zone might be insufficient, causing the platform to move slightly after the switch is triggered and before it stops. A limited buffer zone might lead to the platform colliding with the micro switch body. Therefore, it is recommended to use larger micro switches, long-arm micro switches (bent back), or arc-arm micro switches, as these types of switches offer a larger buffer zone and are more suitable.
+
+## Hardware Design Suggestions
+
+### Distance Between the Bead Clip Head and the table
+
+In theory, the closer the distance between the bead clip head and the table, the better, as it can extend the lifespan of the slider. If you are not using the Wise 2086 bead clip head, you can choose a shorter sensor design to reduce the distance between the two.
+
+### Using a PCB Circuit Board
+
+You can start by assembling and testing the circuit on a breadboard. Once successful, transfer the circuit to a PCB or a hand-soldered board. It's not recommended to use a breadboard for long-term use as it may lead to some issues.
+
 ## Wiring Diagram
 ![images2-2](docs/images2-2.png)
 
 > [!WARNING]
-> The LED should have a 330 ohm resistor connected in series.
+> If the LED module is not specifically designed for use with the Raspberry Pi, you need to connect a 330-ohm resistor in series to protect the GPIO.
 
 # How To Make
 
@@ -294,9 +320,6 @@ Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_Pi
 Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-06-09.zip)
 
 > [!NOTE]
-> You can first assemble and test on a breadboard. Once successful, transfer the circuit to a PCB or hand-soldered board. Long-term use of a breadboard is not recommended as it may cause some issues.
-
-> [!NOTE]
 > Please download the Gerber files and email them to an online (PCBWay, AliExpress, eBay) PCB manufacturer. Note that it is a single-layer, double-sided 1.6mm PCB with double-sided pads. Place the order once the manufacturer provides a quote.
 
 > [!NOTE]
@@ -311,26 +334,7 @@ Upon completing assembly and powering on the machine for the first time, please 
 
 ## Final Settings
 
-### Step 1: Setting FT Parameters
-
-FT Parameter: It determines the magnitude of adjustments after reaching the specified tension. A too large value can cause repeated tension adjustments, while a too small value increases the number of fine-tuning iterations required to reach the specified tension.
-
-SW V2.2 and later have the recommended FT parameters:
-| Ballscrew | TB6600 Slow Mode | TB6600 Fast Mode |
-| -------------------- |:------------------:|:----------------:|
-| 1605                 |         X          |        2         |
-| 1610                 |         2          |        1         |
-
-SW prior to V2.12 have the recommended FT parameters:
-| Ballscrew | TB6600 Slow Mode | TB6600 Fast Mode |
-| -------------------- |:------------------:|:----------------:|
-| 1605                 |         X          |        7~8       |
-| 1610                 |        7~8         |        3~4       |
-
-> [!NOTE]
-> For the configuration of slow mode and fast mode, please refer to the [TB6600 Stepper Motor Parameters](https://github.com/206cc/PicoBETH#tb6600-stepper-motor-parameters) section.
-
-### Step 2: Calibrate The HX Parameter
+### Calibrate The HX Parameter
 
 HX711 tension sensor calibration coefficient. It is necessary to recalibrate it the first time you use it or when replacing the tension sensor or HX711 circuit board.
 
