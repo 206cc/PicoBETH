@@ -71,6 +71,12 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 > [!CAUTION]
 > 非常重要，如果您的穿線機台是簡易型的，請務必補強結構。
 
+> [!CAUTION]
+> 非常重要，如果您的穿線機台是簡易型的，請務必補強結構。
+
+> [!CAUTION]
+> 非常重要，所以說三次，如果您的穿線機台是簡易型的，請務必補強結構。
+
 ## 操作介面
 
 以下展示 V2.60 版本的操作介面
@@ -85,6 +91,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 4. PS=預拉功能 KT=打結功能
 5. 穿線計時器時間
 6. 目前張力值(公克)
+
 ![img_main](docs/img_main.png)
 
 ### 張力設定畫面
@@ -98,6 +105,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 4. 預拉/打結%設定 0 ~ 30%，5% 一個單位
 5. 穿線計時器時間
 6. 目前張力值(公克)
+
 ![img_lbset](docs/img_lbset.png)
 
 ### 張緊中畫面
@@ -111,6 +119,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 3. 達到指定張力後會開始出現計算秒數
 4. 恆拉狀態 C=啟用 M=停用
 5. 與設定張力相差公克數，超過99G顯示 +++ ，低於 99G 顯示 ---
+
 ![img_tensioning](docs/img_tensioning.png)
 
 ### 設定畫面
@@ -121,6 +130,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 4. HX: HX711 的張力傳感器校正(詳見最後設定章節)
 5. I: 系統資訊
 6. T: 總張緊計數/Log記錄
+
 ![img_setting](docs/img_setting.png)
 
 ### 張緊LOG的詳細記錄
@@ -132,6 +142,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 6. 此次張緊預拉%
 7. 張緊秒數
 8. 第幾次張緊數
+
 ![img_tslog](docs/img_tslog.png)
 
 > [!NOTE]
@@ -149,6 +160,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 5. 張力參數
 6. 開機次數
 7. 總張緊計數
+
 ![img_sysinfo](docs/img_sysinfo.png)
 
 ## 硬體
@@ -199,12 +211,32 @@ HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度�
 我測試過的 HX711 電路版 
 ![cbx_bracket](docs/hx711.jpg)
 
+### NJ5 (YZC-133) 張力傳感器
+
+張力傳感器不一定非得是NJ5（YZC-133），我選擇這個型號是因為它可以很容易地安裝在Wise 2086珠夾頭上。如果你使用的是其他夾具，還有許多不同的樣式可供選擇，只需注意選擇20KG的型號。請參考以下的SparkFun HX711指南，裡面有詳細的解說。
+
+[https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all](https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all)
+
+### 滑台上的前後限位SWITCH
+
+滑動台上的前後限位微動開關如果過小，緩衝區可能會不足，導致平台在觸發開關後到停止前仍然會稍微移動，而過小的緩衝區可能會導致平台撞擊到微動開關本體。因此，建議使用較大的微動開關、長臂微動開關(反折)或弧形臂微動開關，這些開關具有較大的緩衝區，更為合適。
+
+## 硬體設計建議
+
+### 珠夾頭與平台間的距離
+
+理論上，珠夾頭與平台之間的距離越近越好，這樣可以延長滑台的壽命。如果不使用Wise 2086珠夾頭，可以選擇造型較短的傳感器，以降低二者之間的距離。
+
+### 使用PCB電路板
+
+您可以先在麵包板組裝測試，成功後再將電路轉移到電路板上或手工焊接板上，不建議長期使用麵包板會有一些問題。
+
 ## 接線圖
 
 ![images2-2](docs/images2-2.png)
 
 > [!WARNING]
-> LED 需串接 330 歐姆電阻。
+> LED 如果不是給 Raspberry Pi 使用的模組，需串接 330 歐姆電阻以保護 GPIO。
 
 # 製作教學
 
@@ -271,7 +303,6 @@ SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭
 > [!NOTE]
 > 相關製作影片 [![VIDEO](https://img.youtube.com/vi/gZF2_dbtVzA/0.jpg)](https://www.youtube.com/watch?v=gZF2_dbtVzA)
 
-
 ## PCB 電路板
 ![images2-3](docs/images2-4.svg)
 
@@ -284,9 +315,6 @@ Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs
 
 Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-06-09.zip)
 
-
-> [!NOTE]
-> 您可以先在麵包板組裝測試，成功後再將電路轉移到電路板上或手工焊接板上，不建議長期使用麵包板會有一些問題。
 
 > [!NOTE]
 > 請將 Gerber 檔案下載後 EMAIL 給線上(露天、蝦皮)PCB製造廠商，備註單層雙面1.6mm、雙面焊盤，廠商報價後下單即可。
@@ -303,26 +331,7 @@ Gerber PCB BTN [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/
 
 ## 最後設定
 
-### 第一步：設定 FT 參數
-
-FT參數: 達到指定張力後微調時的幅度，過大的值會造成反覆加減張力，過小的值微調次數會增加才能到達指定張力。
-
-軟體版本 V2.2 以後的建議的 FT 參數
-| 滑台螺杆規格  | TB6600慢速模式 | TB6600快速模式 |
-| -------- |:-------:|:--------:|
-| 1605     |    X    |     2    |
-| 1610     |    2    |     1    |
-
-軟體版本 V2.12 以前的建議的 FT 參數
-| 滑台螺杆規格  | TB6600慢速模式 | TB6600快速模式 |
-| -------- |:-------:|:--------:|
-| 1605     |    X    |   7~8    |
-| 1610     |  7~8    |   3~4    |
-
-> [!NOTE]
-> 慢速模式與快速模式的設定請參閱 [TB6600 步進馬達電機參數](https://github.com/206cc/PicoBETH#tb6600-stepper-motor-parameters) 章節
-
-### 第二步：校正 HX 參數
+### 校正 HX 參數
 
 HX711 張力感應器校正系數，第一次使用或有更換張力傳感器、HX711 電路板時務必重新校正一次。
 
