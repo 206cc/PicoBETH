@@ -39,8 +39,9 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
 | 可靠度測試         | 進行中   | 目前張緊次數 95,000+ (2024/08/25)        |
+| 速度切換選單       | 開發中   | 於 v2.7 上線        |
 | 適用網球拍         | 尚未開始 | 零件採購中                     |
-| 相容 Pico 2        | 尚未開始 |                      |
+| 相容 Pico 2       | 尚未開始 |                      |
 
 
 ## 原由
@@ -85,6 +86,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 - 使用離開鍵啟用計時功能，再按一下停止計時，按第三下計時器歸零。
 
+![img_main](docs/img_main.png)
+
 1. 設定磅數
 2. 設定公斤
 3. 狀態顯示
@@ -92,12 +95,12 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 5. 穿線計時器時間
 6. 目前張力值(公克)
 
-![img_main](docs/img_main.png)
-
 ### 張力設定畫面
 
 - 按下五向鍵會進入張力設定模式，第一下只會顯示含預拉的最大張力，第二下開始調整張力及預拉
 - 預拉功能(PS)及打結功能(KT)使用上下鍵切換，打結功能用完後會自動切回預拉功能。
+
+![img_lbset](docs/img_lbset.png)
 
 1. 磅數設定，最小單位 0.1 / 含預拉的最大張力
 2. 公斤設定，最小單位 0.1 / 含預拉的最大張力
@@ -106,13 +109,13 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 5. 穿線計時器時間
 6. 目前張力值(公克)
 
-![img_lbset](docs/img_lbset.png)
-
 ### 張緊中畫面
 
 - 到達設定張力時進入恆拉模式，張力不足增加張力、過高減少張力，直到按下珠夾頭上的按鍵或離開按鍵結束張緊模式。
 - 按下五向鍵的中鍵會停用恆拉系統，再一次按下中鍵後重新啟用恆拉系統。
 - 按下五向鍵的上下鍵一次會加減 0.5LB
+
+![img_tensioning](docs/img_tensioning.png)
 
 1. 設定張力
 2. 目前張力
@@ -120,9 +123,9 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 4. 恆拉狀態 C=啟用 M=停用
 5. 與設定張力相差公克數，超過99G顯示 +++ ，低於 99G 顯示 ---
 
-![img_tensioning](docs/img_tensioning.png)
-
 ### 設定畫面
+
+![img_setting](docs/img_setting.png)
 
 1. UN: 在主畫面中使用磅或公斤進行設定。
 2. CP: 恆拉開關
@@ -131,9 +134,10 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 5. I: 系統資訊
 6. T: 總張緊計數/Log記錄
 
-![img_setting](docs/img_setting.png)
-
 ### 張緊LOG的詳細記錄
+
+![img_tslog](docs/img_tslog.png)
+
 1. LOG編號
 2. 此次張緊資訊 設定值/最大值
 3. 恆拉系統的 增加張力微調次數/減少張力微調次數/微調參數  
@@ -143,8 +147,6 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 7. 張緊秒數
 8. 第幾次張緊數
 
-![img_tslog](docs/img_tslog.png)
-
 > [!NOTE]
 > 預設顯示 1-50 筆 LOG 記錄，如要需調整請修改 LOG_MAX 參數
 
@@ -153,6 +155,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 ### 系統資訊
 
+![img_sysinfo](docs/img_sysinfo.png)
+
 1. 軟體版本及日期
 2. HX711張力放大器參數 開機飄移值/張力基準值/取樣頻率
 3. 珠夾頭移動速度，開機時 全行程步數/移動毫秒 越高越快
@@ -160,8 +164,6 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 5. 張力參數
 6. 開機次數
 7. 總張緊計數
-
-![img_sysinfo](docs/img_sysinfo.png)
 
 ## 硬體
 
@@ -219,13 +221,17 @@ HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度�
 
 ### 滑台上的前後限位SWITCH
 
-滑動台上的前後限位微動開關如果過小，緩衝區可能會不足，導致平台在觸發開關後到停止前仍然會稍微移動，而過小的緩衝區可能會導致平台撞擊到微動開關本體。因此，建議使用較大的微動開關、長臂微動開關(反折)或弧形臂微動開關，這些開關具有較大的緩衝區，更為合適。
+滑動台上的前後限位微動開關如果尺寸過小，可能導致緩衝區不足，從而在觸發開關後到平台完全停止前，平台仍會稍微移動。過小的緩衝區可能導致平台撞擊到微動開關的本體。因此，建議使用尺寸較大的微動開關或弧形臂微動開關，這些開關具有較大的緩衝區，更為合適。如果空間允許，也可以使用長臂微動開關，僅接觸長臂部分，避免本體受力。
+
+![img_limit_switch](docs/img_limit_switch.png)
 
 ## 硬體設計建議
 
 ### 珠夾頭與平台間的距離
 
 理論上，珠夾頭與平台之間的距離越近越好，這樣可以延長滑台的壽命。如果不使用Wise 2086珠夾頭，可以選擇造型較短的傳感器，以降低二者之間的距離。
+
+![img_limit_switch](docs/img_head_table.png)
 
 ### 使用PCB電路板
 
