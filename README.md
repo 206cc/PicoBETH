@@ -44,6 +44,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
 | Reliability Testing | In Progress| Current tension count: 95,000+ (2024/08/25)  |
+| Speed Switch Menu  | In Development | To be released in v2.7      |
 | Tennis Racket Compatibility | Not Started | Parts procurement in progress          |
 | Pico 2 Compatibility | Not Started |                                             |
 
@@ -89,6 +90,8 @@ The following demonstrates the user interface of version V2.60.
 
 - Use the Exit button to start the timer function. Press it again to stop the timer, and a third time to reset the timer.
 
+![img_main](docs/img_main.png)
+
 1. Set LB
 2. Set KG
 3. Status Display
@@ -96,12 +99,12 @@ The following demonstrates the user interface of version V2.60.
 5. Stringing Timer Time
 6. Current Tension Value (Grams)
 
-![img_main](docs/img_main.png)
-
 ### Tension Setting Screen
 
 - Press the five-way button to enter the tension setting mode. The first press only displays the maximum tension with pre-stretch included. The second press begins adjusting the tension and pre-stretch.
 - The pre-stretch function (PS) and knotting function (KT) can be toggled using the up and down buttons. After using the knotting function, it will automatically switch back to the pre-stretch function.
+
+![img_lbset](docs/img_lbset.png)
 
 1. LB Setting, minimum unit 0.1 / Maximum tension including pre-stretch
 2. KG Setting, minimum unit 0.1 / Maximum tension including pre-stretch
@@ -110,13 +113,13 @@ The following demonstrates the user interface of version V2.60.
 5. Stringing Timer Time
 6. Current Tension Value (Grams)
 
-![img_lbset](docs/img_lbset.png)
-
 ### Tensioning Screen
 
 - When the set tension is reached, the constant-pull mode is activated. Tension will increase if it's too low, or decrease if it's too high until the tensioning mode is ended by pressing the button on the clamp head or the Exit button.
 - Pressing the middle button of the five-way button will disable the constant-pull system. Pressing the middle button again will re-enable the constant-pull system.
 - Pressing the up or down buttons of the five-way button once will increase or decrease the tension by 0.5LB.
+
+![img_tensioning](docs/img_tensioning.png)
 
 1. Set Tension
 2. Current Tension
@@ -124,9 +127,9 @@ The following demonstrates the user interface of version V2.60.
 4. Constant-pull Status C = Enabled, M = Disabled
 5. Difference from Set Tension in Grams, displays +++ if over 99G, displays --- if below 99G
 
-![img_tensioning](docs/img_tensioning.png)
-
 ### Settings Screen
+
+![img_setting](docs/img_setting.png)
 
 1. UN: Set LB or KG on the main screen.
 2. CP: Constant-pull On/Off
@@ -135,9 +138,9 @@ The following demonstrates the user interface of version V2.60.
 5. I: System Information
 6. T: Total Tension Count/Log Record
 
-![img_setting](docs/img_setting.png)
-
 ### Detailed Log of Tensioning
+
+![img_tslog](docs/img_tslog.png)
 
 1. LOG Number
 2. Tensioning Information for this Log, Set Value/Maximum Value
@@ -148,8 +151,6 @@ The following demonstrates the user interface of version V2.60.
 7. Tensioning Seconds
 8. Tensioning Count
 
-![img_tslog](docs/img_tslog.png)
-
 > [!NOTE]
 > By default, 1-50 log entries are displayed. To adjust this, modify the LOG_MAX parameter.
 
@@ -158,6 +159,8 @@ The following demonstrates the user interface of version V2.60.
 
 ### System Information
 
+![img_sysinfo](docs/img_sysinfo.png)
+
 1. Software Version and Date
 2. HX711 Tension Amplifier Info - Drift Value/Tension Baseline Value/RATE Hz
 3. The movement speed of the clamp head, the higher it is, the faster it goes.
@@ -165,8 +168,6 @@ The following demonstrates the user interface of version V2.60.
 5. Tension Parameters
 6. Boot Count
 7. Total Tension Count
-
-![img_sysinfo](docs/img_sysinfo.png)
 
 ## Hardware
 
@@ -224,13 +225,17 @@ The load sensor doesn't necessarily have to be the NJ5 (YZC-133). I chose this m
 
 ### Front and Rear Limit Switches on sliding table
 
-If the limit micro switches on the sliding table are too small, the buffer zone might be insufficient, causing the platform to move slightly after the switch is triggered and before it stops. A limited buffer zone might lead to the platform colliding with the micro switch body. Therefore, it is recommended to use larger micro switches, long-arm micro switches (bent back), or arc-arm micro switches, as these types of switches offer a larger buffer zone and are more suitable.
+If the limit micro switches on the sliding table are too small, the buffer zone might be insufficient, causing the platform to move slightly after the switch is triggered and before it stops. A limited buffer zone might lead to the platform colliding with the micro switch body. Therefore, it is recommended to use larger micro switches or arc-arm micro switches, as these types of switches offer a larger buffer zone and are more suitable, If space allows, long-lever micro switches can also be used, ensuring only the lever part makes contact, avoiding pressure on the main body.
+
+![img_limit_switch](docs/img_limit_switch.png)
 
 ## Hardware Design Suggestions
 
 ### Distance Between the Bead Clip Head and the table
 
 In theory, the closer the distance between the bead clip head and the table, the better, as it can extend the lifespan of the slider. If you are not using the Wise 2086 bead clip head, you can choose a shorter sensor design to reduce the distance between the two.
+
+![img_limit_switch](docs/img_head_table.png)
 
 ### Using a PCB Circuit Board
 
