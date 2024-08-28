@@ -31,7 +31,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 ### Features
 - **0.05LB High Precision**
-  - Achieved with the Sparkfun HX711 at 94Hz and software version V2.2 and later in fast mode.
+  - Achieved with the Sparkfun HX711 at 94Hz and software version V2.2 and later.
+  - [DEMO Vides](https://youtu.be/Hk7eMABAxT0)
 - **Low Power Consumption**
   - Uses a DC12V3A power supply.
 - **Real-time UPS Redundancy (Uninterruptible Power Supply)**
@@ -43,8 +44,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing | In Progress| Current tension count: 105,000+ (2024/08/27) [Test video](https://youtu.be/4xY9-XTofpA) |
-| Speed Switch Menu  | Under Testing | To be released in v2.7      |
+| Reliability Testing | In Progress| Current tension count: 110,000+ (2024/08/28) [Test video](https://youtu.be/4xY9-XTofpA) |
+| 9-Speed Switch  | Under Testing | To be released in v2.7      |
 | Tennis Racket Compatibility | Not Started | Parts procurement in progress          |
 | Pico 2 Compatibility | Not Started |                                             |
 
@@ -313,9 +314,11 @@ Components can be freely arranged. The diagram below shows the positioning hole 
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/gZF2_dbtVzA/0.jpg)](https://www.youtube.com/watch?v=gZF2_dbtVzA)
 
 ## PCB Circuit Board
-![images2-3](docs/images2-4.svg)
+![img_pcb](docs/img_pcb.png)
 
-Gerber PCB [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-08-17.zip)
+Gerber PCB 1.5 [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-08-28.zip)
+
+In version 1.5, the unused GPIOs are exposed to facilitate the development and use of custom functions in the future.
 
 > [!WARNING]  
 > Version 1.3a has removed the 10K resistors for buttons and micro switches, as the Raspberry Pi Pico already includes built-in pull-down resistors for buttons. Using both may cause issues.
@@ -421,7 +424,7 @@ After replacing any components during maintenance, enter the hardware function t
 
 ### Factory Reset
 
-You can restore the factory default settings without a computer by recreating the `config.cfg` file (the original configuration file will be renamed to `config.cfg.bak`). After restoring the default settings, be sure to set the FT parameters and recalibrate the HX tension parameters.
+You can restore the factory default settings without a computer by recreating the config.cfg file (the original configuration file will be renamed to config.cfg.bak). After restoring the default settings, make sure to recalibrate the HX tension parameters.
 
 **Usage:** When the version information appears at startup, press and hold the exit button until a long beep is heard, then release it.
 
