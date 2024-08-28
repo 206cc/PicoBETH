@@ -53,13 +53,13 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
 
 Drop-weight stringing machine and modification parts
-![images1-1](docs/images1-1.jpg)
+![img_parts](docs/img_parts.jpg)
 
 Modification completed (Under Development)
-![images1-2](docs/images1-2.jpg)
+![img_dev_machine](docs/img_dev_machine.jpg)
 
 Final machine [How to make step by step](https://youtu.be/uJVE3YFJtJA)
-![images1-2](docs/images1-6.jpg)
+![img_final_machine](docs/img_final_machine.jpg)
 
 Stringing demonstration video
 
@@ -190,7 +190,7 @@ Main materials
 
 Main [BOM List](https://docs.google.com/spreadsheets/d/1ML2syn-BDUk_CEcyjm62lMwHZluXPYK5swn7pdFXTbw) Price Reference
 
-![images2-1](docs/images2-1.jpg)
+![img_part_list](docs/img_part_list.jpg)
 
 > [!WARNING]
 > Please make sure to read the next section on Hardware Procurement Recommendations
@@ -205,7 +205,7 @@ Main [BOM List](https://docs.google.com/spreadsheets/d/1ML2syn-BDUk_CEcyjm62lMwH
 There are many styles of sliding tables, and this project uses the CBX/SGX 1610 ballscrew 200MM sliding table. It is recommended to purchase the CBX version with a bearing fixing seat. Some sliding tables without bearing fixing seat may experience issues under high-speed and high-tension conditions.
 
 Bearing Fixing Seat
-![cbx_bracket](docs/cbx_bracket.png)
+![img_bracket](docs/img_bracket.jpg)
 
 ### TB6600 Stepper Motor Driver
 
@@ -216,7 +216,7 @@ TB6600 is a small, economical stepper motor driver used for 42 and 57 type stepp
 HX711 is a simple and easy-to-use amplifier for weight sensors, commonly used in high-precision electronic scales. In this project, it is used to measure the tension of the strings. I have tested many HX711 circuit boards produced by various manufacturers and found a serious issue: many HX711 circuit boards from different manufacturers tend to drift. Of course, this drifting issue can be fixed. I will produce a dedicated episode on my [YouTube channel](https://www.youtube.com/@kuokuo702) on how to fix this issue. It is recommended to directly purchase the HX711 Load Cell Amplifier produced by SparkFun, as it has better quality. Before fabricating the stringing machine head, use the drift test program taught in [EP. 3](https://youtu.be/pZT4ccE3bZk) to test the stability of this board. If you encounter any issues, you can leave a comment on the video.
 
 I tested the HX711 circuit board 
-![hx711](docs/hx711.jpg)
+![img_hx711](docs/img_hx711.jpg)
 
 ### NJ5 (YZC-133) Load Sensor
 
@@ -228,7 +228,7 @@ The load sensor doesn't necessarily have to be the NJ5 (YZC-133). I chose this m
 
 If the limit micro switches on the sliding table are too small, the buffer zone might be insufficient, causing the platform to move slightly after the switch is triggered and before it stops. A limited buffer zone might lead to the platform colliding with the micro switch body. Therefore, it is recommended to use larger micro switches or arc-arm micro switches, as these types of switches offer a larger buffer zone and are more suitable, If space allows, long-lever micro switches can also be used, ensuring only the lever part makes contact, avoiding pressure on the main body.
 
-![img_limit_switch](docs/img_limit_switch.png)
+![img_limit_switch](docs/img_limit_switch.jpg)
 
 ## Hardware Design Suggestions
 
@@ -236,14 +236,14 @@ If the limit micro switches on the sliding table are too small, the buffer zone 
 
 In theory, the closer the distance between the bead clip head and the table, the better, as it can extend the lifespan of the slider. If you are not using the Wise 2086 bead clip head, you can choose a shorter sensor design to reduce the distance between the two.
 
-![img_limit_switch](docs/img_head_table.png)
+![img_head_table](docs/img_head_table.jpg)
 
 ### Using a PCB Circuit Board
 
 You can start by assembling and testing the circuit on a breadboard. Once successful, transfer the circuit to a PCB or a hand-soldered board. It's not recommended to use a breadboard for long-term use as it may lead to some issues.
 
 ## Wiring Diagram
-![images2-2](docs/images2-2.png)
+![img_wiring_diagram](docs/img_wiring_diagram.jpg)
 
 > [!WARNING]
 > If the LED module is not specifically designed for use with the Raspberry Pi, you need to connect a 330-ohm resistor in series to protect the GPIO.
@@ -272,7 +272,10 @@ Use Thonny to save the following code files to the Raspberry Pico. The src folde
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
 
 ## TB6600 Stepper Motor Parameters
-![images2-3](docs/images2-3.png)
+
+It is recommended to use the fast mode unless the quality of the slide rail is poor, causing the motor to slip in fast mode. In that case, switch to the slow mode.
+
+![img_tb6600](docs/img_tb6600.jpg)
 
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/7eG5W6a95h0/0.jpg)](https://www.youtube.com/watch?v=7eG5W6a95h0)
@@ -280,17 +283,17 @@ Use Thonny to save the following code files to the Raspberry Pico. The src folde
 ## HX711 Load Cell Amplifier
 
 This project demands a higher standard for the HX711, and it is recommended to use the more stable quality provided by SparkFun.
-![images2-2](docs/Sparkfun_HX711.jpg)
+![img_sparkfun_hx711](docs/img_sparkfun_hx711.jpg)
 
 ### Enabling 80Hz
 
 The default setting for SparkFun's HX711 is 10Hz. To enable 80Hz, you'll need to cut the connection wire at the green arrow as indicated below.
-![images2-2](docs/Sparkfun_HX711_80Hz.jpg)
+![img_sparkfun_80hz](docs/img_sparkfun_80hz.jpg)
 
 ### Stability Testing
 
 The quality of each HX711 unit varies. Before installing the equipment, it's advisable to test the stability using a breadboard. A normally stable board should not drift by more than 1G over the course of a whole day.
-![images2-2](docs/Sparkfun_HX711_test.jpg)
+![img_hx711_test](docs/img_hx711_test.jpg)
 
 > [!NOTE]
 > The testing script is named TEST_hx711.py.
@@ -308,13 +311,13 @@ The quality of each HX711 unit varies. Before installing the equipment, it's adv
 
 Components can be freely arranged. The diagram below shows the positioning hole diagram for reference. Refer to the tutorial video for usage instructions.
 
-![EP4](docs/EP4_%E5%AE%9A%E4%BD%8D%E5%AD%94%E5%9C%96_Drawing%20for%20Positioning%20of%20Holes.png)
+![img_dph](docs/img_dph.jpg)
 
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/gZF2_dbtVzA/0.jpg)](https://www.youtube.com/watch?v=gZF2_dbtVzA)
 
 ## PCB Circuit Board
-![img_pcb](docs/img_pcb.png)
+![img_pcb](docs/img_pcb.jpg)
 
 Gerber PCB 1.5 [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-08-28.zip)
 
@@ -323,9 +326,9 @@ In version 1.5, the unused GPIOs are exposed to facilitate the development and u
 > [!WARNING]  
 > Version 1.3a has removed the 10K resistors for buttons and micro switches, as the Raspberry Pi Pico already includes built-in pull-down resistors for buttons. Using both may cause issues.
 
-![images2-3](docs/images2-4_3.svg)
+![img_btn](docs/img_btn.jpg)
 
-Gerber PCB BTN [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-06-09.zip)
+Gerber PCB BTN 1.2 [DOWNLOAD](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_BTN_2024-08-28.zip)
 
 > [!NOTE]
 > Please download the Gerber files and email them to an online (PCBWay, AliExpress, eBay) PCB manufacturer. Note that it is a single-layer, double-sided 1.6mm PCB with double-sided pads. Place the order once the manufacturer provides a quote.
@@ -556,7 +559,7 @@ The stringing pattern demo.
 [![stringing demo](https://img.youtube.com/vi/2QjT0JGiluk/0.jpg)](https://www.youtube.com/watch?v=2QjT0JGiluk)
 
 ## Sringing Pattern
-![images2-2](docs/pico_stringing_pattern.png)
+![images2-2](docs/img_pico_stringing_pattern.jpg)
 
 1. The short side is approximately 5 racket lengths, and the long side is approximately 8 racket lengths.
 2. Follow the Yonex stringing pattern for main strings, pulling the two outermost main strings together for tension.
@@ -564,7 +567,7 @@ The stringing pattern demo.
 4. Increasing the tension of the cross strings will help the racquet maintain its original shape after stringing. Due to variations in stringing machine and individual techniques, you can experiment to find the tension increment that minimizes deformation.
 
 ## Tension Of Each String
-![images2-2](docs/pico_stringing_tension.png)
+![images2-2](docs/img_pico_stringing_tension.jpg)
 
 1. The measured values were obtained after stringing with a 25lb tension, following a 10% pre-stretch, and allowing it to sit for 48 hours.
 2. The measurements represent relative tension reference values for each string, NOT the actual tension.
