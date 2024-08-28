@@ -26,7 +26,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 ### 特點
 - **0.05LB 高精度**
-  - 在 94Hz Sparkfun HX711 及軟體版本 V2.2 之後的快速模式
+  - 在 94Hz Sparkfun HX711 及軟體版本 V2.2 之後
+  - [參考影片](https://youtu.be/Hk7eMABAxT0)
 - **低功耗**
   - 僅需 DC12V3A 電源
 - **UPS不斷電**
@@ -38,8 +39,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
-| 可靠度測試         | 進行中   | 目前張緊次數 105,000+ (2024/08/27) [測試影片](https://youtu.be/4xY9-XTofpA)|
-| 速度切換選單       | 測試中   | 於 v2.7 上線        |
+| 可靠度測試         | 進行中   | 目前張緊次數 110,000+ (2024/08/28) [測試影片](https://youtu.be/4xY9-XTofpA)|
+| 9段速度切換        | 測試中   | 於 v2.7 上線        |
 | 適用網球拍         | 尚未開始 | 零件採購中                     |
 | 相容 Pico 2       | 尚未開始 |                      |
 
@@ -310,9 +311,11 @@ SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭
 > 相關製作影片 [![VIDEO](https://img.youtube.com/vi/gZF2_dbtVzA/0.jpg)](https://www.youtube.com/watch?v=gZF2_dbtVzA)
 
 ## PCB 電路板
-![images2-3](docs/images2-4.svg)
+![img_pcb](docs/img_pcb.png)
 
-Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-08-17.zip)
+Gerber PCB [製板文件下載](https://github.com/206cc/PicoBETH/tree/main/docs/Gerber_PicoBETH_PCB_2024-08-28.zip)
+
+在 1.5 版本中，將未使用的 GPIO 引出，方便後續自定義功能的開發與使用。
 
 > [!WARNING]
 > 1.3a 版本已移除按鍵與微控開關的 10K 電阻，因 Raspberry Pi Pico 已內建按鍵的下拉電阻，同時使用可能會有問題。
@@ -420,7 +423,7 @@ HX711 飄移的影響
 
 ### 出廠設定
 
-可不經由電腦重新建立 config.cfg 恢復出廠預設值(原設定檔更名為 config.cfg.bak)，恢復預設後請務必設定 FT 參數及重新校正 HX 張力參數。
+可不經由電腦重新建立 config.cfg 恢復出廠預設值(原設定檔更名為 config.cfg.bak)，恢復預設後請務必重新校正 HX 張力參數。
 
 使用方式：在開機時出現版本資訊時，長按離開鍵直到出現長音放開。
 
