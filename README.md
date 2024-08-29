@@ -27,7 +27,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 - **Tension timer**
 - **Tension counter and boot counter**
 - **Detailed recording of tensioning logs**
-- **Pull speed of the string(Switch on the TB6600 stepper motor driver)**
+- **Pull speed with 9-speed selection**
 
 ### Features
 - **0.05LB High Precision**
@@ -44,24 +44,23 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing | In Progress| Current tension count: 110,000+ (2024/08/28) [Test video](https://youtu.be/4xY9-XTofpA) |
-| 9-Speed Switch  | Under Testing | To be released in v2.7      |
+| Reliability Testing | In Progress| Current tension count: 115,000+ (2024/08/29) [Test video](https://youtu.be/4xY9-XTofpA) |
 | Tennis Racket Compatibility | Not Started | Parts procurement in progress          |
 | Pico 2 Compatibility | Not Started |                                             |
 
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
 
-Drop-weight stringing machine and modification parts
+**Drop-weight stringing machine and modification parts**
 ![img_parts](docs/img_parts.jpg)
 
-Modification completed (Under Development)
+**Modification completed (Under Development)**
 ![img_dev_machine](docs/img_dev_machine.jpg)
 
-Final machine [How to make step by step](https://youtu.be/uJVE3YFJtJA)
+**Final machine** [How to make step by step](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
 
-Stringing demonstration video
+**Stringing demonstration video**
 
 [![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
 
@@ -85,34 +84,32 @@ If the structure of your badminton stringing machine is not strong enough, I str
 
 ## User Interface
 
-The following demonstrates the user interface of version V2.60.
+The following demonstrates the user interface of version V2.70.
 
 ### Main Screen
 
 - Use the Exit button to start the timer function. Press it again to stop the timer, and a third time to reset the timer.
 
-![img_main](docs/img_main.png)
+![img_main](docs/img_main.jpg)
 
 1. Set LB
 2. Set KG
 3. Status Display
 4. PS = Pre-stretch Function, KT = Knotting Function
 5. Stringing Timer Time
-6. Current Tension Value (Grams)
+6. Constant-pull Status C = Enabled, M = Disabled
+7. Clip head movement speed: 1 = slowest, 9 = fastest
+8. Current Tension Value (Grams)
 
 ### Tension Setting Screen
 
 - Press the five-way button to enter the tension setting mode. The first press only displays the maximum tension with pre-stretch included. The second press begins adjusting the tension and pre-stretch.
 - The pre-stretch function (PS) and knotting function (KT) can be toggled using the up and down buttons. After using the knotting function, it will automatically switch back to the pre-stretch function.
 
-![img_lbset](docs/img_lbset.png)
+![img_lbset](docs/img_lbset.jpg)
 
-1. LB Setting, minimum unit 0.1 / Maximum tension including pre-stretch
-2. KG Setting, minimum unit 0.1 / Maximum tension including pre-stretch
-3. Status Display
-4. Pre-stretch/Knotting % Setting 0 ~ 30%, in increments of 5%
-5. Stringing Timer Time
-6. Current Tension Value (Grams)
+1. Maximum tension including pre-stretch
+2. Maximum tension including pre-stretch
 
 ### Tensioning Screen
 
@@ -120,28 +117,30 @@ The following demonstrates the user interface of version V2.60.
 - Pressing the middle button of the five-way button will disable the constant-pull system. Pressing the middle button again will re-enable the constant-pull system.
 - Pressing the up or down buttons of the five-way button once will increase or decrease the tension by 0.5LB.
 
-![img_tensioning](docs/img_tensioning.png)
+![img_tensioning](docs/img_tensioning.jpg)
 
 1. Set Tension
 2. Current Tension
 3. A countdown starts when the set tension is reached
 4. Constant-pull Status C = Enabled, M = Disabled
-5. Difference from Set Tension in Grams, displays +++ if over 99G, displays --- if below 99G
+5. Clip head movement speed: 1 = slowest, 9 = fastest
+6. Difference from Set Tension in Grams, displays +++ if over 99G, displays --- if below 99G
 
 ### Settings Screen
 
-![img_setting](docs/img_setting.png)
+![img_setting](docs/img_setting.jpg)
 
-1. UN: Set LB or KG on the main screen.
+1. SP: Clip head movement speed: 1 = slowest, 9 = fastest
 2. CP: Constant-pull On/Off
 3. BZ: Buzzer On/Off
-4. HX: HX711 Tension Sensor Calibration (see final settings section for details)
-5. I: System Information
-6. T: Total Tension Count/Log Record
+4. UN: Set LB or KG on the main screen.
+5. HX: HX711 Tension Sensor Calibration (see final settings section for details)
+6. I: System Information
+7. T: Total Tension Count/Log Record
 
 ### Detailed Log of Tensioning
 
-![img_tslog](docs/img_tslog.png)
+![img_tslog](docs/img_tslog.jpg)
 
 1. LOG Number
 2. Tensioning Information for this Log, Set Value/Maximum Value
@@ -153,14 +152,11 @@ The following demonstrates the user interface of version V2.60.
 8. Tensioning Count
 
 > [!NOTE]
-> By default, 1-50 log entries are displayed. To adjust this, modify the LOG_MAX parameter.
-
-> [!WARNING]
-> Do not set the LOG_MAX parameter too high, as it may cause memory shortages.
+> By default, 1-50 log entries are displayed. To adjust this, modify the LOG_MAX parameter. Be cautious not to set the LOG_MAX parameter too high, as it may cause memory shortages.
 
 ### System Information
 
-![img_sysinfo](docs/img_sysinfo.png)
+![img_sysinfo](docs/img_sysinfo.jpg)
 
 1. Software Version and Date
 2. HX711 Tension Amplifier Info - Drift Value/Tension Baseline Value/RATE Hz
@@ -262,11 +258,8 @@ Use Thonny to save the following code files to the Raspberry Pico. The src folde
 3. src\lcd_api.py
 4. src\pico_i2c_lcd.py
 
-> [!NOTE]
-> Thanks to [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) for providing the hx711 library for Pico.
-
-> [!NOTE]
-> Thanks to [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) for providing the 2004 LCD library for Pico.
+> [!WARNING]  
+> The three library files `hx711.py`, `lcd_api.py`, and `pico_i2c_lcd.py` must be placed in the `src` folder.
 
 > [!NOTE]
 > Related crafting videos [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
@@ -363,27 +356,12 @@ Reference video
 
 [![DEMO](https://img.youtube.com/vi/nrXwF6YsGyc/0.jpg)](https://www.youtube.com/watch?v=nrXwF6YsGyc)
 
-
-Calibration steps for versions prior to V2.12:
-
-Calibration method:
-1. Temporarily disable the Constant-Pull function on the settings page.
-2. Set the HX parameter to 20.00 on the settings page.
-3. Return to the main menu and set the tension to 20.3 lb with a Pre-Stretch of 10%.
-4. Attach one end of the external tension gauge to the stringing machine and the other end to the badminton string.
-5. Start tensioning, and when the LCD displays below 20.0 lb(19.9), note down the reading on the external tension gauge.
-6. Enter the recorded tension gauge reading on the settings page and re-enable the constant-pull function.
-
-Reference video
-
-[![Reference video](https://img.youtube.com/vi/r7JQPvqK3No/0.jpg)](https://www.youtube.com/watch?v=r7JQPvqK3No)
-
 > [!IMPORTANT]
 > Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
 
 ## Tension Drift Test
 
-After completing the tension calibration, check the degree of drift in the tension. The normal drift should be within approximately ±0.05LB, as shown in the video below. After passing the test, use the old racquet stringer to test a few times. If there are no issues, you can officially start using it.
+After completing the tension calibration, check the drift during tensioning. The normal drift should be within ±0.05LB, as demonstrated in the video below. Once this test is passed, you can proceed with the final reliability test.
 
 Reference video
 
@@ -404,7 +382,7 @@ The system will automatically cycle through tensioning from 20LB to 30LB, with a
 It is recommended to test at least 1000 tensioning cycles (approximately 4 hours) without any abnormal interruptions. A properly assembled machine should not experience any interruptions during this period.
 
 > [!WARNING]
-> Do not run this version directly in Thonny. Please write the program to the Raspberry Pi Pico and run it independently.
+> Do not run the reliability test directly in Thonny. Instead, write the program to the Raspberry Pi Pico and execute it independently.
 
 Reference video
 
@@ -518,7 +496,7 @@ A: It is recommended to first watch EP.1 ~ EP.3 of the [project compilation](htt
 A: In theory, you can switch to DM542C, but the driving method may need to be modified. For example, parameters such as MOTO_FORW_W, MOTO_BACK_W for controlling forward and reverse in the code, and MOTO_SPEED_V1, MOTO_SPEED_V2 for controlling speed may need to be adjusted. It is recommended to first modify the example program in [EP.2](https://youtu.be/7eG5W6a95h0) to ensure that this driver can drive the motor normally and that there is no abnormal noise from the slide during movement before transplanting it into the main program. Although I haven't tried it myself, there have been successful ports by other branch developers, which you can refer to in the [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer) project.
 
 ## Q: My HX711 RATE is only 10Hz, not 80Hz. Can I still use it?
-A: No, you cannot. Initially, this project was also made with a sampling frequency of 10Hz, which can be used normally. However, after testing, it was found that a sampling frequency of 80Hz provides more precise, delicate, and faster response control of tension (the time difference between detecting the specified tension and instructing the Raspberry Pico to stop the motor rotation at 10Hz is about 1.3 times that of 80Hz). Therefore, in version 1.96, I added a check for the 80Hz action.
+A: No, you cannot. Initially, this project was also made with a sampling frequency of 10Hz, which can be used normally. However, after testing, it was found that a sampling frequency of 80Hz provides more precise, delicate, and faster response control of tension. Therefore, in version 1.96, I added a check for the 80Hz action.
 
 ## Q: What is drift in HX711?
 A: You can refer to the test program in [EP.3](https://youtu.be/pZT4ccE3bZk). After testing, the normal drift value of HX711 at 80Hz is about 0.5 ~ 1 gram. Therefore, in version 1.96, I added a drift value sampling during startup for 1 second. If it exceeds 1 gram, it cannot be used. If the check passes, generally speaking, the real-time tension displayed in the lower right corner of the LCD within -10 ~ 10 grams during standby is normal linear drift.
@@ -548,7 +526,16 @@ A: Please turn to the back and try adjusting the blue variable resistor to chang
 A: Please check if you mistakenly purchased the Active Low Trigger version. The correct version should be the Active High Trigger.
 
 # Conclusion
-If you have any questions about making, please leave a comment in the YouTube video.
+If you encounter any issues during the production process, feel free to leave a comment on the YouTube tutorial video. If you complete the project, you're also very welcome to share photos of your finished product in the GitHub discussions.
+
+# Acknowledgements
+
+- [HX711 Driver Module for Raspberry Pi Pico](https://github.com/endail/hx711-pico-mpy)
+- [2004 I2C LCD Module for Raspberry Pi Pico](https://github.com/T-622/RPI-PICO-I2C-LCD)
+
+# License
+
+PicoBETH is licensed under Apache 2.0
 
 # Pico Sringing Pattern
 
