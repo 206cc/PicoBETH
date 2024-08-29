@@ -22,7 +22,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 - **張力計時器**
 - **張力計數器和開機計數器**
 - **張緊LOG的詳細記錄**
-- **二段速度設定(在TB6600馬達控制器上切換)**
+- **9段速度切換**
 
 ### 特點
 - **0.05LB 高精度**
@@ -39,25 +39,24 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
-| 可靠度測試         | 進行中   | 目前張緊次數 110,000+ (2024/08/28) [測試影片](https://youtu.be/4xY9-XTofpA)|
-| 9段速度切換        | 測試中   | 於 v2.7 上線        |
+| 可靠度測試         | 進行中   | 目前張緊次數 115,000+ (2024/08/29) [測試影片](https://youtu.be/4xY9-XTofpA)|
 | 適用網球拍         | 尚未開始 | 零件採購中                     |
 | 相容 Pico 2       | 尚未開始 |                      |
 
 
 ## 原由
-一年前因為公司社團關係，開始打羽毛球，球技不怎麼好卻迷上的穿線，買了一台重錘式穿線機，原本想再購買電子拉線機頭，但後來想想我可以用我會的知識，在 Raspberry Pico 上使用張力傳感器、幾個微動開關、按鈕製作了這個專案。
+一年前，由於參加公司社團，我開始接觸羽毛球。雖然球技平平，但我對穿線產生了濃厚的興趣。當時購買了一台重錘式穿線機，原本打算再購買一個電子拉線機頭，但後來我決定利用自己掌握的知識，結合 Raspberry Pico、張力傳感器、微動開關和按鈕來製作這個專案。
 
-重錘式穿線機與改裝零件
+**重錘式穿線機與改裝零件**
 ![img_parts](docs/img_parts.jpg)
 
-改裝完成（開發中）
+**改裝完成（開發中）**
 ![img_dev_machine](docs/img_dev_machine.jpg)
 
-正式機 [製作合集](https://youtu.be/uJVE3YFJtJA)
+**正式機** [製作合集](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
 
-穿線展示影片
+**穿線展示影片**
 
 [![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
 
@@ -65,7 +64,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 > 如果你沒有穿線機，可以參考此專案做一個穿線機台 [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer)
 
 > [!NOTE]
-> 如果你目前正在選擇手動穿線機，我建議購買有六點固定和底座夾具的重錘式穿線機。重錘式有一定的恆拉效果，穿出來的球拍與電子機穿線的球拍不會有太大差別。在完成這個項目之前，可以先使用重錘熟悉穿線操作。未來如果電子穿線頭發生故障，也可以很快速的裝回重錘。
+> 如果你現在正在考慮選擇手動穿線機，我建議選購具備六點固定和底座夾具的重錘式穿線機。重錘式機型具備一定的恆拉效果，穿出的球拍張力與電子穿線機相比差異不大。在完成這個專案之前，你可以先使用重錘式機器來熟悉穿線操作。將來如果電子穿線頭出現故障，你也能迅速恢復使用重錘式機器。
 
 ## 警告
 如果你的羽毛球穿線機結構不夠堅固，我非常不建議繼續這個專案。一個不堅固的固定平台在張緊時會發生形變，導致球拍框架變圓、張緊度降低。最終，機器會補償張力，形成惡性循環，直到羽毛球拍斷裂。
@@ -81,63 +80,63 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 ## 操作介面
 
-以下展示 V2.60 版本的操作介面
+以下展示 V2.70 版本的操作介面
 
 ### 主畫面
 
-- 使用離開鍵啟用計時功能，再按一下停止計時，按第三下計時器歸零。
+- 按下離開鍵以啟用計時功能，再次按下以停止計時，第三次按下時計時器將歸零。
 
-![img_main](docs/img_main.png)
+![img_main](docs/img_main.jpg)
 
 1. 設定磅數
 2. 設定公斤
 3. 狀態顯示
 4. PS=預拉功能 KT=打結功能
 5. 穿線計時器時間
-6. 目前張力值(公克)
+6. 恆拉狀態 C=啟用 M=停用
+7. 珠夾頭移動速度 1=最慢 9=最快
+8. 目前張力值(公克)
 
 ### 張力設定畫面
 
-- 按下五向鍵會進入張力設定模式，第一下只會顯示含預拉的最大張力，第二下開始調整張力及預拉
+- 按下五向鍵進入張力設定模式，第一次按下時僅顯示包含預拉的最大張力，第二次按下則開始調整張力和預拉設定。
 - 預拉功能(PS)及打結功能(KT)使用上下鍵切換，打結功能用完後會自動切回預拉功能。
 
-![img_lbset](docs/img_lbset.png)
+![img_lbset](docs/img_lbset.jpg)
 
-1. 磅數設定，最小單位 0.1 / 含預拉的最大張力
-2. 公斤設定，最小單位 0.1 / 含預拉的最大張力
-3. 狀態顯示
-4. 預拉/打結%設定 0 ~ 30%，5% 一個單位
-5. 穿線計時器時間
-6. 目前張力值(公克)
+1. 磅數設定，含預拉的最大張力
+2. 公斤設定，含預拉的最大張力
 
 ### 張緊中畫面
 
-- 到達設定張力時進入恆拉模式，張力不足增加張力、過高減少張力，直到按下珠夾頭上的按鍵或離開按鍵結束張緊模式。
-- 按下五向鍵的中鍵會停用恆拉系統，再一次按下中鍵後重新啟用恆拉系統。
+- 當達到設定的張力時，會進入恆拉模式；如果張力不足，系統會自動增加張力，張力過高則會自動減少張力。這個過程會持續，直到你按下珠夾頭上的按鍵或離開鍵來結束張緊模式。
+- 按下五向鍵的中鍵會停用恆拉系統，再次按下中鍵即可重新啟用恆拉系統。。
 - 按下五向鍵的上下鍵一次會加減 0.5LB
 
-![img_tensioning](docs/img_tensioning.png)
+![img_tensioning](docs/img_tensioning.jpg)
 
 1. 設定張力
 2. 目前張力
 3. 達到指定張力後會開始出現計算秒數
 4. 恆拉狀態 C=啟用 M=停用
-5. 與設定張力相差公克數，超過99G顯示 +++ ，低於 99G 顯示 ---
+5. 珠夾頭移動速度 1=最慢 9=最快
+6. 與設定張力相差公克數，超過99G顯示 +++ ，低於 99G 顯示 ---
 
 ### 設定畫面
 
-![img_setting](docs/img_setting.png)
+![img_setting](docs/img_setting.jpg)
 
-1. UN: 在主畫面中使用磅或公斤進行設定。
+1. SP: 珠夾頭移動速度 1=最慢 9=最快
 2. CP: 恆拉開關
 3. BZ: 蜂鳴器開關
-4. HX: HX711 的張力傳感器校正(詳見最後設定章節)
-5. I: 系統資訊
-6. T: 總張緊計數/Log記錄
+4. UN: 在主畫面中使用磅或公斤進行設定。
+5. HX: HX711 的張力傳感器校正(詳見最後設定章節)
+6. I: 系統資訊
+7. T: 總張緊計數/Log記錄
 
 ### 張緊LOG的詳細記錄
 
-![img_tslog](docs/img_tslog.png)
+![img_tslog](docs/img_tslog.jpg)
 
 1. LOG編號
 2. 此次張緊資訊 設定值/最大值
@@ -149,18 +148,15 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 8. 第幾次張緊數
 
 > [!NOTE]
-> 預設顯示 1-50 筆 LOG 記錄，如要需調整請修改 LOG_MAX 參數
-
-> [!WARNING]
-> LOG_MAX 參數請勿設定過大，會導致記憶體不足
+> 預設顯示 1-50 筆 LOG 記錄，如要需調整請修改 LOG_MAX 參數，請勿設定過大，會導致記憶體不足
 
 ### 系統資訊
 
-![img_sysinfo](docs/img_sysinfo.png)
+![img_sysinfo](docs/img_sysinfo.jpg)
 
 1. 軟體版本及日期
 2. HX711張力放大器參數 開機飄移值/張力基準值/取樣頻率
-3. 珠夾頭移動速度，開機時 全行程步數/移動毫秒 越高越快
+3. 珠夾頭移動速度，開機時的 全行程步數/移動毫秒 越高越快
 4. 步進馬達轉速，越低越快
 5. 張力參數
 6. 開機次數
@@ -205,7 +201,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 
 ### TB6600 步進電機驅動器
 
-TB6600 是一款小型、經濟型的步進電機驅動器，用於 42、57型步進電機，在網路商店中，它非常的便宜，建議買標註有 "升級版"、"加強版" 的 TB6600，有一些非常便宜的 TB6600 用起來會有明顯的電流聲，我不知道會有什麼未知的問題，也沒有長時間使用過此廉價版本的 TB6600。
+TB6600 是一款小型且經濟實惠的步進電機驅動器，適用於 42 型和 57 型步進電機。在網路商店中，這款驅動器的價格相對便宜。建議選購標註有‘升級版’或‘加強版’的 TB6600，因為某些較便宜的版本在使用過程中可能會產生明顯的電流聲。由於我尚未長時間使用這些廉價版本的 TB6600，因此無法確定其可能存在的潛在問題。
 
 ### HX711 張力感應加大器
 
@@ -216,7 +212,7 @@ HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度�
 
 ### NJ5 (YZC-133) 張力傳感器
 
-張力傳感器不一定非得是NJ5（YZC-133），我選擇這個型號是因為它可以很容易地安裝在Wise 2086珠夾頭上。如果你使用的是其他夾具，還有許多不同的樣式可供選擇，只需注意選擇20KG的型號。請參考以下的SparkFun HX711指南，裡面有詳細的解說。
+張力傳感器不一定必須使用 NJ5（YZC-133）。我之所以選擇這個型號，是因為它能夠輕鬆安裝在 Wise 2086 珠夾頭上。如果你使用的是其他夾具，還有許多不同的張力傳感器可供選擇，只需確保選擇承重為 20KG 的型號即可。建議參考以下的 SparkFun HX711 指南，其中提供了詳細的說明。
 
 [https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all](https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all)
 
@@ -259,11 +255,8 @@ HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度�
 3. src\lcd_api.py
 4. src\pico_i2c_lcd.py
 
-> [!NOTE]
-> 感謝 [https://github.com/endail/hx711-pico-mpy](https://github.com/endail/hx711-pico-mpy) 提供 hx711 for pico 的函式庫
-
-> [!NOTE]
-> 感謝 [https://github.com/T-622/RPI-PICO-I2C-LCD](https://github.com/T-622/RPI-PICO-I2C-LCD) 提供 2004 LCD for pico 的函式庫
+> [!WARNING]
+> 三個函式庫檔案 hx711.py lcd_api.py pico_i2c_lcd.py 必須放在 src 資料夾下。
 
 > [!NOTE]
 > 相關製作影片 [![VIDEO](https://img.youtube.com/vi/oMgVq6rkX_Q/0.jpg)](https://www.youtube.com/watch?v=oMgVq6rkX_Q)
@@ -280,7 +273,7 @@ HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度�
 ## HX711 張力感測器放大器
 
 此專案對於HX711的要求較高，我測試過許多廠商的 HX711機板，建議使用 SparkFun 品質較為穩定。
-![images2-2](docs/Sparkfun_HX711.jpg)
+![img_sparkfun_hx711](docs/img_sparkfun_hx711.jpg)
 
 ### 開啟 80Hz
 
@@ -306,7 +299,7 @@ SparkFun 的 HX711 RATE 預設是 10Hz，需使用美工刀將以下綠色箭頭
 
 ## 結構佈局
 
-零件佈局自由發揮，下圖是供參考佈局的定位孔圖，如何使用請參閱製作影片。
+零件的佈局可以根據需要自由調整，下圖顯示的是供參考的定位孔圖。具體的使用方法請參閱製作影片。
 
 ![img_dph](docs/img_dph.jpg)
 
@@ -361,24 +354,12 @@ HX711 張力感應器校正系數，第一次使用或有更換張力傳感器�
 
 [![DEMO](https://img.youtube.com/vi/_RFXOTm-FiE/0.jpg)](https://www.youtube.com/watch?v=_RFXOTm-FiE)
 
-V2.12 之前版本的校正步驟：
-1. 至設定頁面暫時關閉自動恆拉功能。
-2. 至設定頁面將 HX 參數設為 20.00。
-3. 跳回主選單設定拉力為 20.3 磅，預拉 10%。
-4. 將外接式張力計，一端綁在拉線機上，另一端綁上羽毛球線。
-5. 開始拉線，當 LCD 顯示低於 20.0 磅時(19.9)，記下外接式張力計顯示數值。
-6. 至設定頁面上填入剛記下張力計的數值，並重新開啟自動恆拉功能。
-
-參考影片 
-
-[![DEMO](https://img.youtube.com/vi/r7JQPvqK3No/0.jpg)](https://www.youtube.com/watch?v=r7JQPvqK3No)
-
 > [!IMPORTANT]
-> 非常重要，如不做此校正，實際張力會與 LCD 上的張力會有誤差
+> 非常重要：如果不進行此校正，實際張力與 LCD 顯示的張力會存在誤差。
 
 ## 張緊飄移測試
 
-完成張力校正後檢驗張緊時的飄移程度，正常的飄移應該如下方影片展示的一樣約在 ±0.05LB 之內，通過測試後先使用舊拍試穿幾次，沒問題後即可正式開始使用。
+完成張力校正後檢驗張緊時的飄移程度，正常的飄移應該如下方影片展示的一樣約在 ±0.05LB 之內，通過測試後可進行最後的可靠度測試。
 
 參考影片
 
@@ -403,7 +384,7 @@ HX711 飄移的影響
 建議至少測試 1000次張緊(約4小時)，期間不能有任何的異常中斷，組裝正常的機器是不會出現異常中斷的情況。
 
 > [!WARNING]
-> 請勿在 Thonny 上直接執行此版本，請將程式寫入 Raspberry Pi Pico 後單機執行。
+> 請勿在 Thonny 上直接執行可靠度測試，請將程式寫入 Raspberry Pi Pico 後單機執行。
 
 參考影片
 
@@ -517,7 +498,7 @@ A: 建議先看我 YouTube 頻道的 [製作合集](https://www.youtube.com/play
 A: 換成 DM542C 理論上可以，但驅動方式可能需要修改，例如程式碼中控制正轉逆轉的 MOTO_FORW_W、MOTO_BACK_W 參數、控制速度的 MOTO_SPEED_V1、MOTO_SPEED_V2 參數，建議先修改 [EP.2](https://youtu.be/7eG5W6a95h0) 中的範例程式中可以使用此驅動器正常驅動馬達，並且確保滑台在移動的過程中沒有異音後再移植至主程式中。我沒有試過，但已經有別的分支開發者移植成功，可以參考 [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer) 專案
 
 ## Q: 我的 HX711 RATE 只有 10Hz 沒有 80Hz 可以使用嗎？
-A: 不行，此專案一開始也是用 10Hz 的取樣頻率製作，是能正常使用，但經過後來測試，80Hz 的取樣頻率對於張力的控制會更加的精準、細膩及有較快的反應速度(10Hz 在偵測到指定的張力時到 Raspberry Pico 下指令停止馬達轉動時的時間差是 80Hz 的約 1.3倍)，所以在 1.96 版本中我加入檢查 80Hz 的動作。
+A: 不行，此專案一開始也是用 10Hz 的取樣頻率製作，是能正常使用，但經過後來測試，80Hz 的取樣頻率對於張力的控制會更加的精準、細膩及有較快的反應速度，所以在 1.96 版本中我加入檢查 80Hz 的動作。
 
 ## Q: 什麼是 HX711 的飄移？
 A: 可以參考 [EP.3](https://youtu.be/pZT4ccE3bZk) 中的測試程式，經過測試，正常的 HX711 在 80Hz 下的飄移值約在 0.5 ~ 1公克以內，所以我在 1.96版本後加入開機時取樣 1秒中的飄移值，如果超過 1公克就無法使用，如果通過檢查，一般來說待機時的 LCD右下角的即時張力顯示在 -10 ~ 10公克以內的線性飄移是正常的。
@@ -547,7 +528,16 @@ A: 請翻到背面試著旋轉調整LCD對比度的藍色可變電阻，以及�
 A: 請確認是否錯誤的買到低平電觸發的版本(Active Low Trigger)，正確的版本是高平電觸發(Active High Trigger)。
 
 # 最後
-如果有製作上的問題，可以直接在 youtube 製作影片下留言。
+如果有製作上的問題，可以直接在 youtube 製作影片下留言，如果您完成了專案，非常歡迎在討論區留下你完成品的照片。
+
+## 致謝
+
+- [HX711 驅動模組適用於 Raspberry Pi Pico](https://github.com/endail/hx711-pico-mpy)
+- [2004 I2C 液晶顯示模組適用於 Raspberry Pi Pico](https://github.com/T-622/RPI-PICO-I2C-LCD)
+
+## License
+
+PicoBETH is licensed under Apache 2.0
 
 # Pico 線譜
 
