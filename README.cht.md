@@ -216,13 +216,13 @@ HX711 是一款簡單易用的稱重傳感器放大器，通常用於高精度�
 
 [https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all](https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all)
 
+## 硬體設計建議
+
 ### 滑台上的前後限位SWITCH
 
 滑動台上的前後限位微動開關如果尺寸過小，可能導致緩衝區不足，從而在觸發開關後到平台完全停止前，平台仍會稍微移動。過小的緩衝區可能導致平台撞擊到微動開關的本體。因此，建議使用尺寸較大的微動開關或弧形臂微動開關，這些開關具有較大的緩衝區，更為合適。如果空間允許，也可以使用長臂微動開關，僅接觸長臂部分，避免本體受力。
 
 ![img_limit_switch](docs/img_limit_switch.jpg)
-
-## 硬體設計建議
 
 ### 珠夾頭與平台間的距離
 
