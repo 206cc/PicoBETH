@@ -220,13 +220,13 @@ The load sensor doesn't necessarily have to be the NJ5 (YZC-133). I chose this m
 
 [https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all](https://learn.sparkfun.com/tutorials/load-cell-amplifier-hx711-breakout-hookup-guide/all)
 
+## Hardware Design Suggestions
+
 ### Front and Rear Limit Switches on sliding table
 
 If the limit micro switches on the sliding table are too small, the buffer zone might be insufficient, causing the platform to move slightly after the switch is triggered and before it stops. A limited buffer zone might lead to the platform colliding with the micro switch body. Therefore, it is recommended to use larger micro switches or arc-arm micro switches, as these types of switches offer a larger buffer zone and are more suitable, If space allows, long-lever micro switches can also be used, ensuring only the lever part makes contact, avoiding pressure on the main body.
 
 ![img_limit_switch](docs/img_limit_switch.jpg)
-
-## Hardware Design Suggestions
 
 ### Distance Between the Bead Clip Head and the table
 
