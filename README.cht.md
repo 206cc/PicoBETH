@@ -530,12 +530,12 @@ A: 請確認是否錯誤的買到低平電觸發的版本(Active Low Trigger)，
 # 最後
 如果有製作上的問題，可以直接在 youtube 製作影片下留言，如果您完成了專案，非常歡迎在討論區留下你完成品的照片。
 
-## 致謝
+# 致謝
 
 - [HX711 驅動模組適用於 Raspberry Pi Pico](https://github.com/endail/hx711-pico-mpy)
 - [2004 I2C 液晶顯示模組適用於 Raspberry Pi Pico](https://github.com/T-622/RPI-PICO-I2C-LCD)
 
-## License
+# License
 
 PicoBETH is licensed under Apache 2.0
 
