@@ -1,4 +1,4 @@
-# TB6600&MOTOR TEST v1.2 https://github.com/206cc/PicoBETH
+# TB6600&MOTOR TEST v1.3 https://github.com/206cc/PicoBETH
 # YouTube Example https://youtu.be/7eG5W6a95h0
 
 # This program is a standalone test to check if the TB6600 stepper motor driver and the 57 stepper motor are functioning properly.
@@ -13,8 +13,10 @@
 # TB6600 B-   <-> MOTOR Blue wire (As indicated on the actual label)
 # TB6600 VCC  <-> 12V3A +
 # TB6600 GND  <-> 12V3A -
+#
+# Set To Fast Mode
 # TB6600 SW1  SW2  SW3  SW4  SW5  SW6 
-#        OFF  ON   OFF  OFF  OFF  OFF
+#        ON   OFF  OFF  OFF  OFF  OFF
 #
 # Test Results: The 57 stepper motor will rotate one full turn clockwise and then one full turn counterclockwise
 
@@ -30,8 +32,10 @@
 # TB6600 B-   <-> MOTOR BLUE 藍線 (依實際標示為準)
 # TB6600 VCC  <-> 12V3A +
 # TB6600 GND  <-> 12V3A -
+#
+# 設定成快速模式 
 # TB6600 SW1  SW2  SW3  SW4  SW5  SW6 
-#        OFF  ON   OFF  OFF  OFF  OFF
+#        ON   OFF  OFF  OFF  OFF  OFF
 #
 # 測試結果: 57步進馬達會正轉一圈後再逆轉一圈
 
