@@ -34,17 +34,20 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
   - Achieved with the Sparkfun HX711 at 94Hz and software version V2.2 and later.
   - [DEMO Vides](https://youtu.be/Hk7eMABAxT0)
 - **Low Power Consumption**
-  - Uses a DC12V3A power supply.
+  - Uses a DC19V4A power supply. *
 - **Real-time UPS Redundancy (Uninterruptible Power Supply)**
-  - Uses 3 x 18650 batteries to ensure at least one complete racquet stringing.
+  - Uses 4 x 18650 batteries to ensure at least one complete racquet stringing.
 - **Compact and Space-Saving**
   - Dimensions are approximately 38(L) x 15(W) x 9(H) CM.(excluding clamp head)
+
+> [!CAUTION]
+> In the **fast mode** after version 2.70, when the speed is set to **L7 or higher** and the **tension exceeds 30LB**, the original 12V3A power supply may be insufficient, potentially causing the motor to slip. Therefore, this version has been upgraded to a 19V4A power supply. If you also plan to switch to a 19V power supply, please ensure that your 5V power converter can handle a 19V input voltage. Additionally, if you are using an external UPS, it should also be upgraded to a version that can accept 19V input and output.
 
 ## Development Project Plan
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing | In Progress| Current tension count: 115,000+ (2024/08/29) [Test video](https://youtu.be/4xY9-XTofpA) |
+| Reliability Testing | In Progress| Current tension count: 125,000+ (2024/08/30) [Test video](https://youtu.be/4xY9-XTofpA) |
 | Tennis Racket Compatibility | Not Started | Parts procurement in progress          |
 | Pico 2 Compatibility | Not Started |                                             |
 
