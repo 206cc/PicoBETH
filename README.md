@@ -14,7 +14,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 ## Current Main Functions and Features
 
-[![DEMO VIDEO](https://img.youtube.com/vi/s5no9YdeNnc/0.jpg)](https://www.youtube.com/watch?v=s5no9YdeNnc)
+[![DEMO VIDEO](https://img.youtube.com/vi/pWgD_OSyc1g/0.jpg)](https://www.youtube.com/watch?v=pWgD_OSyc1g)
 
 ### Functions
 - **LB/KG display and setting**
