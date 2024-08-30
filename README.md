@@ -36,7 +36,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 - **Low Power Consumption**
   - Uses a DC19V4A power supply. *
 - **Real-time UPS Redundancy (Uninterruptible Power Supply)**
-  - Uses 4 x 18650 batteries to ensure at least one complete racquet stringing.
+  - Uses 6 x 18650 batteries to ensure at least one complete racquet stringing.
 - **Compact and Space-Saving**
   - Dimensions are approximately 38(L) x 15(W) x 9(H) CM.(excluding clamp head)
 
