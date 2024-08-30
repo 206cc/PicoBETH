@@ -357,7 +357,7 @@ Calibration Steps:
 
 Reference video
 
-[![DEMO](https://img.youtube.com/vi/nrXwF6YsGyc/0.jpg)](https://www.youtube.com/watch?v=nrXwF6YsGyc)
+[![DEMO](https://img.youtube.com/vi/WMFJQU_TSFk/0.jpg)](https://www.youtube.com/watch?v=WMFJQU_TSFk)
 
 > [!IMPORTANT]
 > Necessary! If you skip this calibration step, the tension displayed on the LCD will not match the actual tension.
