@@ -46,7 +46,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) 是一個開源項�
 | 適用網球拍         | 尚未開始 | 零件採購中                     |
 | 相容 Pico 2       | 尚未開始 |                      |
 
-### 已知問題
+## 已知問題
 - 如果在L9速度下偶爾出現馬達打滑的情況，請降低速度。
 
 ## 原由
