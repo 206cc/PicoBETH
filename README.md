@@ -47,9 +47,12 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing | In Progress| Current tension count: 125,000+ (2024/08/30) [Test video](https://youtu.be/4xY9-XTofpA) |
+| Reliability Testing | In Progress| Current tension count: 145,000+ (2024/09/02) [Test video](https://youtu.be/4xY9-XTofpA) |
 | Tennis Racket Compatibility | Not Started | Parts procurement in progress          |
 | Pico 2 Compatibility | Not Started |                                             |
+
+## Known issues
+- If occasional motor slippage occurs at L9 speed, please reduce the speed.
 
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
