@@ -47,8 +47,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing | In Progress| Current tension count: 145,000+ (2024/09/02) [Test video](https://youtu.be/4xY9-XTofpA) |
-| Tennis Racket Compatibility | Not Started | Parts procurement in progress          |
+| Reliability Testing | In Progress| Current tension count: 155,000+ (2024/09/03) [Test video](https://youtu.be/4xY9-XTofpA) |
+| Tennis Racket Compatibility | Reliability Testing | The production method will be published after the reliability test reaches 100,000 tension cycles.          |
 | Pico 2 Compatibility | Not Started |                                             |
 
 ## Known issues
@@ -530,6 +530,12 @@ A: Please turn to the back and try adjusting the blue variable resistor to chang
 
 ## Q: The stringing function works fine, but the buzzer keeps sounding continuously.
 A: Please check if you mistakenly purchased the Active Low Trigger version. The correct version should be the Active High Trigger.
+
+## Q: The newly assembled machine cannot perform HX tension calibration and directly causes string breakage.
+A: Please check if the 20KG NJ5 sensor (YZC-133) is installed. If a 50KG version is installed, the tension during calibration will fall around 48LB, making proper calibration impossible.
+
+## Q: The motor sometimes slips.
+A: If slippage occurs when reaching a certain tension, try replacing the power supply with one that has a higher amperage, such as a 19V 4A or higher. The TB6600 supports a wide voltage range, from DC 9V to 35V, so theoretically, any power supply with 19V and 4A or higher should be sufficient. Additionally, ensure that the 5V converter can handle the input voltage and provide a stable 5V output. If the issue persists, please describe the situation in detail in the discussion area, and I can help analyze the cause.
 
 # Conclusion
 If you encounter any issues during the production process, feel free to leave a comment on the YouTube tutorial video. If you complete the project, you're also very welcome to share photos of your finished product in the GitHub discussions.
