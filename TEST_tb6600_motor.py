@@ -11,8 +11,8 @@
 # TB6600 A-   <-> MOTOR Green wire (As indicated on the actual label)
 # TB6600 B+   <-> MOTOR Yellow wire (As indicated on the actual label)
 # TB6600 B-   <-> MOTOR Blue wire (As indicated on the actual label)
-# TB6600 VCC  <-> 12V3A +
-# TB6600 GND  <-> 12V3A -
+# TB6600 VCC  <-> 19V3A +
+# TB6600 GND  <-> 19V3A -
 #
 # Set To Fast Mode
 # TB6600 SW1  SW2  SW3  SW4  SW5  SW6 
@@ -30,8 +30,8 @@
 # TB6600 A-   <-> MOTOR GREEN 綠線 (依實際標示為準)
 # TB6600 B+   <-> MOTOR YELLOW 黃線 (依實際標示為準)
 # TB6600 B-   <-> MOTOR BLUE 藍線 (依實際標示為準)
-# TB6600 VCC  <-> 12V3A +
-# TB6600 GND  <-> 12V3A -
+# TB6600 VCC  <-> 19V3A +
+# TB6600 GND  <-> 19V3A -
 #
 # 設定成快速模式 
 # TB6600 SW1  SW2  SW3  SW4  SW5  SW6 
