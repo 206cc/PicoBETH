@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.70"
-VERDATE = "2024-08-29"
+VERSION = "2.71"
+VERDATE = "2024-09-05"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -40,7 +40,7 @@ PS_MAX = 30                  # Maximum percentage in Pre-Strech
                              # 設定預拉的最高%
 KNOT_RANG = [5, 30]          # Minimum/Maximum percentage for knot
                              # 打結增最低/高%
-HX711_RANGE = [15.00, 25.00] # Minimum/Maximum value for HX711 calibration parameter
+HX711_RANGE = [15.00, 55.00] # Minimum/Maximum value for HX711 calibration parameter
                              # HX711校正參數最小/最大值
 CP_SW = 1                    # Constant-pull switch 0=Off, 1=On
                              # 恆拉開關 0=關閉，1=啟用
@@ -52,8 +52,6 @@ BZ_SW = 1                    # Buzzer switch 0=Off, 1=On
                              # 蜂鳴器開關 0=關閉，1=啟用
 CORR_COEF_AUTO = 1           # Self-learning tension parameter 0=Off 1=On
                              # 自我學習張力參數 0=off 1=on
-ABORT_GRAM = 18143           # Maximum abort grams (40LB)
-                             # 最大中斷公克(40磅)
 LOG_MAX = 50                 # Maximum LOG retention records (Please do not set too large to avoid memory exhaustion)
                              # 最大LOG保留記錄(請勿太大，以免記憶體耗盡)
 CA_REM = 0.1                 # LB value for HX711 Tension calibration reminder
@@ -91,6 +89,7 @@ HX711_V0 = 0
 RT_MODE = 0
 HEAD_RESET_COUNT = 0
 MOTOR_SPEED_RATIO = 0
+ABORT_GRAM = 1000
 
 # Initialize all GPIO pins to low 初始化所有 GPIO
 for pin in range(28):
@@ -247,26 +246,28 @@ def beepbeep(run_time):
 def tension_info(tension, flag):
     if tension is None:
         tension = TENSION_MON
-    
-    if flag == 0:
-        lcd_putstr("{: >5d}G".format(tension), 14, 3, 6)
-    elif flag == 3:
-        lcd_putstr("     G", 14, 3, 6)
-    elif flag == 1:
-        if tension <= -100:
+
+    if flag == 1:
+        lcd_putstr("{: >4.1f}".format(round(tension[0] * 0.00220462, 1)), 9, 0, 4)
+        lcd_putstr("{: >4.1f}".format(round(tension[0] / 1000, 1)), 9, 1, 4)
+        tension_diff = tension[0] - tension[1]
+        if tension_diff <= -100:
             ts_str = '---'
-        elif tension >= 100:
+        elif tension_diff >= 100:
             ts_str = '+++'
         else:
-            ts_str = "{:+03d}".format(tension)
+            ts_str = "{:+03d}".format(tension_diff)
         
         lcd_putstr(ts_str, 16, 3, 3)
-        tension  = TENSION_MON
-    elif flag == 2:
-        lcd_putstr("{: >5d}R".format(RT_MODE), 14, 3, 6)
-    
-    lcd_putstr("{: >4.1f}".format(tension * 0.0022), 9, 0, 4)
-    lcd_putstr("{: >4.1f}".format(tension / 1000), 9, 1, 4)
+    else:
+        lcd_putstr("{: >4.1f}".format(tension * 0.0022), 9, 0, 4)
+        lcd_putstr("{: >4.1f}".format(tension / 1000), 9, 1, 4)
+        if flag == 0:
+            lcd_putstr("{: >5d}G".format(tension), 14, 3, 6)
+        elif flag == 3:
+            lcd_putstr("     G", 14, 3, 6)
+        elif flag == 2:
+            lcd_putstr("{: >5d}R".format(RT_MODE), 14, 3, 6)
 
 # Stepper motor operation 步進馬達作動
 def setStep(w1, w2, w3, w4):
@@ -330,7 +331,10 @@ def forward(delay, steps, check, init):
         setStep(0, 1, 1, 1)
         setStep(1, 0, 1, 0)
         
-        time.sleep_us(delay + 10)
+        if i < 30:
+            time.sleep_us(MOTOR_SPEED_V2)
+        else:        
+            time.sleep_us(delay)
 
 # Tension decrease 張力減少
 def backward(delay, steps, check):
@@ -351,7 +355,10 @@ def backward(delay, steps, check):
         setStep(1, 0, 1, 0)
         setStep(0, 1, 1, 0)
         
-        time.sleep_us(delay + 30)
+        if i < 30:
+            time.sleep_us(MOTOR_SPEED_V2)
+        else:        
+            time.sleep_us(delay + 20)
 
 # Bead clip head Reset 珠夾頭復位
 def head_reset(step):
@@ -443,10 +450,8 @@ def init():
     test_MOTOR_SPEED_V1 = MOTOR_SPEED_V1
     config_read()
     ori_BZ_SW = BZ_SW
-    ori_ABORT_GRAM = ABORT_GRAM
     ori_MOTOR_SPEED_V1 = MOTOR_SPEED_V1
     MOTOR_SPEED_V1 = test_MOTOR_SPEED_V1
-    ABORT_GRAM = 1000
     BZ_SW = 1
     lb_kg_select()
     lcd_putstr(" **** PicoBETH **** ", 0, 0, I2C_NUM_COLS)
@@ -481,9 +486,9 @@ def init():
         logs_save(ERR_MSG[0], "init()")
         
     # Sampling value too small (HX711 damaged?) 取樣值過小(HX711損壞?)
-    if HX711["V0"][0] < 0:
-        ERR_MSG[0] = "ERR: HX711@Zero #3"
-        logs_save(ERR_MSG[0], "init()")
+#    if HX711["V0"][0] < 0:
+#        ERR_MSG[0] = "ERR: HX711@Zero #3"
+#        logs_save(ERR_MSG[0], "init()")
 
     # Check if HX711 RATE exceeds 75Hz 檢查 HX711 RATE 是否超過 75Hz
     if HX711["RATE"] < 75:
@@ -548,7 +553,7 @@ def init():
             MOTOR_RS_STEPS = int(MOTOR_MAX_STEPS / 20)
             ABORT_LM = int(int(MOTOR_MAX_STEPS) * 0.4)
             BZ_SW = ori_BZ_SW
-            ABORT_GRAM = ori_ABORT_GRAM
+            ABORT_GRAM = (LB_RANGE[1] + 5) * 454
             head_reset(None)
             MOTOR_SPEED_V1 = ori_MOTOR_SPEED_V1
             LED_RED.off()
@@ -647,6 +652,8 @@ def start_tensioning():
                 if diff_g > 10:
                     if PRE_STRECH == 0 and diff_g > 50:
                         cp_phase = 1
+                    elif DEFAULT_LB >= 40 and diff_g > 10:
+                        cp_phase = 1
                     else:
                         ft = 2
             else:
@@ -678,9 +685,14 @@ def start_tensioning():
         # Manually increase tension 手動增加張力
         if button_list('BUTTON_UP') and RT_MODE == 0 and (time.ticks_ms() - mt_ts) > 250:
             mt_ts = time.ticks_ms()
-            temp_lb = (int(temp_LB_CONV_G / 226) + 1) / 2
-            temp_LB_CONV_G = min(int(temp_lb * 453.59237), int(LB_RANGE[1] * 453.59237))
-            lcd_putstr("{: >4.1f}".format(temp_lb), 4, 0, 4)
+            if LB_KG_SELECT == 2:
+                temp_lb = (int(temp_LB_CONV_G / 499) + 1) / 2
+                temp_LB_CONV_G = min(int(temp_lb * 1000), int(LB_RANGE[1] * 453.59237))
+            else:
+                temp_lb = (int(temp_LB_CONV_G / 226) + 1) / 2
+                temp_LB_CONV_G = min(int(temp_lb * 453.59237), int(LB_RANGE[1] * 453.59237))
+            
+            lcd_putstr("{: >4.1f}".format(temp_LB_CONV_G / 453.592), 4, 0, 4)
             lcd_putstr("{: >4.1f}".format(temp_LB_CONV_G / 1000), 4, 1, 4)
             mt_ts = time.ticks_ms()
             time.sleep(0.2)
@@ -689,15 +701,21 @@ def start_tensioning():
         # Manually decrease tension 手動減少張力
         if button_list('BUTTON_DOWN') and RT_MODE == 0 and (time.ticks_ms() - mt_ts) > 250:
             mt_ts = time.ticks_ms()
-            temp_lb = (int(temp_LB_CONV_G / 226) - 1) / 2
-            temp_LB_CONV_G = min(int(temp_lb * 453.59237), int(LB_RANGE[1] * 453.59237))
-            lcd_putstr("{: >4.1f}".format(temp_lb), 4, 0, 4)
+            if LB_KG_SELECT == 2: 
+                temp_lb = (int(temp_LB_CONV_G / 499) - 1) / 2
+                temp_LB_CONV_G = min(int(temp_lb * 1000), int(LB_RANGE[1] * 453.59237))
+            else:
+                temp_lb = (int(temp_LB_CONV_G / 226) - 1) / 2
+                temp_LB_CONV_G = min(int(temp_lb * 453), int(LB_RANGE[1] * 453.59237))
+            
+            lcd_putstr("{: >4.1f}".format(temp_LB_CONV_G / 453.592), 4, 0, 4)
             lcd_putstr("{: >4.1f}".format(temp_LB_CONV_G / 1000), 4, 1, 4)
             time.sleep(0.2)
             beepbeep(0.1)
                 
         # Manual & automatic adjustment toggle 手動&自動微調切換
-        if button_list('BUTTON_SETTING') and RT_MODE == 0:
+        if button_list('BUTTON_SETTING') and RT_MODE == 0 and (time.ticks_ms() - mt_ts) > 500:
+            mt_ts = time.ticks_ms()
             if manual_flag == 0:
                 manual_flag = 1
             else:
@@ -774,7 +792,7 @@ def start_tensioning():
         
         # Slow Constant-Pull 慢速恆拉
         if cp_phase == 0:
-            tension_info((TENSION_MON - temp_LB_CONV_G), 1)
+            tension_info([TENSION_MON, temp_LB_CONV_G], 1)
             if ts_phase == 2:
                 lcd_putstr("{: >3d}".format(min(time.time()-t0, 999)), 17, 1, 3)
             else:
@@ -1371,7 +1389,7 @@ def rt_mode():
         RT_CC[0] = random.uniform(0.95, 1.2)
         CORR_COEF = RT_CC[0]
     
-    DEFAULT_LB = 20 + (RT_MODE % 11)
+    DEFAULT_LB = (LB_RANGE[1] - 15) + (RT_MODE % 11)
     lcd_putstr("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
     lcd_putstr("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
     lcd_putstr("    --G", 13, 3, 7)
