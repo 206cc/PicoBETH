@@ -47,7 +47,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing | In Progress| Current tension count: 155,000+ (2024/09/03) [Test video](https://youtu.be/4xY9-XTofpA) |
+| Reliability Testing | In Progress| Current tension count: 175,000+ (2024/09/06) [Test video](https://youtu.be/4xY9-XTofpA) |
 | Tennis Racket Compatibility | Reliability Testing | The production method will be published after the reliability test reaches 100,000 tension cycles.          |
 | Pico 2 Compatibility | Not Started |                                             |
 
