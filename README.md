@@ -81,11 +81,11 @@ If the structure of your badminton stringing machine is not strong enough, I str
 
 # Additional Documentation
 
-- [Operation and Settings Guide](1.Operation_and_Settings_Guide.md)
-- [Hardware Setup, Procurement, and Maintenance](2.Hardware_Setup.md)
-- [Maintenance and Logs Guide](3.Maintenance_and_Logs_Guide.md)
-- [FAQ (Frequently Asked Questions)](4.FAQ.md)
-- [Pico Stringing Pattern](5.Pico_Stringing_Pattern.md)
+- [Operation and Settings Guide](docs/1.Operation_and_Settings_Guide.md)
+- [Hardware Setup, Procurement, and Maintenance](docs/2.Hardware_Setup.md)
+- [Maintenance and Logs Guide](docs/3.Maintenance_and_Logs_Guide.md)
+- [FAQ (Frequently Asked Questions)](docs/4.FAQ.md)
+- [Pico Stringing Pattern](docs/5.Pico_Stringing_Pattern.md)
 
 # Support
 If you encounter any issues during the production process, feel free to leave a comment on the YouTube tutorial video. If you complete the project, you're also very welcome to share photos of your finished product in the GitHub discussions.

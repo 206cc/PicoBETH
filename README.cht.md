@@ -76,11 +76,11 @@
 
 # 其他說明文件
 
-- [操作與設定指南](1.Operation_and_Settings_Guide.cht.md)
-- [硬體製作、採購與維護](2.Hardware_Setup.cht.md)
-- [維護與日誌管理指南](3.Maintenance_and_Logs_Guide.cht.md)
-- [常見問題解答(FAQ)](4.FAQ.cht.md)
-- [Pico 線譜](5.Pico_Stringing_Pattern.cht.md)
+- [操作與設定指南](docs/1.Operation_and_Settings_Guide.cht.md)
+- [硬體製作、採購與維護](docs/2.Hardware_Setup.cht.md)
+- [維護與日誌管理指南](docs/3.Maintenance_and_Logs_Guide.cht.md)
+- [常見問題解答(FAQ)](docs/4.FAQ.cht.md)
+- [Pico 線譜](docs/5.Pico_Stringing_Pattern.cht.md)
 
 # 支援
 有任何問題，可以在 YouTube 影片下方留言。若完成專案，歡迎在討論區分享你的成果照片。
