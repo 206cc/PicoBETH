@@ -42,9 +42,10 @@
 
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
-| 可靠度測試         | 進行中   | 張緊次數已達 290,000+，尚未發現故障 (截至 2024/09/22) [測試影片](https://youtu.be/4xY9-XTofpA) |
+| 可靠度測試         | 進行中   | 張緊次數已達 300,000+，尚未發現故障 (截至 2024/09/24) [測試影片](https://youtu.be/4xY9-XTofpA) |
 | 適用網球拍         | 採購中   | EBX 滑台在完成 73,000 次張緊操作後出現微小間隙，且在超過 80LB 張力時偶爾會發生步進馬達失步。<br>目前計劃重新採購承載能力更強的 GX80 滑台進行測試。 |
 | 相容 Pico 2        | 結束 | 受到 [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) BUG 的影響，已確認無法直接使用。 |
+| 製作對應 WISE 2086 安裝孔位轉接座 | 尚未開始 | 徵求故障的 WISE 2086 |
 
 ## 專案起源
 一年前，由於參加公司社團，我開始接觸羽毛球，並對穿線產生濃厚興趣。我購買了重錘式穿線機，原計劃買一個電子拉線機頭，但最終決定利用我所掌握的知識自行設計。這個項目就是結合 Raspberry Pico、張力傳感器、微動開關和按鈕的成果。
@@ -92,4 +93,5 @@
 
 # License
 
-PicoBETH is licensed under Apache 2.0
+- **Source Code**: Licensed under the Apache License 2.0
+- **Hardware Design**: Distributed under the CERN Open Hardware Licence v2 - Weakly Reciprocal
