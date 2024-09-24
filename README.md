@@ -47,7 +47,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing           | Ongoing   | Tensioning cycles have reached 300,000+ with no failures (as of 2024/09/24) [Test Video](https://youtu.be/4xY9-XTofpA) |
+| Reliability Testing           | Ongoing   | Tensioning cycles have reached 300,000+ with no failures (as of 2024/09/24) [Test Video](https://youtube.com/shorts/0TDaBDEwqnI) |
 | Tennis Racquet Compatibility   | In Procurement | The EBX sliding table developed slight play after completing 73,000 tensioning cycles and occasionally experienced stepper motor step loss when exceeding 80LB of tension. <br> I am currently planning to purchase a more robust GX80 sliding table for further testing. |
 | Pico 2 Compatibility | Completed | Due to the [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) bug, it has been confirmed that it cannot be used directly. |
 | Create an adapter to match the mounting holes of the WISE 2086 | Not started |  |
