@@ -13,55 +13,43 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.72"
-VERDATE = "2024-09-12"
+VERSION = "2.73"
+VERDATE = "2024-09-29"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
 # On the first boot, please visit https://github.com/206cc/PicoBETH?tab=readme-ov-file#final-settings to see how to calibrate the HX tension parameters.
 # For code updates, please visit https://github.com/206cc/PicoBETH#firmware-update to view the update steps.
-# Basic parameters (settings saved in CFG_NAME will take precedence if there are stored parameter values)
+# Basic parameters
 # 第一次開機請至 https://github.com/206cc/PicoBETH?tab=readme-ov-file#final-settings 觀看如何校正 HX 張力參數
 # 軟體升級請至 https://github.com/206cc/PicoBETH#firmware-update 觀看升級步驟
-# 基本參數(如 CFG_NAME 內有儲存參數值會以的存檔的設定為主)
-HX711_CAL = 20.00            # Calibration coefficients for HX711 load cell amplifier
-                             # HX711張力放大器校正系數
-LB_KG_SELECT = 0             # Setting for pounds or kilograms, 0=Both can be set, 1=Only pounds, 2=Only kilograms
-                             # 磅或公斤的設定，0=皆可設定，1=只設定磅，2=只設定公斤
-DEFAULT_LB = 20.0            # Default weight in LB
-                             # 預設磅數
-PRE_STRECH = 10              # Default Pre-Strech %
-                             # 預設預拉%
-KNOT = 15                    # Default Knot %
-                             # 預設打結%
-LB_RANGE = [15.0, 35.0]      # Minimum/Maximum tension in LB
-                             # 設定張緊的低磅/最高磅數
-PS_MAX = 30                  # Maximum percentage in Pre-Strech
-                             # 設定預拉的最高%
-KNOT_RANG = [5, 30]          # Minimum/Maximum percentage for knot
-                             # 打結增最低/高%
-HX711_RANGE = [15.00, 55.00] # Minimum/Maximum value for HX711 calibration parameter
-                             # HX711校正參數最小/最大值
-CP_SW = 1                    # Constant-pull switch 0=Off, 1=On
-                             # 恆拉開關 0=關閉，1=啟用
-CP_SLOW = 30                 # Gram value for triggering constant tension adjustment
-                             # 觸發恆拉微調公克值
-CP_FAST = 40                 # Gram value for triggering the fast constant-pull mechanism
-                             # 觸發快速恆拉微調公克值
-BZ_SW = 1                    # Buzzer switch 0=Off, 1=On
-                             # 蜂鳴器開關 0=關閉，1=啟用
-CORR_COEF_AUTO = 1           # Self-learning tension parameter 0=Off 1=On
-                             # 自我學習張力參數 0=off 1=on
-LOG_MAX = 50                 # Maximum LOG retention records (Please do not set too large to avoid memory exhaustion)
-                             # 最大LOG保留記錄(請勿太大，以免記憶體耗盡)
-CA_REM = 0.1                 # LB value for HX711 Tension calibration reminder
-                             # 張力校正提醒(磅)
-HX711_DIFRT = 1.0            # Check the HX711 difrt in grams.
-                             # 檢查HX711飄移值(公克)
-HEAD_RESET = 1               # Bead clip head Reset Mode: 0=Limit switch impact method, 1=Step calculation method.
-                             # 珠夾頭復位型式 0=限位開關撞擊方式 1=計算步數方式
-MOTOR_SPEED_V1 = 30          # The movement speed of the bead clip head (lower values are faster)
-                             # 珠夾頭的移動速度 (越低越快)
+# 基本參數
+KNOT = 15                       # Default Knot %
+                                # 預設打結%
+LB_RANGE = [15.0, 35.0]         # Minimum/Maximum tension in LB
+                                # 設定張緊的低磅/最高磅數
+PS_MAX = 30                     # Maximum percentage in Pre-Strech
+                                # 設定預拉的最高%
+KNOT_RANG = [5, 30]             # Minimum/Maximum percentage for knot
+                                # 打結增最低/高%
+HX711_RANGE = [15.00, 55.00]    # Minimum/Maximum value for HX711 calibration parameter
+                                # HX711校正參數最小/最大值
+CP_SLOW = 30                    # Gram value for triggering constant tension adjustment
+                                # 觸發恆拉微調公克值
+CP_FAST = 40                    # Gram value for triggering the fast constant-pull mechanism
+                                # 觸發快速恆拉微調公克值
+CORR_COEF_AUTO = 1              # Self-learning tension parameter 0=Off 1=On
+                                # 自我學習張力參數 0=off 1=on
+LOG_MAX = 50                    # Maximum LOG retention records (Please do not set too large to avoid memory exhaustion)
+                                # 最大LOG保留記錄(請勿太大，以免記憶體耗盡)
+CA_REM = 0.1                    # LB value for HX711 Tension calibration reminder
+                                # 張力校正提醒(磅)
+HX711_DIFRT = 1.0               # Check the HX711 difrt in grams.
+                                # 檢查HX711飄移值(公克)
+HEAD_RESET = 1                  # Bead clip head Reset Mode: 0=Limit switch impact method, 1=Step calculation method.
+                                # 珠夾頭復位型式 0=限位開關撞擊方式 1=計算步數方式
+TENNIS = [40, 90, 0]            # Tennis Mode [Min LB, Max LB , 0=Disable/1=Enadble](BETA)
+                                # 網球模式[最小LB, 最大LB , 0=關閉/1=啟用](BETA)
                     
 import time, _thread, machine, os, random, gc, sys
 from machine import I2C, Pin
@@ -70,26 +58,34 @@ from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2
 
 # Other parameters 其它參數
 FIRST_TEST = 1
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','MOTOR_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','CORR_COEF_AUTO','KNOT','FIRST_TEST','BZ_SW','HX711_V0','MOTOR_SPEED_V1'] # Saved variables 存檔變數
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','MOTOR_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','CORR_COEF_AUTO','KNOT','FIRST_TEST','BZ_SW','HX711_V0','MOTOR_SPEED_LV'] # Saved variables 存檔變數
 MENU_ARR = [[5,0],[4,1],[4,2],[14,0],[14,1],[15,1],[17,1],[18,1],[19,1],[11,3],[19,3]] # Array for LB setting menu 設定選單陣列
-UNIT_ARR = ['LB&KG', 'LB', 'KG']
-ONOFF_ARR = ['Off', 'On ']
-MA_ARR = ['M', 'C']
-PSKT_ARR = ['PS', 'KT']
+OPTIONS_DICT = {"UNIT_ARR":['LB&KG', 'LB', 'KG'],
+                "ONOFF_ARR":['Off', 'On '],
+                "MA_ARR":['M', 'C'],
+                "PSKT_ARR":['PS', 'KT'],
+                "TENNIS":[' ', ' ']}
 TS_LB_ARR = [[4,0],[5,0],[7,0]] # Array for LB setting 磅調整陣列
 TS_KG_ARR = [[4,1],[5,1],[7,1]] # Array for KG setting 公斤調整陣列
 TS_KT     = [[14,0]]            # Switching between knot and Pre-Strech 打結鍵切換
 TS_PS_ARR = [[17,0],[18,0]]     # Array for Pre-Strech 預拉調整陣列
 MOTOR_MAX_STEPS = 1000000
 MOTOR_RS_STEPS = 2000    # Number of steps to retreat during slider reset 滑台復位時退回的步數
-MOTOR_SPEED_V2 = 1000   # Stepper motor low speed 步進馬達低速
-BUTTON_SLEEP = 0.1       # Button waiting time in seconds 按鍵等待秒數
 CORR_COEF = 1.00         # Tension coefficient 張力系數
 HX711_V0 = 0
 RT_MODE = 0
 HEAD_RESET_COUNT = 0
 MOTOR_SPEED_RATIO = 0
 ABORT_GRAM = 1000
+HX711_CAL = 20.00
+LB_KG_SELECT = 0
+DEFAULT_LB = 20.0
+PRE_STRECH = 10
+CP_SW = 1
+BZ_SW = 1
+MOTOR_SPEED_V1 = [80, 40, 30] # Stepper motor high speed 步進馬達高速
+MOTOR_SPEED_V2 = 1000   # Stepper motor low speed 步進馬達低速
+MOTOR_SPEED_LV = 8 # Default stepper motor speed level 預設的步進馬達速度等級
 
 # Initialize all GPIO pins to low 初始化所有 GPIO
 for pin in range(28):
@@ -121,7 +117,7 @@ BUTTON_LIST = {"BUTTON_HEAD":0,
                "BUTTON_LEFT":0,
                "BUTTON_RIGHT":0,
                "MOTOR_SW_FRONT":0,
-               "MOTOR_SW_REAR":0}                # Button list 按鈕列表
+               "MOTOR_SW_REAR":0}               # Button list 按鈕列表
 BUTTON_CLICK_MS = 500                           # Button click milliseconds 按鈕點擊毫秒
 
 # LED
@@ -156,8 +152,8 @@ TIMER_FLAG = 0
 # 2004 i2c LCD
 I2C_ADDR     = 0x27
 I2C_NUM_COLS = 20
-i2c = I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
-lcd = I2cLcd(i2c, I2C_ADDR, 4, I2C_NUM_COLS)
+I2C = I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
+LCD = I2cLcd(I2C, I2C_ADDR, 4, I2C_NUM_COLS)
 
 # HX711
 hx = hx711(Pin(27), Pin(26))
@@ -279,9 +275,11 @@ def setStep(w1, w2, w3, w4):
 # Increase in tension 張力增加
 def forward(delay, steps, check, init):
     global MOTOR_ON, MOTOR_STP, RT_MODE
+    tennis_g = 453 * TENNIS[0]
     LED_GREEN.off()
     MOTOR_ON = 1
     for i in range(0, steps):
+        start_time = time.ticks_us()
         if check == 1:
             # Reached the specified tension 到達指定張力
             if MOTOR_STP == 1:
@@ -326,39 +324,44 @@ def forward(delay, steps, check, init):
             logs_save(f"ABORT GRAM/{ABORT_GRAM}/{TENSION_MON}", "forward()")
             return "ABORT GRAM"
         
+        if i < 30 or tennis_g < TENSION_MON:
+            time.sleep_us(MOTOR_SPEED_V2)
+        else:
+            elapsed_time = time.ticks_diff(time.ticks_us(), start_time)
+            usleep_time = max(delay - elapsed_time, 0)
+            time.sleep_us(usleep_time)
+        
         setStep(1, 0, 1, 0)
         setStep(0, 1, 0, 0)
         setStep(0, 1, 1, 1)
         setStep(1, 0, 1, 0)
-        
-        if i < 30:
-            time.sleep_us(MOTOR_SPEED_V2)
-        else:        
-            time.sleep_us(delay)
 
 # Tension decrease 張力減少
 def backward(delay, steps, check):
     global MOTOR_STEPS
     LED_GREEN.off()
     for i in range(0, steps):
+        start_time = time.ticks_us()
         if check == 1:
             if MOTOR_SW_FRONT.value():
                 if init == 1:
                     MOTOR_STEPS = i
                     
                 time.sleep(0.2)
-                forward(MOTOR_SPEED_V1, MOTOR_RS_STEPS, 0, 0)
+                forward((MOTOR_SPEED_V1[0] + (9 - MOTOR_SPEED_LV) * MOTOR_SPEED_V1[1]), MOTOR_RS_STEPS, 0, 0)
                 return 0 
+        
+        if i < 30:
+            time.sleep_us(MOTOR_SPEED_V2)
+        else:
+            elapsed_time = time.ticks_diff(time.ticks_us(), start_time)
+            usleep_time = max(delay - elapsed_time, 0)
+            time.sleep_us(usleep_time)
         
         setStep(0, 1, 0, 1)
         setStep(1, 0, 0, 1)
         setStep(1, 0, 1, 0)
         setStep(0, 1, 1, 0)
-        
-        if i < 30:
-            time.sleep_us(MOTOR_SPEED_V2)
-        else:        
-            time.sleep_us(delay + 20)
 
 # Bead clip head Reset 珠夾頭復位
 def head_reset(step):
@@ -366,18 +369,18 @@ def head_reset(step):
     LED_YELLOW.on()
     time.sleep(0.2)
     if HEAD_RESET_COUNT == 99:
-        backward(MOTOR_SPEED_V1, MOTOR_MAX_STEPS, 1)
+        backward(MOTOR_SPEED_V1[2], MOTOR_MAX_STEPS, 1)
         logs_save("head_reset", "head_reset()")
         HEAD_RESET_COUNT = 0
     elif step and HEAD_RESET == 1:
-        backward(MOTOR_SPEED_V1, step, 1)
+        backward(MOTOR_SPEED_V1[2], step, 1)
         HEAD_RESET_COUNT = HEAD_RESET_COUNT + 1
         if abs(TENSION_MON) > 100:
-            backward(MOTOR_SPEED_V1, MOTOR_MAX_STEPS, 1)
+            backward(MOTOR_SPEED_V1[2], MOTOR_MAX_STEPS, 1)
             logs_save(f"head_reset_step_err:{TENSION_MON}G", "head_reset()")
             HEAD_RESET_COUNT = 0
     else:
-        backward(MOTOR_SPEED_V1, MOTOR_MAX_STEPS, 1)
+        backward(MOTOR_SPEED_V1[2], MOTOR_MAX_STEPS, 1)
         HEAD_RESET_COUNT = HEAD_RESET_COUNT + 1
     
     beepbeep(0.3)
@@ -388,8 +391,8 @@ def head_reset(step):
 def lcd_putstr(text, x, y, length):
     text = text[:length]
     text = f'{text :{" "}<{length}}'
-    lcd.move_to(x, y)
-    lcd.putstr(text)
+    LCD.move_to(x, y)
+    LCD.putstr(text)
 
 # Button detection 按鈕偵測
 def button_list(key):
@@ -399,7 +402,15 @@ def button_list(key):
         return True
     else:
         return False
-    
+
+# errno check
+def handle_error(e, func):
+    global ERR_MSG
+    ERR_MSG[0] = f"{e}/MEM:{gc.mem_free()} bytes"   
+    logs_save(ERR_MSG[0], func)
+    with open("sys_log.txt", "a") as f:
+        sys.print_exception(e, f)
+
 # Second core 第二核心
 def tension_monitoring():
     try:
@@ -437,10 +448,7 @@ def tension_monitoring():
                         BUTTON_LIST[key] = 0
     
     except Exception as e:
-        ERR_MSG[0] = f"{e} / MEM: {gc.mem_free()} bytes"
-        logs_save(ERR_MSG[0], "tension_monitoring()")
-        with open("sys_log.txt", "a") as f:
-            sys.print_exception(e, f)
+        handle_error(e, "tension_monitoring()")
 
 def lb_kg_select():
     global TS_ARR
@@ -452,7 +460,7 @@ def lb_kg_select():
         TS_ARR = TS_LB_ARR + TS_KG_ARR + TS_KT + TS_PS_ARR
 
 def sys_logs_show():
-    lcd_putstr("<PicoBETH> SYSLOG", 0, 3, I2C_NUM_COLS)
+    lcd_putstr("=PicoBETH= SYSLOG", 0, 3, I2C_NUM_COLS)
     lines = []
     filename = 'sys_log.txt'
     if filename in os.listdir():
@@ -489,16 +497,18 @@ def sys_logs_show():
 # Boot initialization 開機初始化
 def init():
     try:
-        global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTOR_RS_STEPS, MOTOR_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, BZ_SW, RT_MODE, MOTOR_SPEED_RATIO, MOTOR_SPEED_V1, LB_RANGE, DEFAULT_LB
+        global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTOR_RS_STEPS, MOTOR_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, BZ_SW, RT_MODE, MOTOR_SPEED_RATIO, MOTOR_SPEED_LV, LB_RANGE, DEFAULT_LB, TENNIS
         boot_mode = 0
         # Update mode
         if BUTTON_DOWN.value():
             lcd_putstr("UPDATE MODE", 0, 0, I2C_NUM_COLS)
-            sys.exit()
+            while True:
+                time.sleep(1)
         
         # Tennis Mode(Beta)
-        if BUTTON_LEFT.value():
-            LB_RANGE[1] = 85
+        if BUTTON_LEFT.value() or TENNIS[2] == 1:
+            LB_RANGE[1] = TENNIS[1]
+            TENNIS[2] = 1
             lcd_putstr("Tennis MODE", 0, 0, I2C_NUM_COLS)
             time.sleep(2)
             
@@ -530,24 +540,24 @@ def init():
             time.sleep(2)
             sys_logs_show()
         
-        test_MOTOR_SPEED_V1 = MOTOR_SPEED_V1
+        test_MOTOR_SPEED_LV = MOTOR_SPEED_LV
         config_read()
         DEFAULT_LB = min(DEFAULT_LB, LB_RANGE[1])
         ori_BZ_SW = BZ_SW
-        ori_MOTOR_SPEED_V1 = MOTOR_SPEED_V1
-        MOTOR_SPEED_V1 = test_MOTOR_SPEED_V1
+        ori_MOTOR_SPEED_LV = max(1, min(9, MOTOR_SPEED_LV))
+        MOTOR_SPEED_LV = test_MOTOR_SPEED_LV
         BZ_SW = 1
         lb_kg_select()
         logs_save("------", "init()PowerOn")
         logs_save(f"VER:{VERSION}/DATE:{VERDATE}", "init()")
-        lcd_putstr(" **** PicoBETH **** ", 0, 0, I2C_NUM_COLS)
-        lcd_putstr(f"Version: {VERSION}", 0, 1, I2C_NUM_COLS)
+        lcd_putstr(" ==== PicoBETH ==== ", 0, 0, I2C_NUM_COLS)
+        lcd_putstr(f"Ver : {VERSION}", 0, 1, I2C_NUM_COLS)
         lcd_putstr(f"Date: {VERDATE}", 0, 2, I2C_NUM_COLS)
         lcd_putstr("Ghub: 206cc/PicoBETH", 0, 3, I2C_NUM_COLS)
         time.sleep(3)
         LED_RED.on()
         main_interface()
-        lcd_putstr(f"{int(10 - (0.05 * ori_MOTOR_SPEED_V1 + 0.5))}", 12, 3, 1)
+        lcd_putstr(f"{ori_MOTOR_SPEED_LV}", 12, 3, 1)
         LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100)), int(LB_RANGE[1] * 453.59237))
         lcd_putstr("Tension monitoring...", 0, 2, I2C_NUM_COLS)
         _thread.start_new_thread(tension_monitoring, ())
@@ -635,11 +645,11 @@ def init():
             lcd_putstr("Checking motor...", 0, 2, I2C_NUM_COLS)
             logs_save("MOTOR_MAX_STEPS#1", "init()")
             t0 = time.ticks_ms()
-            MOTOR_MAX_STEPS = forward(MOTOR_SPEED_V1, MOTOR_MAX_STEPS, 0, 1)
+            MOTOR_MAX_STEPS = forward((MOTOR_SPEED_V1[0] + (9 - MOTOR_SPEED_LV) * MOTOR_SPEED_V1[1]), MOTOR_MAX_STEPS, 0, 1)
             motor_time = time.ticks_ms() - t0
             logs_save("MOTOR_MAX_STEPS#2", "init()")
             MOTOR_SPEED_RATIO = round(MOTOR_MAX_STEPS/motor_time, 2)
-            logs_save(f"STEPS:{MOTOR_MAX_STEPS}/TIME:{motor_time}/MR:{MOTOR_SPEED_RATIO}/MS:{test_MOTOR_SPEED_V1}", "init()MOTOR")
+            logs_save(f"STEPS:{MOTOR_MAX_STEPS}/TIME:{motor_time}/MR:{MOTOR_SPEED_RATIO}/MS:{MOTOR_SPEED_V1[0]}/LV:{MOTOR_SPEED_LV}", "init()MOTOR")
             if not isinstance(MOTOR_MAX_STEPS, int):
                 ERR_MSG[0] = "ERR: MMS ABORT"
                 logs_save(ERR_MSG[0], "init()")
@@ -652,7 +662,7 @@ def init():
                 BZ_SW = ori_BZ_SW
                 ABORT_GRAM = (LB_RANGE[1] + 5) * 454
                 head_reset(None)
-                MOTOR_SPEED_V1 = ori_MOTOR_SPEED_V1
+                MOTOR_SPEED_LV = ori_MOTOR_SPEED_LV
                 LED_RED.off()
                 if hx_diff_g > (CA_REM * 453):
                     lcd_putstr("HX Need Calibration!", 0, 2, I2C_NUM_COLS)
@@ -666,16 +676,13 @@ def init():
                     config_save(0)
 
     except Exception as e:
-        ERR_MSG[0] = f"{e}/MEM:{gc.mem_free()}bytes"
-        logs_save(ERR_MSG[0], "init()")
-        with open("sys_log.txt", "a") as f:
-            sys.print_exception(e, f)
+        handle_error(e, "init()")
 
 # Start increasing tension 開始增加張力
 def start_tensioning():
     try:
         global MOTOR_ON, MOTOR_STP, TENSION_COUNT, LOGS, CORR_COEF, KNOT_FLAG, LB_CONV_G, RT_MODE, ERR_MSG
-        lcd.hide_cursor()
+        LCD.hide_cursor()
         lcd_putstr("Tensioning", 0, 2, I2C_NUM_COLS)
         lcd_putstr("     ", 15, 1, 5)
         if KNOT_FLAG == 0:
@@ -688,7 +695,7 @@ def start_tensioning():
         else:
             timer_diff = 0
             
-        rel = forward(MOTOR_SPEED_V1, MOTOR_MAX_STEPS, 1, 0)
+        rel = forward((MOTOR_SPEED_V1[0] + (9 - MOTOR_SPEED_LV) * MOTOR_SPEED_V1[1]), MOTOR_MAX_STEPS, 1, 0)
         if isinstance(rel, int):
             head_pos = rel
         else:
@@ -757,7 +764,7 @@ def start_tensioning():
                     if diff_g > 10:
                         if PRE_STRECH == 0 and diff_g > 50:
                             cp_phase = 1
-                        elif DEFAULT_LB >= 40 and diff_g > 10:
+                        elif DEFAULT_LB >= TENNIS[0] and diff_g > 30:
                             cp_phase = 1
                         else:
                             ft = 2
@@ -826,12 +833,12 @@ def start_tensioning():
                 else:
                     manual_flag = 0
                         
-                lcd_putstr(MA_ARR[manual_flag], 11, 3, 1)
+                lcd_putstr(OPTIONS_DICT['MA_ARR'][manual_flag], 11, 3, 1)
                 beepbeep(0.1)
             
             # String Broken (suddenly less than 5 lb) 斷線(突然小於5磅)
             if TENSION_MON < 2267:
-                lcd_putstr(MA_ARR[CP_SW], 11, 3, 1)
+                lcd_putstr(OPTIONS_DICT['MA_ARR'][CP_SW], 11, 3, 1)
                 lcd_putstr("Resetting...", 0, 2, I2C_NUM_COLS)
                 head_reset(None)
                 lcd_putstr("String Broken?", 0, 2, I2C_NUM_COLS)
@@ -862,7 +869,7 @@ def start_tensioning():
                     CORR_COEF = max(0.95, min(CORR_COEF, 1.2))
                 
                 log_s = time.time() - t0
-                lcd_putstr(MA_ARR[CP_SW], 11, 3, 1)
+                lcd_putstr(OPTIONS_DICT['MA_ARR'][CP_SW], 11, 3, 1)
                 lcd_putstr("Resetting...", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("{: >4.1f}".format(DEFAULT_LB), 4, 0, 4)
                 lcd_putstr("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
@@ -880,7 +887,7 @@ def start_tensioning():
                         
                     if KNOT_FLAG == 1:
                         KNOT_FLAG = 0
-                        lcd_putstr(PSKT_ARR[KNOT_FLAG], 14, 0, 2)
+                        lcd_putstr(OPTIONS_DICT['PSKT_ARR'][KNOT_FLAG], 14, 0, 2)
                         lcd_putstr("{: >2d}".format(PRE_STRECH), 17, 0, 2)
                     
                     if TENSION_COUNT % LOG_MAX == 0:
@@ -907,10 +914,7 @@ def start_tensioning():
                 time.sleep(HX711["CP_HZ"])
 
     except Exception as e:
-        ERR_MSG[0] = f"{e} / MEM: {gc.mem_free()} bytes"
-        logs_save(ERR_MSG[0], "start_tensioning()")
-        with open("sys_log.txt", "a") as f:
-            sys.print_exception(e, f)
+        handle_error(e, "start_tensioning()")
 
 # Main screen 主畫面
 def setting_ts():
@@ -927,8 +931,8 @@ def setting_ts():
         set_count = len(TS_ARR)
         i = CURSOR_XY_TS_TEMP
         cursor_xy = TS_ARR[i][0], TS_ARR[i][1]
-        lcd.move_to(TS_ARR[i][0], TS_ARR[i][1])
-        lcd.blink_cursor_on()
+        LCD.move_to(TS_ARR[i][0], TS_ARR[i][1])
+        LCD.blink_cursor_on()
         ps_kt_tmp = 0
         if KNOT_FLAG == 0:
             ps_kt_tmp = PRE_STRECH
@@ -939,8 +943,8 @@ def setting_ts():
         while True:
             # Action of pressing the up or down button 按下上下鍵動作
             if BUTTON_UP.value() or BUTTON_DOWN.value():
-                lcd.show_cursor()
-                lcd.blink_cursor_on()
+                LCD.show_cursor()
+                LCD.blink_cursor_on()
                 kg = round(DEFAULT_LB * 0.45359237, 1)
                 # LB 10-digit setting 設定 LB十位數
                 if cursor_xy == (4, 0):
@@ -1014,7 +1018,7 @@ def setting_ts():
                             KNOT_FLAG = 1
                             ps_kt_tmp = KNOT
                             
-                        lcd_putstr(PSKT_ARR[KNOT_FLAG], 14, 0, 2)
+                        lcd_putstr(OPTIONS_DICT['PSKT_ARR'][KNOT_FLAG], 14, 0, 2)
                         lcd_putstr("{: >2d}".format(ps_kt_tmp), 17, 0, 2)
                 
                 DEFAULT_LB = max(LB_RANGE[0], min(LB_RANGE[1], DEFAULT_LB))
@@ -1032,23 +1036,23 @@ def setting_ts():
                     lcd_putstr("{: >2d}".format(PRE_STRECH), 17, 0, 2)
                     ps_kt_show = DEFAULT_LB * ((PRE_STRECH + 100) / 100)
                 
-                lcd.blink_cursor_off()
-                lcd.hide_cursor()
+                LCD.blink_cursor_off()
+                LCD.hide_cursor()
                 lcd_putstr("{: >4.1f}".format(min(ps_kt_show, LB_RANGE[1])), 9, 0, 4)
                 lcd_putstr("{: >4.1f}".format(min(ps_kt_show * 0.45359237, LB_RANGE[1] * 0.45359237)), 9, 1, 4)
                 lcd_putstr("{:.1f}".format(DEFAULT_LB), 4, 0, 4)
                 lcd_putstr("{: >4.1f}".format(DEFAULT_LB * 0.45359237), 4, 1, 4)
-                lcd.move_to(TS_ARR[i][0],TS_ARR[i][1])
-                lcd.show_cursor()
-                lcd.blink_cursor_on()
+                LCD.move_to(TS_ARR[i][0],TS_ARR[i][1])
+                LCD.show_cursor()
+                LCD.blink_cursor_on()
                 last_set_time = time.ticks_ms()
                 beepbeep(0.1)
-                time.sleep(BUTTON_SLEEP)
+                time.sleep(0.1)
 
             # Action of pressing the left or right button 按下左右鍵動作
             if BUTTON_RIGHT.value() or BUTTON_LEFT.value():
-                lcd.hide_cursor()
-                lcd.blink_cursor_on()
+                LCD.hide_cursor()
+                LCD.blink_cursor_on()
                 if BUTTON_RIGHT.value():
                     if (i+1) < set_count:
                         i = i + 1
@@ -1061,31 +1065,28 @@ def setting_ts():
                         i = set_count - 1
                 
                 CURSOR_XY_TS_TEMP = i
-                lcd.move_to(TS_ARR[i][0], TS_ARR[i][1])
+                LCD.move_to(TS_ARR[i][0], TS_ARR[i][1])
                 cursor_xy = TS_ARR[i][0], TS_ARR[i][1]
                 last_set_time = time.ticks_ms()
                 beepbeep(0.1)
-                time.sleep(BUTTON_SLEEP)
+                time.sleep(0.1)
 
             # Action of pressing the exit button 按下離開鍵動作
             if button_list('BUTTON_EXIT') or ((time.ticks_ms() - last_set_time) > (1.8 * 1000)):
                 config_save(0)
-                lcd.blink_cursor_off()
-                lcd.hide_cursor()
-                time.sleep(BUTTON_SLEEP)
+                LCD.blink_cursor_off()
+                LCD.hide_cursor()
+                time.sleep(0.1)
                 beepbeep(0.04)
                 return 0
             
     except Exception as e:
-        ERR_MSG[0] = f"{e}/MEM:{gc.mem_free()}bytes"
-        logs_save(ERR_MSG[0], "setting_ts()")
-        with open("sys_log.txt", "a") as f:
-            sys.print_exception(e, f)
+        handle_error(e, "setting_ts()")
 
 # Settings screen 設定頁面
 def setting():
     try:
-        global CURSOR_XY_TEMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, CURSOR_XY_TS_TEMP, CP_SW, BZ_SW, FIRST_TEST, HX711_V0, MOTOR_SPEED_V1
+        global CURSOR_XY_TEMP, CORR_COEF, HX711_CAL, LB_KG_SELECT, CURSOR_XY_TS_TEMP, CP_SW, BZ_SW, FIRST_TEST, HX711_V0, MOTOR_SPEED_LV
         if HX711['HX711_CAL'] != HX711_CAL:
             save_flag = 1
             lcd_putstr("S", 19, 1, 1)
@@ -1096,33 +1097,33 @@ def setting():
         set_count = len(MENU_ARR)
         i = CURSOR_XY_TEMP
         cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
-        lcd.move_to(MENU_ARR[i][0], MENU_ARR[i][1])
-        lcd.blink_cursor_on()
-        time.sleep(BUTTON_SLEEP)
+        LCD.move_to(MENU_ARR[i][0], MENU_ARR[i][1])
+        LCD.blink_cursor_on()
+        time.sleep(0.1)
         beepbeep(0.1)    
         while True:
             # Action of pressing the up or down button 按下上下鍵動作
             if BUTTON_UP.value() or BUTTON_DOWN.value() or button_list('BUTTON_SETTING'):
-                lcd.hide_cursor()
-                lcd.blink_cursor_off()
+                LCD.hide_cursor()
+                LCD.blink_cursor_off()
                 flag = 0
                 # System information 系統資訊
                 if cursor_xy == (11, 3):
                     if BUTTON_SETTING.value():
-                        lcd.blink_cursor_off()
+                        LCD.blink_cursor_off()
                         beepbeep(0.1)
                         lcd_putstr(f"SW:V{VERSION}_{VERDATE}", 0, 0, I2C_NUM_COLS)
                         lcd_putstr(f"HX:{HX711['DIFF']}mg/{sorted(HX711['V0'])[0]}/{HX711['RATE']}Hz", 0, 1, I2C_NUM_COLS)
-                        lcd_putstr(f"MR:{MOTOR_SPEED_RATIO: >1.2f} MS:{int(MOTOR_SPEED_V1):02d} {BOOT_COUNT: >5d}B", 0, 2, I2C_NUM_COLS)
+                        lcd_putstr(f"MR:{MOTOR_SPEED_RATIO: >1.2f} MS:{int(MOTOR_SPEED_V1[0]):02d} {BOOT_COUNT: >5d}B", 0, 2, I2C_NUM_COLS)
                         lcd_putstr(f"CC:{CORR_COEF: >1.2f}", 0, 3, 10)
-                        lcd.move_to(11, 3)
-                        lcd.blink_cursor_on()
+                        LCD.move_to(11, 3)
+                        LCD.blink_cursor_on()
                         beepbeep(0.1)
                         while True:
                             if BUTTON_EXIT.value():
                                 beepbeep(0.1)
                                 setting_interface()
-                                lcd.blink_cursor_on()
+                                LCD.blink_cursor_on()
                                 break
                 
                 # LB or KG setting selection 磅、公斤設定選擇
@@ -1130,7 +1131,7 @@ def setting():
                     if BUTTON_UP.value() or BUTTON_DOWN.value():
                         CURSOR_XY_TS_TEMP = 1
                         LB_KG_SELECT = (LB_KG_SELECT + 1) % 3
-                        lcd_putstr(UNIT_ARR[LB_KG_SELECT], 14, 0, 5)
+                        lcd_putstr(OPTIONS_DICT['UNIT_ARR'][LB_KG_SELECT], 14, 0, 5)
                         lb_kg_select()
                         
                 # Constant-pull switch 恆拉開關
@@ -1141,7 +1142,7 @@ def setting():
                         else:
                             CP_SW = 1
                         
-                        lcd_putstr(ONOFF_ARR[CP_SW], 4, 1, 3)
+                        lcd_putstr(OPTIONS_DICT['ONOFF_ARR'][CP_SW], 4, 1, 3)
                         
                 # Buzzer switch 蜂鳴器開關
                 elif cursor_xy == (4, 2):
@@ -1151,14 +1152,14 @@ def setting():
                         else:
                             BZ_SW = 1
                         
-                        lcd_putstr(ONOFF_ARR[BZ_SW], 4, 2, 3)
+                        lcd_putstr(OPTIONS_DICT['ONOFF_ARR'][BZ_SW], 4, 2, 3)
                         
                 # Bead clip head movement speed 珠夾頭速度
                 elif cursor_xy == (5, 0):
                     if BUTTON_UP.value():
-                        MOTOR_SPEED_V1 = MOTOR_SPEED_V1 - 20
+                        MOTOR_SPEED_LV = MOTOR_SPEED_LV + 1
                     elif BUTTON_DOWN.value():
-                        MOTOR_SPEED_V1 = MOTOR_SPEED_V1 + 20
+                        MOTOR_SPEED_LV = MOTOR_SPEED_LV - 1
 
                 # HX711 calibration coefficient ten-digit 校正系數十位數HX711
                 elif cursor_xy == (14, 1):
@@ -1202,14 +1203,14 @@ def setting():
                 # Display LOG 顯示LOG
                 elif cursor_xy == (19, 3):
                     if BUTTON_SETTING.value():
-                        lcd.blink_cursor_off()
+                        LCD.blink_cursor_off()
                         beepbeep(0.1)
                         if len(LOGS) != 0:
                             logs_idx = 0
-                            lcd.hide_cursor()
+                            LCD.hide_cursor()
                             logs_interface("init")
                             logs_interface(logs_idx)
-                            lcd.blink_cursor_on()
+                            LCD.blink_cursor_on()
                             log_flag = 0
                             beepbeep(0.1)
                             while True:
@@ -1232,7 +1233,7 @@ def setting():
                                 
                             setting_interface()
                             
-                        lcd.blink_cursor_on()
+                        LCD.blink_cursor_on()
                 
                 if flag == 1:
                     HX711_CAL = max(HX711_RANGE[0], min(HX711_RANGE[1], HX711_CAL))
@@ -1247,14 +1248,14 @@ def setting():
                         save_flag = 0
                         lcd_putstr(" ", 19, 1, 1)
                 
-                MOTOR_SPEED_V1 = max(10, min(170, MOTOR_SPEED_V1))
-                lcd_putstr(f"L{int(10 - (0.05 * MOTOR_SPEED_V1 + 0.5))}", 4, 0, 6)
+                MOTOR_SPEED_LV = max(1, min(9, MOTOR_SPEED_LV))
+                lcd_putstr(f"L{MOTOR_SPEED_LV}", 4, 0, 6)
                 lcd_putstr("{: >2.2f}".format(HX711_CAL), 14, 1, 5)
-                lcd.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
-                lcd.show_cursor()
-                lcd.blink_cursor_on()
+                LCD.move_to(MENU_ARR[i][0],MENU_ARR[i][1])
+                LCD.show_cursor()
+                LCD.blink_cursor_on()
                 beepbeep(0.1)
-                time.sleep(BUTTON_SLEEP)
+                time.sleep(0.1)
 
             # Action of pressing the left or right button 按下左右鍵動作
             if BUTTON_RIGHT.value() or BUTTON_LEFT.value():
@@ -1274,38 +1275,35 @@ def setting():
                         i = set_count - 1
                 
                 CURSOR_XY_TEMP = i
-                lcd.move_to(MENU_ARR[i][0], MENU_ARR[i][1])
+                LCD.move_to(MENU_ARR[i][0], MENU_ARR[i][1])
                 cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
                 beepbeep(0.1)
-                time.sleep(BUTTON_SLEEP)
+                time.sleep(0.1)
 
             # Action of pressing the exit button 按下離開鍵動作
             if button_list('BUTTON_EXIT'):
                 config_save(0)
-                lcd.blink_cursor_off()
-                lcd.hide_cursor()
-                time.sleep(BUTTON_SLEEP)
+                LCD.blink_cursor_off()
+                LCD.hide_cursor()
+                time.sleep(0.1)
                 beepbeep(0.1)
                 return 0
      
     except Exception as e:
-        ERR_MSG[0] = f"{e}/MEM:{gc.mem_free()}bytes"
-        logs_save(ERR_MSG[0], "setting()")
-        with open("sys_log.txt", "a") as f:
-            sys.print_exception(e, f)
+        handle_error(e, "setting()")
             
 # Settings interface 設定介面顯示
 def setting_interface():
-    lcd.hide_cursor()
-    temp_sp = f"L{int(10 - (0.05 * MOTOR_SPEED_V1 + 0.5))}"
-    lcd_putstr("SP: "+ temp_sp +"    UN: "+ UNIT_ARR[LB_KG_SELECT], 0, 0, I2C_NUM_COLS)
-    lcd_putstr("CP: "+ ONOFF_ARR[CP_SW] +"   HX: "+ "{: >2.2f}".format(HX711_CAL) +" ", 0, 1, I2C_NUM_COLS)
-    lcd_putstr("BZ: "+ ONOFF_ARR[BZ_SW], 0, 2, I2C_NUM_COLS)
-    lcd_putstr("<PicoBETH> I "+ "{: >6d}".format(TENSION_COUNT) +"T", 0, 3, I2C_NUM_COLS)
+    LCD.hide_cursor()
+    temp_sp = f"L{MOTOR_SPEED_LV}"
+    lcd_putstr(f"SP: {temp_sp}    UN: {OPTIONS_DICT['UNIT_ARR'][LB_KG_SELECT]}", 0, 0, I2C_NUM_COLS)
+    lcd_putstr(f"CP: {OPTIONS_DICT['ONOFF_ARR'][CP_SW]}   HX: {HX711_CAL: >2.2f} ", 0, 1, I2C_NUM_COLS)
+    lcd_putstr(f"BZ: {OPTIONS_DICT['ONOFF_ARR'][BZ_SW]}", 0, 2, I2C_NUM_COLS)
+    lcd_putstr(f"=PicoBETH={OPTIONS_DICT['TENNIS'][TENNIS[2]]}I {TENSION_COUNT: >6d}T", 0, 3, I2C_NUM_COLS)
     
 # LOG interface 介面顯示LOG
 def logs_interface(idx):
-    lcd.hide_cursor()
+    LCD.hide_cursor()
     if idx=="init":
         lcd_putstr("  LOG  TIMER:   m  s", 0, 0, I2C_NUM_COLS)
         lcd_putstr("LB:    /        :  %", 0, 1, I2C_NUM_COLS)
@@ -1340,11 +1338,11 @@ def logs_interface(idx):
 
 # Main screen 主畫面顯示
 def main_interface():
-    lcd.hide_cursor()
-    lcd_putstr(f"LB:     /--.- {PSKT_ARR[KNOT_FLAG]}:  %", 0, 0, I2C_NUM_COLS)
+    LCD.hide_cursor()
+    lcd_putstr(f"LB:     /--.- {OPTIONS_DICT['PSKT_ARR'][KNOT_FLAG]}:  %", 0, 0, I2C_NUM_COLS)
     lcd_putstr("KG:     /--.-       ", 0, 1, I2C_NUM_COLS)
     lcd_putstr("                    ", 0, 2, I2C_NUM_COLS)
-    lcd_putstr(f"<PicoBETH> {MA_ARR[CP_SW]}{int(10 - (0.05 * MOTOR_SPEED_V1 + 0.5))}", 0, 3, I2C_NUM_COLS)
+    lcd_putstr(f"=PicoBETH={OPTIONS_DICT['TENNIS'][TENNIS[2]]}{OPTIONS_DICT['MA_ARR'][CP_SW]}{MOTOR_SPEED_LV}", 0, 3, I2C_NUM_COLS)
     lcd_putstr(f"{DEFAULT_LB:.1f}", 4, 0, 4)
     lcd_putstr(f"{DEFAULT_LB * 0.45359237: >4.1f}", 4, 1, 4)
     lcd_putstr(f"{PRE_STRECH: >2d}", 17, 0, 2)
@@ -1352,7 +1350,7 @@ def main_interface():
 # Timer 計時器顯示
 def show_timer():
     if TIMER:
-        lcd.hide_cursor()
+        LCD.hide_cursor()
         lcd_putstr("   m  ", 14, 1, 6)
         timer_diff = TIMER_FLAG - TIMER
         if timer_diff < 0:
@@ -1482,7 +1480,7 @@ def hw_test(flag, ori_BZ_SW):
                     BZ_SW = ori_BZ_SW
                     config_save(0)
                 
-                lcd_putstr("[Pres EXIT Reboot]", 0, 3, I2C_NUM_COLS)
+                lcd_putstr("[Please Reboot]", 0, 3, I2C_NUM_COLS)
                 while True:
                     if button_list('BUTTON_EXIT'):
                         machine.reset()
@@ -1567,10 +1565,7 @@ def rt_mode():
             beepbeep(0.1)
             
     except Exception as e:
-        ERR_MSG[0] = f"{e}/MEM:{gc.mem_free()}bytes"
-        logs_save(ERR_MSG[0], "rt_mode()")
-        with open("sys_log.txt", "a") as f:
-            sys.print_exception(e, f)
+        handle_error(e, "rt_mode()")
 
 init()
 try:
@@ -1620,7 +1615,7 @@ try:
             
             # Tension display update 張力顯示更新
             if (time.ticks_ms() - ts_info_time) > 100:
-                lcd.hide_cursor()
+                LCD.hide_cursor()
                 tension_info(None, 0)
                 if TIMER:
                     if TIMER_FLAG == 0:
@@ -1628,8 +1623,8 @@ try:
                         lcd_putstr("{: >3d}".format(int(timer_diff / 60)), 14, 1, 3)
                         lcd_putstr("{: >2d}".format(timer_diff % 60), 18, 1, 2)
                 
-                lcd.move_to(TS_ARR[CURSOR_XY_TS_TEMP][0], TS_ARR[CURSOR_XY_TS_TEMP][1])
-                lcd.show_cursor()
+                LCD.move_to(TS_ARR[CURSOR_XY_TS_TEMP][0], TS_ARR[CURSOR_XY_TS_TEMP][1])
+                LCD.show_cursor()
                 ts_info_time = time.ticks_ms()
             
         # Reliability Testing Mode 穩定性測試模式
@@ -1643,7 +1638,5 @@ try:
             break
     
 except Exception as e:
-    ERR_MSG[0] = f"{e}/MEM:{gc.mem_free()}bytes"
-    logs_save(ERR_MSG[0], "main_loop()")
-    with open("sys_log.txt", "a") as f:
-        sys.print_exception(e, f)
+    handle_error(e, "main_loop()")
+    
