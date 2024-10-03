@@ -47,8 +47,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing           | Ongoing   | Tensioning cycles have reached 360,000+ with no failures (as of 2024/10/02) [Test Video](https://youtube.com/shorts/0TDaBDEwqnI) |
-| Tennis Racquet Compatibility   | Testing | Performing 75-85LB cyclic tension reliability testing using the GX80 sliding table. Tensioning cycles have reached 20,000+ (as of 2024/10/02) The production method will be published after the reliability test reaches 100,000 tension cycles. |
+| Reliability Testing           | Ongoing   | Tensioning cycles have reached 365,000+ with no failures (as of 2024/10/03) [Test Video](https://youtube.com/shorts/0TDaBDEwqnI) |
+| Tennis Racquet Compatibility   | Testing | Performing 75-85LB cyclic tension reliability testing using the GX80 sliding table. Tensioning cycles have reached 25,000+ (as of 2024/10/03) |
 | Pico 2 Compatibility | Completed | Due to the [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) bug, it has been confirmed that it cannot be used directly. |
 | Create an adapter to match the mounting holes of the WISE 2086 | Not started |  |
 
@@ -87,6 +87,13 @@ If the structure of your badminton stringing machine is not strong enough, I str
 - [Maintenance and Logs Guide](docs/3.Maintenance_and_Logs_Guide.md)
 - [FAQ (Frequently Asked Questions)](docs/4.FAQ.md)
 - [Pico Stringing Pattern](docs/5.Pico_Stringing_Pattern.md)
+
+# Improvement Branches
+
+| Branch Name                     | Description                      |
+|----------------------------------|----------------------------------|
+| [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH_/tree/imp/beadclip-btn%40jpliew) | Improved Bead Clip Activation Button |
+| `imp/tennis`                     | Tennis Racquet Compatibility <br> (Testing in progress, production method will be released after 100,000 reliability test cycles) |
 
 # Support
 If you encounter any issues during the production process, feel free to leave a comment on the YouTube tutorial video. If you complete the project, you're also very welcome to share photos of your finished product in the GitHub discussions.
