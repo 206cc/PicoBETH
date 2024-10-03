@@ -39,6 +39,10 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
   - Uses 5 x 18650 batteries to ensure at least one complete racquet stringing.
 - **Compact and Space-Saving**
   - Dimensions are approximately 38(L) x 15(W) x 9(H) CM.(excluding clamp head)
+- **Simple structure, low cost, and easy maintenance**
+  - All components are easy to source and inexpensive
+- **High durability**
+  - Over 365,000 tensioning reliability tests completed (testing ongoing)
 
 > [!CAUTION]
 > In the **fast mode** after version 2.70, when the speed is set to **L7 or higher** and the **tension exceeds 30LB**, the original 12V3A power supply may be insufficient, potentially causing the motor to slip. Therefore, this version has been upgraded to a 19V4A power supply. If you also plan to switch to a 19V power supply, please ensure that your 5V power converter can handle a 19V input voltage. Additionally, if you are using an external UPS, it should also be upgraded to a version that can accept 19V input and output.
@@ -92,8 +96,8 @@ If the structure of your badminton stringing machine is not strong enough, I str
 
 | Branch Name                     | Description                      |
 |----------------------------------|----------------------------------|
-| [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH_/tree/imp/beadclip-btn%40jpliew) | Improved Bead Clip Activation Button |
-| `imp/tennis`                     | Tennis Racquet Compatibility <br> (Testing in progress, production method will be released after 100,000 reliability test cycles) |
+| [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH/tree/imp/beadclip-btn%40jpliew) | Improved Bead Clip Activation Button |
+| `imp/tennis`                     | Tennis Racquet Compatibility (Testing in progress, production method will be released after 100,000 reliability test cycles) |
 
 # Support
 If you encounter any issues during the production process, feel free to leave a comment on the YouTube tutorial video. If you complete the project, you're also very welcome to share photos of your finished product in the GitHub discussions.
