@@ -42,8 +42,8 @@
 
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
-| 可靠度測試         | 進行中   | 張緊次數已達 360,000+，尚未發現故障 (截至 2024/10/02) [測試影片](https://youtube.com/shorts/0TDaBDEwqnI) |
-| 適用網球拍         | 測試中   | 使用 GX80 滑台進行 75~85LB 循環張緊可靠度測試中。 張緊次數已達 20,000+ (截至 2024/10/02) 製作方法將在可靠度測試達 10 萬次後發佈|
+| 可靠度測試         | 進行中   | 張緊次數已達 365,000+，尚未發現故障 (截至 2024/10/03) [測試影片](https://youtube.com/shorts/0TDaBDEwqnI) |
+| 適用網球拍         | 測試中   | 使用 GX80 滑台進行 75~85LB 循環張緊可靠度測試中。 張緊次數已達 25,000+ (截至 2024/10/03) |
 | 相容 Pico 2        | 結束 | 受到 [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) BUG 的影響，已確認無法直接使用。 |
 | 製作對應 WISE 2086 安裝孔位轉接座 | 尚未開始 | 徵求故障的 WISE 2086 |
 
@@ -82,6 +82,14 @@
 - [維護與日誌管理指南](docs/3.Maintenance_and_Logs_Guide.cht.md)
 - [常見問題解答(FAQ)](docs/4.FAQ.cht.md)
 - [Pico 線譜](docs/5.Pico_Stringing_Pattern.cht.md)
+
+# 改進分支
+
+| 分支名稱                        | 說明                             |
+|----------------------------------|----------------------------------|
+| [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH_/tree/imp/beadclip-btn%40jpliew) | 改良式珠夾啟動按鍵                |
+| `imp/tennis` | 適用網球拍 (測試中，製作方法將在可靠度測試達 10 萬次後發佈)              |
+
 
 # 支援
 有任何問題，可以在 YouTube 影片下方留言。若完成專案，歡迎在討論區分享你的成果照片。
