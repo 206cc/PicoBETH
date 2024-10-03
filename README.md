@@ -63,4 +63,4 @@ After the modification, there is a minor issue: when pressing the bead clip head
 
 # Acknowledgment
 
-Thanks to jpliew for the contribution: https://github.com/206cc/PicoBETH/issues/5
+Thanks to [jpliew](https://github.com/jpliew) for the contribution: https://github.com/206cc/PicoBETH/issues/5

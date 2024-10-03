@@ -63,4 +63,4 @@ if not button_head_pressed or button_exit_pressed or rt_mode_pressed:
 
 # 致謝
 
-感謝 jpliew 的貢獻：https://github.com/206cc/PicoBETH/issues/5
+感謝 [jpliew](https://github.com/jpliew) 的貢獻：https://github.com/206cc/PicoBETH/issues/5
