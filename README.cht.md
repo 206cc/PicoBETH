@@ -86,6 +86,7 @@
 - [維護與日誌管理指南](docs/3.Maintenance_and_Logs_Guide.cht.md)
 - [常見問題解答(FAQ)](docs/4.FAQ.cht.md)
 - [Pico 線譜](docs/5.Pico_Stringing_Pattern.cht.md)
+- [研究室](docs/6.Research_Lab.cht.md)
 
 # 改進分支
 
