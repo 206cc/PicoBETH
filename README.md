@@ -91,7 +91,7 @@ If the structure of your badminton stringing machine is not strong enough, I str
 - [Maintenance and Logs Guide](docs/3.Maintenance_and_Logs_Guide.md)
 - [FAQ (Frequently Asked Questions)](docs/4.FAQ.md)
 - [Pico Stringing Pattern](docs/5.Pico_Stringing_Pattern.md)
-- [Research_Lab](docs/6.Research_Lab.md)
+- [Research Lab](docs/6.Research_Lab.md)
 
 # Improvement Branches
 
