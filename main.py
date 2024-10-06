@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.73A"
-VERDATE = "2024-10-05"
+VERSION = "2.73B"
+VERDATE = "2024-10-06"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -649,8 +649,8 @@ def init():
             
             time.sleep(3)
             logs_save("head_reset#0", "init()")
-            head_reset(None)
             lcd_putstr("Checking motor...", 0, 2, I2C_NUM_COLS)
+            head_reset(None)
             logs_save("MOTOR_MAX_STEPS#1", "init()")
             t0 = time.ticks_ms()
             MOTOR_MAX_STEPS = forward((MOTOR_SPEED_V1[0] + (9 - MOTOR_SPEED_LV) * MOTOR_SPEED_V1[1]), MOTOR_MAX_STEPS, 0, 1)
@@ -772,8 +772,10 @@ def start_tensioning():
                     if diff_g > 10:
                         if PRE_STRECH == 0 and diff_g > 50:
                             cp_phase = 1
-                        elif DEFAULT_LB >= TENNIS[0] and diff_g > 30:
+                        elif DEFAULT_LB >= TENNIS[0] and diff_g >= 90:
                             cp_phase = 1
+                        elif DEFAULT_LB >= TENNIS[0] and diff_g < 90:
+                            cp_phase = 0
                         else:
                             ft = 2
                 else:
@@ -1207,6 +1209,11 @@ def setting():
                         beepbeep(0.1)
                         HX711_V0 = HX711["HX711_V0"]
                         config_save(1)
+                        lcd_putstr(" ", 19, 1, 1)
+                        i = i - 1
+                        save_flag = 0
+                        CURSOR_XY_TEMP = i
+                        cursor_xy = MENU_ARR[i][0], MENU_ARR[i][1]
 
                 # Display LOG 顯示LOG
                 elif cursor_xy == (19, 3):
