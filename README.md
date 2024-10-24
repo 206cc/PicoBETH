@@ -69,7 +69,7 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 **HW 1.5 machine** [How to make step by step](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
 
-![PicoBETH HW 1.5](img_HW1.5_3D.jpg)
+![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/7evrJmn7L1r-picobeth-hw-15-for-badminton-stringing)
 
 **Stringing demonstration video**
