@@ -66,7 +66,7 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 **Modification completed (Under Development)**
 ![img_dev_machine](docs/img_dev_machine.jpg)
 
-**Final machine** [How to make step by step](https://youtu.be/uJVE3YFJtJA)
+**HW 1.5 machine** [How to make step by step](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
 
 **Stringing demonstration video**
