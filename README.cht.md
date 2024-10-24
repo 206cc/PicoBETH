@@ -64,7 +64,7 @@
 **HW 1.5 完成品** [製作合集](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
 
-![PicoBETH HW 1.5](img_HW1.5_3D.jpg)
+![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/7evrJmn7L1r-picobeth-hw-15-for-badminton-stringing)
 
 **穿線展示影片**
