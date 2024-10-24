@@ -53,7 +53,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 | ------------------- | ---------- | -------------------------------------------- |
 | Reliability Testing           | Ongoing   | Tensioning cycles have reached 515,000+ with no failures (as of 2024/10/24) [Test Video](https://youtube.com/shorts/0TDaBDEwqnI) |
 | Tennis Racquet Compatibility   | Testing | Performing 75-85LB cyclic tension reliability testing using the GX80 sliding table. Tensioning cycles have reached 175,000+ (as of 2024/10/24) |
-| Update hardware layout | In progress | HW 2.0 will feature a simpler, more aesthetically pleasing, and cost-effective arrangement of hardware components [View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw20-for-badminton-stringing) |
+| Update hardware layout | In progress | HW 2.0 will feature a simpler, more aesthetically pleasing, and cost-effective arrangement of hardware components [View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw-20-for-badminton-stringing?sharecode=Maq9iaeRmlb3yHHCTIYZC1jmwOv0plqlq70pMMMWHQw) |
 | Pico 2 Compatibility | Completed | Due to the [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) bug, it has been confirmed that it cannot be used directly. |
 | Create an adapter to match the mounting holes of the WISE 2086 | Not started |  |
 
@@ -70,7 +70,7 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 ![img_final_machine](docs/img_final_machine.jpg)
 
 ![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)
-[View 3D Model on Tinkercad](https://www.tinkercad.com/things/7evrJmn7L1r-picobeth-hw-15-for-badminton-stringing)
+[View 3D Model on Tinkercad](https://www.tinkercad.com/things/5FHNO85KUK4-picobeth-hw-15-for-badminton-stringing?sharecode=hBukCj4giq4Q9J8Fq-s8H5lIKzbYCcOiwuyQ-TE8oRA)
 
 **Stringing demonstration video**
 

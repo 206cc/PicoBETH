@@ -48,7 +48,7 @@
 | ------------------ | -------- | ------------------------------ |
 | 可靠度測試         | 進行中   | 張緊次數已達 515,000+，尚未發現故障 (截至 2024/10/24) [測試影片](https://youtube.com/shorts/0TDaBDEwqnI) |
 | 適用網球拍         | 測試中   | 使用 GX80 滑台進行 75~85LB 循環張緊可靠度測試中。 張緊次數已達 175,000+ (截至 2024/10/24) |
-| 更新結構佈局       | 進行中   | HW 2.0 將採用更簡單、美觀且更具成本效益的佈局方式 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw20-for-badminton-stringing) |
+| 更新結構佈局       | 進行中   | HW 2.0 將採用更簡單、美觀且更具成本效益的佈局方式 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw-20-for-badminton-stringing?sharecode=Maq9iaeRmlb3yHHCTIYZC1jmwOv0plqlq70pMMMWHQw) |
 | 相容 Pico 2        | 結束 | 受到 [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) BUG 的影響，已確認無法直接使用。 |
 | 製作對應 WISE 2086 安裝孔位轉接座 | 尚未開始 | 徵求故障的 WISE 2086 |
 
@@ -65,7 +65,7 @@
 ![img_final_machine](docs/img_final_machine.jpg)
 
 ![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)
-[View 3D Model on Tinkercad](https://www.tinkercad.com/things/7evrJmn7L1r-picobeth-hw-15-for-badminton-stringing)
+[View 3D Model on Tinkercad](https://www.tinkercad.com/things/5FHNO85KUK4-picobeth-hw-15-for-badminton-stringing?sharecode=hBukCj4giq4Q9J8Fq-s8H5lIKzbYCcOiwuyQ-TE8oRA)
 
 **穿線展示影片**
 
