@@ -42,7 +42,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 - **Simple structure, low cost, and easy maintenance**
   - All components are easy to source and inexpensive
 - **High durability**
-  - Over 515,000 tensioning reliability tests completed (testing ongoing)
+  - Over 565,000 tensioning reliability tests completed (testing ongoing)
 
 > [!CAUTION]
 > In the **fast mode** after version 2.70, when the speed is set to **L7 or higher** and the **tension exceeds 30LB**, the original 12V3A power supply may be insufficient, potentially causing the motor to slip. Therefore, this version has been upgraded to a 19V4A power supply. If you also plan to switch to a 19V power supply, please ensure that your 5V power converter can handle a 19V input voltage. Additionally, if you are using an external UPS, it should also be upgraded to a version that can accept 19V input and output.
@@ -51,8 +51,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing           | Ongoing   | Tensioning cycles have reached 515,000+ with no failures (as of 2024/10/24) [Test Video](https://youtube.com/shorts/0TDaBDEwqnI) |
-| Tennis Racquet Compatibility   | Testing | Performing 75-85LB cyclic tension reliability testing using the GX80 sliding table. Tensioning cycles have reached 175,000+ (as of 2024/10/24) |
+| Reliability Testing           | Ongoing   | Tensioning cycles have reached 565,000+ with no failures (as of 2024/10/31) [Test Video](https://youtube.com/shorts/0TDaBDEwqnI) |
+| Tennis Racquet Compatibility   | Testing | Performing 75-85LB cyclic tension reliability testing using the GX80 sliding table. Tensioning cycles have reached 225,000+ (as of 2024/10/31) |
 | Update hardware layout | In progress | HW 2.0 will feature a simpler, more aesthetically pleasing, and cost-effective arrangement of hardware components [View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw-20-for-badminton-stringing?sharecode=Maq9iaeRmlb3yHHCTIYZC1jmwOv0plqlq70pMMMWHQw) |
 | Pico 2 Compatibility | Completed | Due to the [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) bug, it has been confirmed that it cannot be used directly. |
 | Create an adapter to match the mounting holes of the WISE 2086 | Not started |  |
