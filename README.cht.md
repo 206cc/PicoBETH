@@ -63,7 +63,7 @@
 **HW 1.5 完成品** [製作合集](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
 
-![PicoBETH HW 1.5](docs/img_HW2.0_3D.jpg)  
+![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)  
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/5FHNO85KUK4-picobeth-hw-15-for-badminton-stringing?sharecode=hBukCj4giq4Q9J8Fq-s8H5lIKzbYCcOiwuyQ-TE8oRA)
 
 **HW 2.0 完成品**
@@ -71,6 +71,8 @@
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw-20-for-badminton-stringing?sharecode=Maq9iaeRmlb3yHHCTIYZC1jmwOv0plqlq70pMMMWHQw)
 
 **HW 3D Print 完成品**
+![HW3DP](docs/img_HW3DP.jpg)
+
 ![PicoBETH HW3D Print](docs/img_HW3DP_3D.jpg)  
 目前開發中，待可靠度測試完成後公佈
 
