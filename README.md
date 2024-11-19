@@ -42,7 +42,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 - **Simple structure, low cost, and easy maintenance**
   - All components are easy to source and inexpensive
 - **High durability**
-  - Over 565,000 tensioning reliability tests completed (testing ongoing)
+  - Over 705,000 tensioning reliability tests completed (testing ongoing)
 
 > [!CAUTION]
 > In the **fast mode** after version 2.70, when the speed is set to **L7 or higher** and the **tension exceeds 30LB**, the original 12V3A power supply may be insufficient, potentially causing the motor to slip. Therefore, this version has been upgraded to a 19V4A power supply. If you also plan to switch to a 19V power supply, please ensure that your 5V power converter can handle a 19V input voltage. Additionally, if you are using an external UPS, it should also be upgraded to a version that can accept 19V input and output.
@@ -51,11 +51,10 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing           | Ongoing   | Tensioning cycles have reached 565,000+ with no failures (as of 2024/10/31) [Test Video](https://youtube.com/shorts/0TDaBDEwqnI) |
-| Tennis Racquet Compatibility   | Testing | Performing 75-85LB cyclic tension reliability testing using the GX80 sliding table. Tensioning cycles have reached 225,000+ (as of 2024/10/31) |
-| Update hardware layout | In progress | HW 2.0 will feature a simpler, more aesthetically pleasing, and cost-effective arrangement of hardware components [View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw-20-for-badminton-stringing?sharecode=Maq9iaeRmlb3yHHCTIYZC1jmwOv0plqlq70pMMMWHQw) |
+| Reliability Testing           | Ongoing   | Tensioning cycles have reached 705,000+ with no failures (as of 2024/11/19) [Test Video](https://youtube.com/shorts/0TDaBDEwqnI) |
+| Tennis Racquet Compatibility   | Testing | The GX80 sliding table is being used in the HW2.0 layout for cyclic tension reliability testing at 75~85LB. The tension cycles have reached 360,000+ (as of 2024/11/19). |
+| 3D-printed parts | Testing | The HW3D Print version will use 3D printing, significantly reducing the difficulty of mechanical machining. Reliability testing is currently in progress. |
 | Pico 2 Compatibility | Completed | Due to the [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) bug, it has been confirmed that it cannot be used directly. |
-| Create an adapter to match the mounting holes of the WISE 2086 | Not started |  |
 
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
@@ -71,6 +70,16 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 
 ![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)  
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/5FHNO85KUK4-picobeth-hw-15-for-badminton-stringing?sharecode=hBukCj4giq4Q9J8Fq-s8H5lIKzbYCcOiwuyQ-TE8oRA)
+
+**HW 2.0 machine**
+![PicoBETH HW 2.0](docs/img_HW2.0_3D.jpg)  
+[View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw-20-for-badminton-stringing?sharecode=Maq9iaeRmlb3yHHCTIYZC1jmwOv0plqlq70pMMMWHQw)
+
+**HW 3D Print machine**
+![HW3DP](docs/img_HW3DP.jpg)
+
+![PicoBETH HW3D Print](docs/img_HW3DP_3D.jpg)  
+Currently under development, to be announced after completing reliability testing.
 
 **Stringing demonstration video**
 
