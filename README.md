@@ -51,7 +51,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing           | Ongoing   | Tensioning cycles have reached 705,000+ with no failures (as of 2024/11/19) [Test Video](https://youtube.com/shorts/0TDaBDEwqnI) |
+| Reliability Testing           | Ongoing   | Tensioning cycles have reached 705,000+ with no failures (as of 2024/11/19) [Test Video](https://youtube.com/shorts/LBGjt78jUYY) |
 | Tennis Racquet Compatibility   | Testing | The GX80 sliding table is being used in the HW2.0 layout for cyclic tension reliability testing at 75~85LB. The tension cycles have reached 360,000+ (as of 2024/11/19). |
 | 3D-printed parts | Testing | The HW3D Print version will use 3D printing, significantly reducing the difficulty of mechanical machining. Reliability testing is currently in progress. |
 | Pico 2 Compatibility | Completed | Due to the [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) bug, it has been confirmed that it cannot be used directly. |
