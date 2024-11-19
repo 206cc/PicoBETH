@@ -37,7 +37,7 @@
 - **結構簡單、成本低且易於維修**
   - 所有元件皆易於取得且價格低廉
 - **高耐用性**
-  - 已完成超過 56.5 萬次張緊可靠度測試（測試仍在進行中）
+  - 已完成超過 70.5 萬次張緊可靠度測試（測試仍在進行中）
 
 > [!CAUTION]
 > 在 V2.70 版本後的**快速模式**下，當速度設置在 **L7** 以上且**張力超過 30 LB** 時，原本的 12V3A 電源可能不足以支持，可能導致馬達失步(打滑)。因此，更換為 19V4A 的電源。如果你計劃更換 19V 電源，請確保你的 5V 轉換器可以承受 19V 輸入電壓。使用外接 UPS 亦需更換為 19V 兼容版本。
@@ -46,11 +46,10 @@
 
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
-| 可靠度測試         | 進行中   | 張緊次數已達 565,000+，尚未發現故障 (截至 2024/10/31) [測試影片](https://youtube.com/shorts/0TDaBDEwqnI) |
-| 適用網球拍         | 測試中   | 使用 GX80 滑台進行 75~85LB 循環張緊可靠度測試中。 張緊次數已達 225,000+ (截至 2024/10/31) |
-| 更新結構佈局       | 進行中   | HW 2.0 將採用更簡單、美觀且更具成本效益的佈局方式 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw-20-for-badminton-stringing?sharecode=Maq9iaeRmlb3yHHCTIYZC1jmwOv0plqlq70pMMMWHQw) |
+| 可靠度測試         | 進行中   | 張緊次數已達 705,000+，尚未發現故障 (截至 2024/11/19) [測試影片](https://youtube.com/shorts/0TDaBDEwqnI) |
+| 適用網球拍         | 測試中   | 在HW2.0 佈局上使用 GX80 滑台進行 75~85LB 循環張緊可靠度測試中。 張緊次數已達 360,000+ (截至 2024/11/19) |
+| 3D列印結構         | 測試中   | HW3D Print 將採用 3D 列印方式，大幅降低機械加工難度，目前正在進行可靠性測試。 |
 | 相容 Pico 2        | 結束 | 受到 [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) BUG 的影響，已確認無法直接使用。 |
-| 製作對應 WISE 2086 安裝孔位轉接座 | 尚未開始 | 徵求故障的 WISE 2086 |
 
 ## 專案起源
 一年前，由於參加公司社團，我開始接觸羽毛球，並對穿線產生濃厚興趣。我購買了重錘式穿線機，原計劃買一個電子拉線機頭，但最終決定利用我所掌握的知識自行設計。這個項目就是結合 Raspberry Pico、張力傳感器、微動開關和按鈕的成果。
@@ -64,8 +63,16 @@
 **HW 1.5 完成品** [製作合集](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
 
-![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)  
+![PicoBETH HW 1.5](docs/img_HW2.0_3D.jpg)  
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/5FHNO85KUK4-picobeth-hw-15-for-badminton-stringing?sharecode=hBukCj4giq4Q9J8Fq-s8H5lIKzbYCcOiwuyQ-TE8oRA)
+
+**HW 2.0 完成品**
+![PicoBETH HW 2.0](docs/img_HW2.0_3D.jpg)  
+[View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw-20-for-badminton-stringing?sharecode=Maq9iaeRmlb3yHHCTIYZC1jmwOv0plqlq70pMMMWHQw)
+
+**HW 3D Print 完成品**
+![PicoBETH HW3D Print](docs/img_HW3DP_3D.jpg)  
+目前開發中，待可靠度測試完成後公佈
 
 **穿線展示影片**
 
