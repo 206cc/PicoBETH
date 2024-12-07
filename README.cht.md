@@ -66,7 +66,9 @@
 ![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)  
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/5FHNO85KUK4-picobeth-hw-15-for-badminton-stringing?sharecode=hBukCj4giq4Q9J8Fq-s8H5lIKzbYCcOiwuyQ-TE8oRA)
 
-**HW 2.0 完成品**
+**HW 2.0 完成品** (部份組件採用 3D 列印)
+![img_final_machine](docs/img_final_machine_hw2.jpg)
+
 ![PicoBETH HW 2.0](docs/img_HW2.0_3D.jpg)  
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/gW2eyW052h4-picobeth-hw-20-for-badminton-stringing?sharecode=Maq9iaeRmlb3yHHCTIYZC1jmwOv0plqlq70pMMMWHQw)
 
