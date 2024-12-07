@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.73B"
-VERDATE = "2024-10-06"
+VERSION = "2.73C"
+VERDATE = "2024-12-07"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -44,7 +44,7 @@ LOG_MAX = 50                    # Maximum LOG retention records (Please do not s
                                 # 最大LOG保留記錄(請勿太大，以免記憶體耗盡)
 CA_REM = 0.1                    # LB value for HX711 Tension calibration reminder
                                 # 張力校正提醒(磅)
-HX711_DIFRT = 1.0               # Check the HX711 difrt in grams.
+HX711_DIFRT = 2.0               # Check the HX711 difrt in grams.
                                 # 檢查HX711飄移值(公克)
 HEAD_RESET = 1                  # Bead clip head Reset Mode: 0=Limit switch impact method, 1=Step calculation method.
                                 # 珠夾頭復位型式 0=限位開關撞擊方式 1=計算步數方式
@@ -302,6 +302,14 @@ def forward(delay, steps, check, init):
                 MOTOR_STP = 0
                 logs_save("No String?", "forward()")
                 return "No String?"
+            
+            # Tension exceeds negative 5 pounds during stringing (Is the YZC-133 installed upside down?) 張緊時張力超過負5磅(YZC-133裝反?)
+            if TENSION_MON < -2267:
+                head_reset(None)
+                MOTOR_ON = 0
+                MOTOR_STP = 0
+                logs_save("YZC-133 Reversed?", "forward()")
+                return "YZC-133 Reversed?"
         
         # Exceeding the rear limit switch 超過後限位SW
         if MOTOR_SW_REAR.value():
@@ -596,8 +604,8 @@ def init():
             ERR_MSG[0] = f"ERR: HX711@{HX711['RATE']}Hz"
             logs_save(ERR_MSG[0], "init()")
 
-        # Sampling error exceeds HX711_DIFRT gram or is less than 0.3G. (unstable) 取樣誤差過大超過 HX711_DIFRT 或小於 0.3公克(不穩定)
-        if HX711["DIFF"] > (HX711_DIFRT * 1000) or HX711["DIFF"] < 300:
+        # Sampling error exceeds HX711_DIFRT gram or is less than 0.2G. (unstable) 取樣誤差過大超過 HX711_DIFRT 或小於 0.2公克(不穩定)
+        if HX711["DIFF"] > (HX711_DIFRT * 1000) or HX711["DIFF"] < 200:
             ERR_MSG[0] = f"ERR: HX_DIFRT@{round(HX711['DIFF']/1000, 1)}G"
             logs_save(ERR_MSG[0], "init()")
 
@@ -654,34 +662,35 @@ def init():
             logs_save("MOTOR_MAX_STEPS#1", "init()")
             t0 = time.ticks_ms()
             MOTOR_MAX_STEPS = forward((MOTOR_SPEED_V1[0] + (9 - MOTOR_SPEED_LV) * MOTOR_SPEED_V1[1]), MOTOR_MAX_STEPS, 0, 1)
-            motor_time = time.ticks_ms() - t0
-            logs_save("MOTOR_MAX_STEPS#2", "init()")
-            MOTOR_SPEED_RATIO = round(MOTOR_MAX_STEPS/motor_time, 2)
-            logs_save(f"STEPS:{MOTOR_MAX_STEPS}/TIME:{motor_time}/MR:{MOTOR_SPEED_RATIO}/MS:{MOTOR_SPEED_V1[0]}/LV:{MOTOR_SPEED_LV}", "init()MOTOR")
             if not isinstance(MOTOR_MAX_STEPS, int):
                 ERR_MSG[0] = "ERR: MMS ABORT"
                 logs_save(ERR_MSG[0], "init()")
-            elif MOTOR_MAX_STEPS < 5000:
-                ERR_MSG[0] = "ERR: MAX STEPS"
-                logs_save(ERR_MSG[0], "init()")
             else:
-                MOTOR_RS_STEPS = int(MOTOR_MAX_STEPS / 20)
-                ABORT_LM = int(int(MOTOR_MAX_STEPS) * 0.4)
-                BZ_SW = ori_BZ_SW
-                ABORT_GRAM = (LB_RANGE[1] + 5) * 454
-                head_reset(None)
-                MOTOR_SPEED_LV = ori_MOTOR_SPEED_LV
-                LED_RED.off()
-                if hx_diff_g > (CA_REM * 453):
-                    lcd_putstr("HX Need Calibration!", 0, 2, I2C_NUM_COLS)
-                    logs_save("HX Need Calibration!", "init()")
+                motor_time = time.ticks_ms() - t0
+                logs_save("MOTOR_MAX_STEPS#2", "init()")
+                MOTOR_SPEED_RATIO = round(MOTOR_MAX_STEPS/motor_time, 2)
+                logs_save(f"STEPS:{MOTOR_MAX_STEPS}/TIME:{motor_time}/MR:{MOTOR_SPEED_RATIO}/MS:{MOTOR_SPEED_V1[0]}/LV:{MOTOR_SPEED_LV}", "init()MOTOR")
+                if MOTOR_MAX_STEPS < 5000:
+                    ERR_MSG[0] = "ERR: MAX STEPS"
+                    logs_save(ERR_MSG[0], "init()")
                 else:
-                    lcd_putstr("Ready", 0, 2, I2C_NUM_COLS)
-                    
-                beepbeep(0.3)
-                BOOT_COUNT = BOOT_COUNT + 1
-                if ERR_MSG[0] == "":
-                    config_save(0)
+                    MOTOR_RS_STEPS = int(MOTOR_MAX_STEPS / 20)
+                    ABORT_LM = int(int(MOTOR_MAX_STEPS) * 0.4)
+                    BZ_SW = ori_BZ_SW
+                    ABORT_GRAM = (LB_RANGE[1] + 5) * 454
+                    head_reset(None)
+                    MOTOR_SPEED_LV = ori_MOTOR_SPEED_LV
+                    LED_RED.off()
+                    if hx_diff_g > (CA_REM * 453):
+                        lcd_putstr("HX Need Calibration!", 0, 2, I2C_NUM_COLS)
+                        logs_save("HX Need Calibration!", "init()")
+                    else:
+                        lcd_putstr("Ready", 0, 2, I2C_NUM_COLS)
+                        
+                    beepbeep(0.3)
+                    BOOT_COUNT = BOOT_COUNT + 1
+                    if ERR_MSG[0] == "":
+                        config_save(0)
 
     except Exception as e:
         handle_error(e, "init()")
@@ -1357,7 +1366,7 @@ def main_interface():
     lcd_putstr(f"LB:     /--.- {OPTIONS_DICT['PSKT_ARR'][KNOT_FLAG]}:  %", 0, 0, I2C_NUM_COLS)
     lcd_putstr("KG:     /--.-       ", 0, 1, I2C_NUM_COLS)
     lcd_putstr("                    ", 0, 2, I2C_NUM_COLS)
-    lcd_putstr(f"=Pico= {OPTIONS_DICT['TENNIS'][TENNIS[2]]} L{MOTOR_SPEED_LV} {OPTIONS_DICT['MA_ARR'][CP_SW]}", 0, 3, I2C_NUM_COLS)
+    lcd_putstr(f"=PICO= {OPTIONS_DICT['TENNIS'][TENNIS[2]]} L{MOTOR_SPEED_LV} {OPTIONS_DICT['MA_ARR'][CP_SW]}", 0, 3, I2C_NUM_COLS)
     lcd_putstr(f"{DEFAULT_LB:.1f}", 4, 0, 4)
     lcd_putstr(f"{DEFAULT_LB * 0.45359237: >4.1f}", 4, 1, 4)
     lcd_putstr(f"{PRE_STRECH: >2d}", 17, 0, 2)
@@ -1667,4 +1676,3 @@ try:
     
 except Exception as e:
     handle_error(e, "main_loop()")
-    
