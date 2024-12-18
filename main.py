@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.73C"
-VERDATE = "2024-12-07"
+VERSION = "2.80"
+VERDATE = "2024-12-18"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
