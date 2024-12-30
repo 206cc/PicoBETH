@@ -42,7 +42,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 - **Simple structure, low cost, and easy maintenance**
   - All components are easy to source and inexpensive
 - **High durability**
-  - Over 965,000 tensioning reliability tests completed (testing ongoing)
+  - Over 1 million tension reliability test cycles have been completed with no hardware failures detected. [1 Million Cycles Video](https://youtube.com/shorts/kR_JLVGHwB8)
 
 > [!CAUTION]
 > In the **fast mode** after version 2.70, when the speed is set to **L7 or higher** and the **tension exceeds 30LB**, the original 12V3A power supply may be insufficient, potentially causing the motor to slip. Therefore, this version has been upgraded to a 19V4A power supply. If you also plan to switch to a 19V power supply, please ensure that your 5V power converter can handle a 19V input voltage. Additionally, if you are using an external UPS, it should also be upgraded to a version that can accept 19V input and output.
@@ -51,10 +51,11 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Reliability Testing           | Ongoing   | Tensioning cycles have reached 965,000+ with no failures (as of 2024/12/23) [Test Video](https://youtube.com/shorts/LBGjt78jUYY) |
-| Tennis Racquet Compatibility   | Testing | The GX80 sliding table is being used in the HW2.0 layout for cyclic tension reliability testing at 75~85LB. The tension cycles have reached 615,000+ (as of 2024/12/23). |
-| 3D-printed parts | Pause Testing | The HW3D Print version will use 3D printing, significantly reducing the difficulty of mechanical machining. Reliability testing is currently in progress. The tension cycles have reached 150,000+ (as of 2024/12/07). |
+| Tennis Racquet Compatibility   | Testing | The GX80 1605 sliding table is being used in the HW2 layout for cyclic tension reliability testing at 75~85LB. The tension cycles have reached 665,000+ (as of 2024/12/30). |
+| 3D-printed parts | Testing | The HW3D Print version will use 3D printing, significantly reducing the difficulty of mechanical machining. Reliability testing is currently in progress. The tension cycles have reached 150,000+ (as of 2024/12/30). |
+| 3D-Printed Clip Head | Testing | Reliability Testing in Progress |
 | Pico 2 Compatibility | Completed | Due to the [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) bug, it has been confirmed that it cannot be used directly. |
+| Reliability Testing           | Completed   | The HW1 tension cycles reached 1 million with no hardware failures during the test. Testing is now complete. |
 
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
