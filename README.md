@@ -39,7 +39,7 @@
 
 ## Assembly Video
 
-Please refer to the [Assembly Video](https://youtube.com/shorts/kR_JLVGHwB8) on YouTube for detailed instructions.
+Please refer to the [Assembly Video](https://youtube.com/gtyGDhp-Uqk) on YouTube for detailed instructions.
 
 ## Parts List
 
