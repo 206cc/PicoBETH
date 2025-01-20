@@ -44,7 +44,7 @@
 
 ## 組裝影片
 
-請參考 YouTube 上的 [組裝影片](https://youtube.com/gtyGDhp-Uqk) 完成組裝。
+請參考 YouTube 上的 [組裝影片](https://youtu.be/gtyGDhp-Uqk) 完成組裝。
 
 ## 零件列表
 
