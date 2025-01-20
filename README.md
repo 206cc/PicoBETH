@@ -51,7 +51,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item        | Progress   | Remarks                                      |
 | ------------------- | ---------- | -------------------------------------------- |
-| Tennis Racquet Compatibility   | Testing | The GX80 1605 sliding table is being used in the HW2 layout for cyclic tension reliability testing at 75~85LB. The tension cycles have reached 795,000+ (as of 2025/01/17). |
+| Tennis Racquet Compatibility   | Testing | The GX80 1605 sliding table is being used in the HW2 layout for cyclic tension reliability testing at 75~85LB. The tension cycles have reached 825,000+ (as of 2025/01/20). |
 | 3D-printed parts | Testing | The HW3D Print version will use 3D printing, significantly reducing the difficulty of mechanical machining. Reliability testing is currently in progress. The tension cycles have reached 150,000+ (as of 2024/12/30). |
 | 3D-Printed Clip Head | Testing | Reliability Testing in Progress |
 | Pico 2 Compatibility | Completed | Due to the [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) bug, it has been confirmed that it cannot be used directly. |
@@ -81,8 +81,8 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 **HW 3D Print machine** (Fully 3D-Printed)
 ![HW3DP](docs/img_HW3DP.jpg)
 
-![PicoBETH HW3D Print](docs/img_HW3DP_3D.jpg)  
-Currently under testing and will be released after completing reliability tests.
+![PicoBETH HW 3D-Printed Version](docs/img_HW3DP_3D.jpg)  
+PicoBETH HW 3D-Printed Version branch [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/3d-printed)
 
 **Stringing demonstration video**
 
@@ -114,7 +114,8 @@ If the structure of your badminton stringing machine is not strong enough, I str
 | Branch Name                     | Description                      |
 |----------------------------------|----------------------------------|
 | [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH/tree/imp/beadclip-btn%40jpliew) | Improved Bead Clip Activation Button |
-| `imp/tennis`                     | Tennis Racquet Compatibility (Testing in progress, production method will be released after 100,000 reliability test cycles) |
+| [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/3d-printed) | HW 3D-Printed Version                |
+| `branch/tennis`                     | Tennis Racquet Compatibility (Testing in progress) |
 
 # Support
 If you encounter any issues during the production process, feel free to leave a comment on the YouTube tutorial video. If you complete the project, you're also very welcome to share photos of your finished product in the GitHub discussions.

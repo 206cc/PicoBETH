@@ -46,7 +46,7 @@
 
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
-| 適用網球拍         | 測試中   | 在 HW2 佈局上使用 GX80 1605 滑台進行 75~85LB 循環張緊可靠度測試中。 張緊次數已達 795,000+ (截至 2025/01/17) |
+| 適用網球拍         | 測試中   | 在 HW2 佈局上使用 GX80 1605 滑台進行 75~85LB 循環張緊可靠度測試中。 張緊次數已達 825,000+ (截至 2025/01/20) |
 | 3D列印結構         | 測試中   | HW3D Print 將採用 3D 列印方式，大幅降低機械加工難度，目前正在進行可靠性測試。 張緊次數已達 150,000+ (截至 2024/12/30)|
 | 3D列印珠夾頭       | 測試中   | 耐用度測試中 |
 | 相容 Pico 2        | 結束 | 受到 [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) BUG 的影響，已確認無法直接使用。 |
@@ -76,8 +76,8 @@
 **HW 3D Print 完成品 (全部由 3D 列印)**
 ![HW3DP](docs/img_HW3DP.jpg)
 
-![PicoBETH HW3D Print](docs/img_HW3DP_3D.jpg)  
-目前測試中，待可靠度測試完成後公佈
+![PicoBETH HW 3D-Printed Version](docs/img_HW3DP_3D.jpg)  
+PicoBETH HW 3D 列印分支 [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/3d-printed/README.cht.md)
 
 **穿線展示影片**
 
@@ -104,12 +104,13 @@
 - [Pico 線譜](docs/5.Pico_Stringing_Pattern.cht.md)
 - [研究室](docs/6.Research_Lab.cht.md)
 
-# 改進分支
+# 分支
 
 | 分支名稱                        | 說明                             |
 |----------------------------------|----------------------------------|
-| [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH/blob/imp/beadclip-btn%40jpliew/README.cht.md) | 改良式珠夾啟動按鍵                |
-| `imp/tennis` | 適用網球拍 (測試中，製作方法將在可靠度測試達 10 萬次後發佈)              |
+| [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH/blob/imp/beadclip-btn%40jpliew) | 改良式珠夾啟動按鍵                |
+| [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/3d-printed) | HW 3D 列印分支                |
+| `branch/tennis` | 適用網球拍 (測試中)              |
 
 
 # 支援
