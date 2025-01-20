@@ -79,7 +79,7 @@ Please refer to the [Assembly Video](https://youtu.be/gtyGDhp-Uqk) on YouTube fo
 | 28  | XH2.54mm 2P Clip Activation Switch Cable 50cm |
 
 > [!WARNING]  
-> **Note:** Power cables must not be thinner than **18 AWG**.
+> **Note:** Power cables must not be thinner than **22 AWG**.
 
 ### Screw List
 
