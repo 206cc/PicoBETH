@@ -97,10 +97,10 @@ This part serves as the mounting bracket for the Load Cell and the sliding table
 
 ### **Step 2: Assembling the Main Body (Part-1)**
 1. Attach the bottom of the main body to the sliding table using **M4 x 30mm screws + spring washers + flat washers** x2 (keep them slightly loose for adjustment).
-2. Attach the sides of the main body to the sliding table using **M4 x 30mm screws + spring washers + flat washers** x4 (keep them slightly loose for adjustment).
+2. Attach the sides of the main body to the sliding table using **M4 x 20mm screws + spring washers + flat washers** x4 (keep them slightly loose for adjustment).
 3. Align the main body with the sliding table.
-4. Tighten the bottom **M4 x 30mm screws** x2 to a torque of 1.5 Nm.
-5. Tighten the side **M4 x 20mm screws** x4 to a torque of 1.5 Nm.
+4. Tighten the bottom **M4 x 30mm screws** x2 to a torque of **1.5 Nm**.
+5. Tighten the side **M4 x 20mm screws** x4 to a torque of **1.5 Nm**.
 
 > [!CAUTION]
 > Ensure washers are installed, and tighten screws to the recommended torque to prevent damage to the 3D-printed parts.
@@ -114,7 +114,7 @@ This part serves as the mounting bracket for the Load Cell and the sliding table
 ### **Step 4: Wiring the Power Cables**
 1. Install the **power switch** and **DC jack** onto the **Power Cover (Part-5)**.
 2. Insert the **mainboard power cable** into the mainboard.
-3. Use **gray spring wire connectors** to connect the **DC jack positive wire** to one side of the power switch.
+3. Use **gray spring wire connectors** to connect the **DC jack positive wire** to one side of the **power switch**.
 4. Connect the remaining **three positive wires** into another gray connector.
 5. Use another gray connector for all **negative wires**.
 
@@ -122,15 +122,15 @@ This part serves as the mounting bracket for the Load Cell and the sliding table
 1. Thread the **XH2.54mm 4P LCD Signal Cable** through the conduits and insert it into the mainboard. Mark the GND pin on both ends.
 2. Thread and connect the **Five-Way Button (XH2.54mm 6P)**, **LED Signal Cable (XH2.54mm 4P)**, and **Cancel Button (XH2.54mm 2P)** to the mainboard.
 
-### **Step 6: Installing the Clip Head and YZC-133 Load Cell**
-1. Drill a **6mm hole** 5mm above the YZC-133 and attach it to the clip head.
-2. Attach the **NJ5 20kg Load Cell (YZC-133)** to the **Part-3 Load Cell Bracket** using **M5 x 70mm hex screws + flat washers** (leave a 5mm gap for adjustment, do not fully tighten yet).
+### **Step 6: Installing the Clip Head and NJ5 20kg Load Cell (YZC-133)**
+1. Drill a **6mm hole** 5mm above the Load Cell and attach it to the clip head.
+2. Attach the **Load Cell** to the **Part-3 Load Cell Bracket** using **M5 x 70mm hex screws + flat washers** (leave a 5mm gap for adjustment, do not fully tighten yet).
 3. Secure the activation switch mount to the clip head using **M3 x 6mm round-head screws**.
 4. Attach the **XH2.54mm 2P Clip Activation Switch** using **M3 x 6mm self-tapping screws**.
-5. After organizing the cables, tighten the **M5 x 70mm hex screws** to a torque of 2.0 Nm.
-6. Secure the **M4 x 16mm screws + spring washers + flat washers** x4 to a torque of 1.5 Nm.
+5. After organizing the cables, tighten the **M5 x 70mm hex screws** to a torque of **2.0 Nm**.
+6. Secure the **M4 x 16mm screws + spring washers + flat washers** x4 to a torque of **1.5 Nm**.
 7. Connect the **XH2.54mm 2P Clip Activation Switch** to the mainboard.
-8. Use **Ø4 wire wrap** to organize the cables for the YZC-133 and Clip Activation Switch.
+8. Use **Ø4 wire wrap** to organize the cables for the Load Cell and Clip Activation Switch.
 
 > [!CAUTION]
 > Ensure washers are installed, and tighten screws to the recommended torque to prevent damage to the 3D-printed parts.
@@ -154,7 +154,7 @@ This part serves as the mounting bracket for the Load Cell and the sliding table
 
 ### **Step 10: Mounting the Stringing Head to the Platform**
 1. Before installation, design a custom adapter base to fit your stringing machine platform. Refer to [EP.9 Positioning and Fixing](https://youtube.com/Ax4agdsqyms).
-2. It is recommended to use M8 screws with flat washers and tighten them to a torque of 3.0 N·m.
+2. It is recommended to use M8 screws with flat washers and tighten them to a torque of **3.0 Nm**.
 
 ### **Step 11: Hardware Testing**
 1. Enter HW Testing Mode by holding the **middle button** during startup.
