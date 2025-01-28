@@ -81,7 +81,7 @@
 
 ## **Assembly Steps**
 
-Follow the [YouTube Tutorial Video](https://youtube.com/shorts/kR_JLVGHwB8) for detailed assembly instructions.
+Follow the [YouTube Tutorial Video](https://youtu.be/gtyGDhp-Uqk) for detailed assembly instructions.
 
 ### **Step 1: 3D-Printed Parts**
 ![part1](docs/img_3d_part1.jpg)
