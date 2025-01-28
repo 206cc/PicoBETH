@@ -82,7 +82,7 @@
 
 ## **組裝步驟**
 
-以下組裝步驟請搭配 [YouTube 教學影片](https://youtube.com/shorts/kR_JLVGHwB8) 進行。
+以下組裝步驟請搭配 [YouTube 教學影片](https://youtu.be/gtyGDhp-Uqk) 進行。
 
 ### **步驟 1：3D 列印部件**
 ![part1](docs/img_3d_part1.jpg)
