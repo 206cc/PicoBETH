@@ -77,7 +77,7 @@
 | I   | M4 × 8mm Hex Screws            | 2        |
 | J   | M4 Spring Washers              | 10       |
 | K   | M4 Flat Washers                | 10       |
-| L   | M5 × 70mm Hex Screws + Washers | 2        |
+| L   | M5 × 80mm Hex Screws + Washers | 2        |
 
 ## **Assembly Steps**
 
@@ -124,10 +124,10 @@ This part serves as the mounting bracket for the Load Cell and the sliding table
 
 ### **Step 6: Installing the Clip Head and NJ5 20kg Load Cell (YZC-133)**
 1. Drill a **6mm hole** 5mm above the Load Cell and attach it to the clip head.
-2. Attach the **Load Cell** to the **Part-3 Load Cell Bracket** using **M5 x 70mm hex screws + flat washers** (leave a 5mm gap for adjustment, do not fully tighten yet).
+2. Attach the **Load Cell** to the **Part-3 Load Cell Bracket** using **M5 x 80mm hex screws + flat washers** (leave a 5mm gap for adjustment, do not fully tighten yet).
 3. Secure the activation switch mount to the clip head using **M3 x 6mm round-head screws**.
 4. Attach the **XH2.54mm 2P Clip Activation Switch** using **M3 x 6mm self-tapping screws**.
-5. After organizing the cables, tighten the **M5 x 70mm hex screws** to a torque of **2.0 Nm**.
+5. After organizing the cables, tighten the **M5 x 80mm hex screws** to a torque of **2.0 Nm**.
 6. Secure the **M4 x 16mm screws + spring washers + flat washers** x4 to a torque of **1.5 Nm**.
 7. Connect the **XH2.54mm 2P Clip Activation Switch** to the mainboard.
 8. Use **Ø4 wire wrap** to organize the cables for the Load Cell and Clip Activation Switch.
