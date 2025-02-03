@@ -4,11 +4,11 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
 
 # PicoBETH HW 3D-Printed Version
-> [!CAUTION]
-> The documentation for this 3D-Printed project is still being revised. If you have any questions, feel free to ask and discuss in the community.
+
+This branch replaces the components in the main branch that require complex machining with 3D-printed parts, significantly simplifying the production process. Before starting this 3D-printed branch, please thoroughly read the [main branch](https://github.com/206cc/PicoBETH) documentation to understand the relevant information and precautions.
 
 > [!CAUTION]
-> This branch replaces the components in the main branch that require complex machining with 3D-printed parts, significantly simplifying the production process. Before starting this 3D-printed branch, please thoroughly read the [main branch](https://github.com/206cc/PicoBETH) documentation to understand the relevant information and precautions.
+> The documentation for this 3D-Printed project is still being revised. If you have any questions, feel free to ask and discuss in the community.
 
 ## 3D-Printed Version Stringing Demo
 
