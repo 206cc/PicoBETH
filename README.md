@@ -10,15 +10,21 @@
 > [!CAUTION]
 > This branch replaces the components in the main branch that require complex machining with 3D-printed parts, significantly simplifying the production process. Before starting this 3D-printed branch, please thoroughly read the [main branch](https://github.com/206cc/PicoBETH) documentation to understand the relevant information and precautions.
 
+## 3D-Printed Version Stringing Demo
+
+This video provides a real-world example of how the machine operates and handles stringing efficiently. If you have any questions or feedback, feel free to leave a comment!
+
+**[Watch the YouTube Demo](https://youtu.be/3ESbAJstZl4)**  
+
 ## 3D-Printed Parts Download
-[PicoBETH HW 3D Printed Version](https://www.thingiverse.com/thing:6913170)
+**[PicoBETH HW 3D Printed Version](https://www.thingiverse.com/thing:6913170)**
 
 > [!CAUTION]
 > Avoid using PLA for printing as its strength may degrade over time.
 
 ## 3D Viewing Model (Non-Printable)
 
-[PicoBETH HW 3D Viewing Model](https://www.tinkercad.com/things/4lv9ptAmuc4-picobeth-hw-3d-viewing-model)
+**[PicoBETH HW 3D Viewing Model](https://www.tinkercad.com/things/4lv9ptAmuc4-picobeth-hw-3d-viewing-model)**
 
 ## Parts List
 
@@ -81,7 +87,7 @@
 
 ## **Assembly Steps**
 
-Follow the [YouTube Tutorial Video](https://youtu.be/gtyGDhp-Uqk) for detailed assembly instructions.
+Follow the **[YouTube Tutorial Video](https://youtu.be/gtyGDhp-Uqk)** for detailed assembly instructions.
 
 ### **Step 1: 3D-Printed Parts**
 ![part1](docs/img_3d_part1.jpg)
