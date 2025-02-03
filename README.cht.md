@@ -4,11 +4,11 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
 
 # PicoBETH HW 3D-Printed Version
-> [!CAUTION]
->  本 3D Printed 專案的說明文件仍在持續修訂中，如有任何問題，歡迎在討論區提問交流。
+
+此分支主要將主版本(main-branch)中需要複雜機械加工的零件改為 3D 列印，從而大幅簡化製作流程。在開始進行此 3D 列印分支的製作前，請務必詳閱 [主版本](https://github.com/206cc/PicoBETH) 的說明文件，了解相關知識和注意事項。
 
 > [!CAUTION]
->  此分支主要將主版本(main-branch)中需要複雜機械加工的零件改為 3D 列印，從而大幅簡化製作流程。在開始進行此 3D 列印分支的製作前，請務必詳閱 [主版本](https://github.com/206cc/PicoBETH) 的說明文件，了解相關知識和注意事項。
+>  本 3D Printed 專案的說明文件仍在持續修訂中，如有任何問題，歡迎在討論區提問交流。
 
 ## 3D 列印版穿線示範
 
