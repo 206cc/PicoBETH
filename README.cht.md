@@ -10,15 +10,21 @@
 > [!CAUTION]
 >  此分支主要將主版本(main-branch)中需要複雜機械加工的零件改為 3D 列印，從而大幅簡化製作流程。在開始進行此 3D 列印分支的製作前，請務必詳閱 [主版本](https://github.com/206cc/PicoBETH) 的說明文件，了解相關知識和注意事項。
 
+## 3D 列印版穿線示範
+
+此影片展示了機器的實際操作，讓您更直觀地了解穿線效果。如果有任何問題或建議，歡迎留言交流！
+
+**[觀看 YouTube 示範影片](https://youtu.be/3ESbAJstZl4)**  
+
 ## 3D 列印部件下載
-[PicoBETH HW 3D Printed Version](https://www.thingiverse.com/thing:6913170)
+**[PicoBETH HW 3D Printed Version](https://www.thingiverse.com/thing:6913170)**
 
 > [!CAUTION]
 >  請勿使用 PLA 材質列印，因其強度隨時間可能會劣化。
 
 ## 3D 展示模型(非列印模型)
 
-[PicoBETH HW 3D Viewing Model](https://www.tinkercad.com/things/4lv9ptAmuc4-picobeth-hw-3d-viewing-model)
+**[PicoBETH HW 3D Viewing Model](https://www.tinkercad.com/things/4lv9ptAmuc4-picobeth-hw-3d-viewing-model)**
 
 ## 零件列表
 
@@ -82,7 +88,7 @@
 
 ## **組裝步驟**
 
-以下組裝步驟請搭配 [YouTube 教學影片](https://youtu.be/gtyGDhp-Uqk) 進行。
+以下組裝步驟請搭配 **[YouTube 教學影片](https://youtu.be/gtyGDhp-Uqk)** 進行。
 
 ### **步驟 1：3D 列印部件**
 ![part1](docs/img_3d_part1.jpg)
