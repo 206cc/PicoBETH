@@ -62,6 +62,10 @@
   | C    | 鋁條      | 20 x 15 mm      | 長度：80 mm   |
   | E    | 鋁片      | 55 x 25 mm      | 厚度：2 mm    |
 
+### 相關照片
+
+（請附上各版本組裝及測試照片，以供參考）
+
 ---
 
 ## 軟體說明
@@ -75,8 +79,8 @@
 ```python
 TENNIS = [40, 90, 1]            # Tennis Mode [Min LB, Max LB , 0=Disable/1=Enadble](BETA)
                                 # 網球模式[最小LB, 最大LB , 0=關閉/1=啟用](BETA)
-LOAD_CELL_KG = 50               # 使用的荷重元公斤數(20KG or 50KG)
-                                # The load cell capacity in KG.(20KG or 50KG)
+LOAD_CELL_KG = 50               # The load cell capacity in KG.(20KG or 50KG)
+                                # 使用的荷重元公斤數(20KG or 50KG)
 ```
 
 - **TENNIS 陣列**：第三個值設為 `1` 以啟用網球模式。如果是網球輕型版本請將第二個值設為 `70` 把最大張力值鎖定在 70 lb。
@@ -87,12 +91,6 @@ LOAD_CELL_KG = 50               # 使用的荷重元公斤數(20KG or 50KG)
 ## 張力校正
 
 由於網球版本採用 50 kg Load Cell，其校正方式與羽毛球版使用的 20 kg Load Cell 略有不同。請參考此 [Load Cell 50kg 校正影片](https://youtu.be/3H8zwHVQJGE)，按照影片步驟進行張力校正，以確保準確性。
-
----
-
-## 相關照片
-
-（請附上各版本組裝及測試照片，以供參考）
 
 ---
 
