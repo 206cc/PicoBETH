@@ -70,7 +70,11 @@
 
 ### 相關照片
 
-（請附上各版本組裝及測試照片，以供參考）
+![img_HW2_GX80-1](docs/img_HW2_GX80-1.jpg)
+![img_HW2_GX80-2](docs/img_HW2_GX80-2.jpg)
+![img_HW2_GX80-3](docs/img_HW2_GX80-3.jpg)
+![img_HW2_GX80-4](docs/img_HW2_GX80-4.jpg)
+![img_HW2_GX80-5](docs/img_HW2_GX80-5.jpg)
 
 ---
 
@@ -91,6 +95,9 @@ LOAD_CELL_KG = 50               # The load cell capacity in KG.(20KG or 50KG)
 
 - **TENNIS 陣列**：第三個值設為 `1` 以啟用網球模式。如果是網球輕型版本請將第二個值設為 `70` 把最大張力值鎖定在 70 lb。
 - **LOAD_CELL_KG 變數**：設為 `50` 以表示使用 50 kg Load Cell。
+
+啟用網球模式後，待機畫面底部的狀態列會顯示一個 T 標誌。 
+![img_tennis_mode](docs/img_tennis_mode.jpg)
 
 ---
 
