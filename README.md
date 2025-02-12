@@ -35,8 +35,7 @@ Two configurations are provided for the tennis version: **Lightweight** and **St
 
 ---
 
-### Accuracy  
-When the tension is below 50 lb, the accuracy is ±0.05 lb; when above 50 lb, the accuracy is ±0.15 lb.  
+### Accuracy   
 Reference video: [PicoBETH HW3D Lightweight Tennis – Tension Calibration & Accuracy](https://youtu.be/3H8zwHVQJGE)
 
 ---
