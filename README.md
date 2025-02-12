@@ -71,7 +71,11 @@ This version uses the GX80 series sliding table with a 1605 lead screw. The GX80
 
 ### Related Photos
 
-(Attach assembly and test photos for reference.)
+![img_HW2_GX80-1](docs/img_HW2_GX80-1.jpg)
+![img_HW2_GX80-2](docs/img_HW2_GX80-2.jpg)
+![img_HW2_GX80-3](docs/img_HW2_GX80-3.jpg)
+![img_HW2_GX80-4](docs/img_HW2_GX80-4.jpg)
+![img_HW2_GX80-5](docs/img_HW2_GX80-5.jpg)
 
 ---
 
@@ -92,6 +96,9 @@ LOAD_CELL_KG = 50               # The load cell capacity in KG.(20KG or 50KG)
 
 - **TENNIS array**: Set the third value to `1` to enable Tennis Mode. If using the lightweight version, set the second value to `70` to limit the maximum tension to 70 lb.
 - **LOAD_CELL_KG variable**: Set to `50` to indicate the use of a 50 kg Load Cell.
+
+When Tennis Mode is enabled, a T symbol will appear on the bottom status bar of the standby screen.
+![img_tennis_mode](docs/img_tennis_mode.jpg)
 
 ---
 
