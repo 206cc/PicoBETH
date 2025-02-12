@@ -3,7 +3,7 @@
 
 # PicoBETH Tennis Version
 
-This version requires minimal hardware modifications based on the original badminton version to support the higher tension demands of tennis rackets.
+This version requires minimal hardware modifications based on the original badminton version to support the higher tension demands of tennis rackets. Before proceeding with this branch, be sure to thoroughly read the [main version](https://github.com/206cc/PicoBETH) documentation to understand the relevant knowledge and important considerations.
 
 ## Hardware Changes
 
