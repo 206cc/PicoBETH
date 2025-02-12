@@ -46,10 +46,10 @@
 
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
-| 3D 列印輕量網球版本  | 尚未開始   | 在 HW3D 架構，使用 50KG Load Cell 與 SGX 1605 滑台，進行 55 至 65 LB 循環張緊可靠性測試。 |
+| 3D 列印輕量網球版本  | 測試中   | 在 HW3D 架構，使用 50KG Load Cell 與 SGX 1605 滑台，進行 55 至 65 LB 循環張緊可靠性測試。 張緊次數已達 20,000+ (截至 2025/02/12)|
 | 相容 Pico 2        | 結束 | 受到 [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/) BUG 的影響，已確認無法直接使用。 |
 | 可靠度測試         | 結束   | HW1 測試張緊次數已達 100 萬次，期間無任何硬體故障，測試結束。 |
-| 適用網球拍         | 結束   | 在 HW2 架構，使用 50KG Load Cell 與 GX80 1605 滑台進行了 75~85LB 循環張緊可靠度測試，張緊次數達 870,000+ 次後測試結束（Load Cell 斷裂），目前製作文件正在編寫中。|
+| 適用網球拍         | 結束   | 在 HW2 架構，使用 50KG Load Cell 與 GX80 1605 滑台進行了 75~85LB 循環張緊可靠度測試，張緊次數達 870,000+ 次後測試結束（Load Cell 金屬疲勞斷裂）。|
 | 3D列印珠夾頭       | 結束   | 夾片耐用度不佳，停止開發 |
 
 ## 專案起源
@@ -110,7 +110,7 @@ PicoBETH HW 3D 列印分支 [`branch/3d-printed`](https://github.com/206cc/PicoB
 |----------------------------------|----------------------------------|
 | [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH/blob/imp/beadclip-btn%40jpliew) | 改良式珠夾啟動按鍵                |
 | [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/3d-printed) | HW 3D 列印分支                |
-| `branch/tennis` | 適用網球拍 (測試中)              |
+| [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/tennis) | 適用網球拍              |
 
 
 # 支援

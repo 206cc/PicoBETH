@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.80"
-VERDATE = "2024-12-18"
+VERSION = "2.80A"
+VERDATE = "2025-02-01"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -32,8 +32,6 @@ PS_MAX = 30                     # Maximum percentage in Pre-Strech
                                 # 設定預拉的最高%
 KNOT_RANG = [5, 30]             # Minimum/Maximum percentage for knot
                                 # 打結增最低/高%
-HX711_RANGE = [15.00, 55.00]    # Minimum/Maximum value for HX711 calibration parameter
-                                # HX711校正參數最小/最大值
 CP_SLOW = 30                    # Gram value for triggering constant tension adjustment
                                 # 觸發恆拉微調公克值
 CP_FAST = 40                    # Gram value for triggering the fast constant-pull mechanism
@@ -49,7 +47,9 @@ HX711_DIFRT = 2.0               # Check the HX711 difrt in grams.
 HEAD_RESET = 1                  # Bead clip head Reset Mode: 0=Limit switch impact method, 1=Step calculation method.
                                 # 珠夾頭復位型式 0=限位開關撞擊方式 1=計算步數方式
 TENNIS = [40, 90, 0]            # Tennis Mode [Min LB, Max LB , 0=Disable/1=Enadble](BETA)
-                                # 網球模式[最小LB, 最大LB , 0=關閉/1=啟用](BETA)
+                                # 網球模式[最小LB, 最大LB , 0=關閉/1=啟用]
+LOAD_CELL_KG = 20               # 使用的荷重元公斤數(20KG or 50KG)
+                                # The load cell capacity in KG.(20KG or 50KG)
                     
 import time, _thread, machine, os, random, gc, sys
 from machine import I2C, Pin
@@ -58,7 +58,7 @@ from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2
 
 # Other parameters 其它參數
 FIRST_TEST = 1
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','MOTOR_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','CORR_COEF_AUTO','KNOT','FIRST_TEST','BZ_SW','HX711_V0','MOTOR_SPEED_LV'] # Saved variables 存檔變數
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','MOTOR_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','KNOT','FIRST_TEST','BZ_SW','HX711_V0','MOTOR_SPEED_LV','LOAD_CELL_KG'] # Saved variables 存檔變數
 MENU_ARR = [[5,0],[4,1],[4,2],[14,0],[14,1],[15,1],[17,1],[18,1],[19,1],[8,3],[19,3]] # Array for LB setting menu 設定選單陣列
 OPTIONS_DICT = {"UNIT_ARR":['LB&KG', 'LB', 'KG'],
                 "ONOFF_ARR":['Off', 'On '],
@@ -77,7 +77,7 @@ RT_MODE = 0
 HEAD_RESET_COUNT = 0
 MOTOR_SPEED_RATIO = 0
 ABORT_GRAM = 1000
-HX711_CAL = 20.00
+HX711_CAL = LOAD_CELL_KG
 LB_KG_SELECT = 0
 DEFAULT_LB = 20.0
 PRE_STRECH = 10
@@ -136,7 +136,7 @@ MOTOR_STP = 0
 MOTOR_STEPS = 0
 CURSOR_XY_TEMP = 0
 CURSOR_XY_TS_TEMP = 1
-HX711 = {"RATE":0, "DIFF":0, "V0":[], "CP_HZ":0.125, "HX711_CAL": 20.00}
+HX711 = {"RATE":0, "DIFF":0, "V0":[], "CP_HZ":0.125, "HX711_CAL": LOAD_CELL_KG}
 TENSION_COUNT = 0
 BOOT_COUNT = 0
 TIMER = 0
@@ -144,7 +144,6 @@ ERR_MSG = ["", ""]
 ABORT_LM = 0
 TS_ARR = []
 LOGS = []
-TENSION_MON_TEMP = 0
 KNOT_FLAG = 0
 RT_CC = [1.0, 1.0]
 TIMER_FLAG = 0
@@ -352,9 +351,6 @@ def backward(delay, steps, check):
         start_time = time.ticks_us()
         if check == 1:
             if MOTOR_SW_FRONT.value():
-                if init == 1:
-                    MOTOR_STEPS = i
-                    
                 time.sleep(0.2)
                 forward((MOTOR_SPEED_V1[0] + (9 - MOTOR_SPEED_LV) * MOTOR_SPEED_V1[1]), MOTOR_RS_STEPS, 0, 0)
                 return 0 
@@ -422,7 +418,7 @@ def handle_error(e, func):
 # Second core 第二核心
 def tension_monitoring():
     try:
-        global TENSION_MON, MOTOR_STP, HX711, BUTTON_LIST, TENSION_MON_TEMP, ERR_MSG
+        global TENSION_MON, MOTOR_STP, HX711, BUTTON_LIST, ERR_MSG
         # HX711 zeroing 歸零 HX711
         v0_arr = []
         t0 = time.ticks_ms()
@@ -444,7 +440,6 @@ def tension_monitoring():
                 TENSION_MON = int((val-(v0))/100*(HX711_CAL/20))
                 if MOTOR_ON == 1:
                     if LB_CONV_G < (TENSION_MON * CORR_COEF):
-                        TENSION_MON_TEMP = TENSION_MON
                         MOTOR_STP = 1
             
             # Button detection 按鍵偵測
@@ -505,7 +500,7 @@ def sys_logs_show():
 # Boot initialization 開機初始化
 def init():
     try:
-        global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTOR_RS_STEPS, MOTOR_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, BZ_SW, RT_MODE, MOTOR_SPEED_RATIO, MOTOR_SPEED_LV, LB_RANGE, DEFAULT_LB, TENNIS
+        global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTOR_RS_STEPS, MOTOR_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, BZ_SW, RT_MODE, MOTOR_SPEED_RATIO, MOTOR_SPEED_LV, LB_RANGE, DEFAULT_LB, TENNIS, HX711_CAL, HX711_V0, LOAD_CELL_KG
         boot_mode = 0
         # Update mode
         if BUTTON_DOWN.value():
@@ -553,6 +548,7 @@ def init():
             beta = "(BETA)"
         
         test_MOTOR_SPEED_LV = MOTOR_SPEED_LV
+        ori_LOAD_CELL_KG = LOAD_CELL_KG
         config_read()
         DEFAULT_LB = min(DEFAULT_LB, LB_RANGE[1])
         ori_BZ_SW = BZ_SW
@@ -573,6 +569,22 @@ def init():
         LB_CONV_G = min(int((DEFAULT_LB * 453.59237) * ((PRE_STRECH + 100) / 100)), int(LB_RANGE[1] * 453.59237))
         lcd_putstr("Tension monitoring...", 0, 2, I2C_NUM_COLS)
         _thread.start_new_thread(tension_monitoring, ())
+ 
+        # 檢查 Load Cell 公斤數
+        if LOAD_CELL_KG not in (20, 50):
+            ERR_MSG[0] = f"ERR: Load Cell {LOAD_CELL_KG}"
+            logs_save(ERR_MSG[0], "init()")
+ 
+        # 檢查 Load Cell 是否重新設定
+        if ori_LOAD_CELL_KG != LOAD_CELL_KG:
+            HX711_CAL = ori_LOAD_CELL_KG
+            HX711_V0 = 0
+            LOAD_CELL_KG = ori_LOAD_CELL_KG
+        
+        # 檢查 Load Cell 是否與 HX711_CAL 匹配
+        if abs(LOAD_CELL_KG - HX711_CAL) > 10:
+            HX711_CAL = LOAD_CELL_KG
+            DEFAULT_LB = 20
         
         # Waiting for HX711 zeroing 等待 HX711 歸零
         i = 0
@@ -681,6 +693,7 @@ def init():
                     head_reset(None)
                     MOTOR_SPEED_LV = ori_MOTOR_SPEED_LV
                     LED_RED.off()
+                    main_interface()
                     if hx_diff_g > (CA_REM * 453):
                         lcd_putstr("HX Need Calibration!", 0, 2, I2C_NUM_COLS)
                         logs_save("HX Need Calibration!", "init()")
@@ -775,16 +788,26 @@ def start_tensioning():
                     cp_phase = 2
                     if cc_add_flag == 0:
                         cc_count_add = cc_count_add + 1000
-                elif diff_g < (CP_FAST * 2) and ts_phase == 2:
+                # for Tennis
+                elif diff_g < (CP_FAST * 2.5) and ts_phase == 2 and DEFAULT_LB >= TENNIS[0]:
                     cp_phase = 0
                     cc_add_flag = 1
                     if diff_g > 10:
                         if PRE_STRECH == 0 and diff_g > 50:
                             cp_phase = 1
-                        elif DEFAULT_LB >= TENNIS[0] and diff_g >= 90:
+                        elif diff_g >= (CP_FAST * 1.0):
                             cp_phase = 1
-                        elif DEFAULT_LB >= TENNIS[0] and diff_g < 90:
+                        elif diff_g < (CP_FAST * 1.0):
                             cp_phase = 0
+                        else:
+                            ft = 2
+                # for Badminton
+                elif diff_g < (CP_FAST * 2) and ts_phase == 2 and DEFAULT_LB < TENNIS[0]:
+                    cp_phase = 0
+                    cc_add_flag = 1
+                    if diff_g > 10:
+                        if PRE_STRECH == 0 and diff_g > 50:
+                            cp_phase = 1
                         else:
                             ft = 2
                 else:
@@ -802,10 +825,18 @@ def start_tensioning():
             # Constant-pull decrease 恆拉減少張力
             if (temp_LB_CONV_G + (CP_SLOW * 2)) < TENSION_MON and (manual_flag == 1 or ts_phase == 0):
                 diff_g =  TENSION_MON - temp_LB_CONV_G
-                if diff_g < CP_FAST * (5 - (PRE_STRECH / 10)) and ts_phase == 2:
-                    cp_phase = 0
+                # for badminton
+                if DEFAULT_LB < TENNIS[0]:
+                    if diff_g < CP_FAST * (5 - (PRE_STRECH / 10)) and ts_phase == 2:
+                        cp_phase = 0
+                    else:
+                        cp_phase = 1
+                # for Tennis
                 else:
-                    cp_phase = 1
+                    if diff_g < CP_FAST * (8 - (PRE_STRECH / 10)) and ts_phase == 2:
+                        cp_phase = 0
+                    else:
+                        cp_phase = 1
                 
                 if ts_phase == 0:
                     count_sub = count_sub + 1
@@ -1260,7 +1291,7 @@ def setting():
                         LCD.blink_cursor_on()
                 
                 if flag == 1:
-                    HX711_CAL = max(HX711_RANGE[0], min(HX711_RANGE[1], HX711_CAL))
+                    HX711_CAL = max(LOAD_CELL_KG - 10, min(LOAD_CELL_KG + 10, HX711_CAL))
                     
                     if FIRST_TEST == 2:
                         FIRST_TEST = 0
