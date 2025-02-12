@@ -97,7 +97,7 @@ LOAD_CELL_KG = 50               # The load cell capacity in KG.(20KG or 50KG)
 
 ## Tension Calibration
 
-Since the tennis version uses a 50 kg Load Cell, the calibration process differs slightly from the 20 kg Load Cell used in the badminton version. Please refer to this [Load Cell 50kg Calibration Video](https://youtu.be/3H8zwHVQJGE) and follow the steps carefully to ensure accurate calibration.
+Since the tennis version uses a 50 kg Load Cell, the calibration process differs slightly from the 20 kg Load Cell used in the badminton version. Please refer to this [PicoBETH HW3D Lightweight Tennis – Tension Calibration & Accuracy](https://youtu.be/3H8zwHVQJGE) and follow the steps carefully to ensure accurate calibration.
 
 
 ---
