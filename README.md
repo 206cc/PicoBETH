@@ -35,6 +35,13 @@ Two configurations are provided for the tennis version: **Lightweight** and **St
 
 ---
 
+### Accuracy  
+When the tension is below 50 lb, the accuracy is ±0.05 lb; when above 50 lb, the accuracy is ±0.15 lb.  
+Reference video: [PicoBETH HW3D Lightweight Tennis – Tension Calibration & Accuracy](https://youtu.be/3H8zwHVQJGE)
+
+---
+
+
 ## Lightweight Tennis Version
 
 This version continues using the SGX series sliding table, replacing only the lead screw with 1605 for increased pulling force. Since SGX is equipped with only one MGN12H linear rail, it is recommended to keep the maximum tension below 70 lb to ensure the longevity of the sliding table.
