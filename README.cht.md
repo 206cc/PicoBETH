@@ -36,7 +36,6 @@
 ---
 
 ### 精度  
-當拉力值低於 50 lb 時，精度為 0.05 lb；高於 50 lb 時，精度為 0.15 lb。  
 參考影片：[PicoBETH HW3D Lightweight Tennis – Tension Calibration & Accuracy](https://youtu.be/3H8zwHVQJGE)
 
 ---
