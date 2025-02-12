@@ -96,7 +96,7 @@ LOAD_CELL_KG = 50               # The load cell capacity in KG.(20KG or 50KG)
 
 ## 張力校正
 
-由於網球版本採用 50 kg Load Cell，其校正方式與羽毛球版使用的 20 kg Load Cell 略有不同。請參考此 [Load Cell 50kg 校正影片](https://youtu.be/3H8zwHVQJGE)，按照影片步驟進行張力校正，以確保準確性。
+由於網球版本採用 50 kg Load Cell，其校正方式與羽毛球版使用的 20 kg Load Cell 略有不同。請參考此 [PicoBETH HW3D 輕型網球版 – 張力校正與精度](https://youtu.be/3H8zwHVQJGE)，按照影片步驟進行張力校正，以確保準確性。
 
 ---
 
