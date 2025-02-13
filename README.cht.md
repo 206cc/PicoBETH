@@ -31,7 +31,9 @@
 > 請勿使用 GPP 系列滑台，可靠度測試顯示該系列在約 7 萬次張力操作後，其光軸會出現明顯間隙。
 
 > [!NOTE]
-> 螺杆速度參考影片：[1605 vs 1610: Lead Screw Speed Test](https://youtu.be/DaFmQe_a8F8)
+> 螺杆速度參考影片
+> 
+> [![1605 vs 1610: Lead Screw Speed Test](https://img.youtube.com/vi/DaFmQe_a8F8/0.jpg)](https://www.youtube.com/watch?v=DaFmQe_a8F8)
 
 ---
 
@@ -53,7 +55,7 @@
 
 ## 一般網球版本
 
-本版本採用 GX80 系列滑台搭配 1605 螺杆，GX80 配置兩組 MGN12H 線性滑軌，可安全支撐高達 90 lb 的張力。測試機經過 87 萬次可靠度測試後，Load Cell 發生金屬疲勞斷裂，但此使用壽命仍相當長。
+本版本採用 GX80 系列滑台搭配 1605 螺杆，GX80 配置兩組 MGN12H 線性滑軌，可安全支撐高達 90 lb 的張力。雖然測試機經過 87 萬次可靠度測試後，Load Cell 發生金屬疲勞斷裂，但此使用壽命仍相當長。
 
 ### 製作方法
 
@@ -102,7 +104,9 @@ LOAD_CELL_KG = 50               # The load cell capacity in KG.(20KG or 50KG)
 
 ## 張力校正
 
-由於網球版本採用 50 kg Load Cell，其校正方式與羽毛球版使用的 20 kg Load Cell 略有不同。請參考此 [PicoBETH HW3D 輕型網球版 – 張力校正與精度](https://youtu.be/3H8zwHVQJGE)，按照影片步驟進行張力校正，以確保準確性。
+由於網球版本採用 50 kg Load Cell，其校正方式與羽毛球版使用的 20 kg Load Cell 略有不同。請參考此 **PicoBETH HW3D 輕型網球版 – 張力校正與精度**，按照影片步驟進行張力校正，以確保準確性。
+
+[![PicoBETH HW3D 輕型網球版 – 張力校正與精度](https://img.youtube.com/vi/3H8zwHVQJGE/0.jpg)](https://www.youtube.com/watch?v=3H8zwHVQJGE)
 
 ---
 
