@@ -31,7 +31,9 @@ Two configurations are provided for the tennis version: **Lightweight** and **St
 > Do not use the GPP series sliding table. Reliability tests indicate that after approximately 70,000 tensioning cycles, the optical shaft will develop noticeable gaps.
 
 > [!NOTE]
-> Lead screw speed reference video: [1605 vs 1610: Lead Screw Speed Test](https://youtu.be/DaFmQe_a8F8)
+> Lead screw speed reference video
+> 
+> [![1605 vs 1610: Lead Screw Speed Test](https://img.youtube.com/vi/DaFmQe_a8F8/0.jpg)](https://www.youtube.com/watch?v=DaFmQe_a8F8)
 
 ---
 
@@ -103,8 +105,9 @@ When Tennis Mode is enabled, a T symbol will appear on the bottom status bar of 
 
 ## Tension Calibration
 
-Since the tennis version uses a 50 kg Load Cell, the calibration process differs slightly from the 20 kg Load Cell used in the badminton version. Please refer to this [PicoBETH HW3D Lightweight Tennis – Tension Calibration & Accuracy](https://youtu.be/3H8zwHVQJGE) and follow the steps carefully to ensure accurate calibration.
+Since the tennis version uses a 50 kg Load Cell, the calibration process differs slightly from the 20 kg Load Cell used in the badminton version. Please refer to this PicoBETH HW3D Lightweight Tennis – Tension Calibration & Accuracy and follow the steps carefully to ensure accurate calibration.
 
+[![1605 vs 1610: Lead Screw Speed Test](https://img.youtube.com/vi/3H8zwHVQJGE/0.jpg)](https://www.youtube.com/watch?v=3H8zwHVQJGE)
 
 ---
 
