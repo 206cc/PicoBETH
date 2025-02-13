@@ -116,7 +116,7 @@ If the structure of your badminton stringing machine is not strong enough, I str
 |----------------------------------|----------------------------------|
 | [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH/tree/imp/beadclip-btn%40jpliew) | Improved Bead Clip Activation Button |
 | [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/3d-printed) | HW 3D-Printed Version                |
-| [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/tennis) | Compatible with Tennis Racquets  |
+| [`branch/tennis`](https://github.com/206cc/PicoBETH/tree/branch/tennis) | Compatible with Tennis Racquets  |
 
 # Support
 If you encounter any issues during the production process, feel free to leave a comment on the YouTube tutorial video. If you complete the project, you're also very welcome to share photos of your finished product in the GitHub discussions.
