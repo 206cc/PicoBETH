@@ -110,7 +110,7 @@ PicoBETH HW 3D 列印分支 [`branch/3d-printed`](https://github.com/206cc/PicoB
 |----------------------------------|----------------------------------|
 | [`imp/beadclip-btn@jpliew`](https://github.com/206cc/PicoBETH/blob/imp/beadclip-btn%40jpliew) | 改良式珠夾啟動按鍵                |
 | [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/3d-printed) | HW 3D 列印分支                |
-| [`branch/3d-printed`](https://github.com/206cc/PicoBETH/tree/branch/tennis) | 適用網球拍              |
+| [`branch/tennis`](https://github.com/206cc/PicoBETH/tree/branch/tennis) | 適用網球拍              |
 
 
 # 支援
