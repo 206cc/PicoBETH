@@ -105,7 +105,7 @@ When Tennis Mode is enabled, a T symbol will appear on the bottom status bar of 
 
 ## Tension Calibration
 
-Since the tennis version uses a 50 kg Load Cell, the calibration process differs slightly from the 20 kg Load Cell used in the badminton version. Please refer to this PicoBETH HW3D Lightweight Tennis – Tension Calibration & Accuracy and follow the steps carefully to ensure accurate calibration.
+Since the tennis version uses a 50 kg Load Cell, the calibration process differs slightly from the 20 kg Load Cell used in the badminton version. Please refer to this **PicoBETH HW3D Lightweight Tennis – Tension Calibration & Accuracy** and follow the steps carefully to ensure accurate calibration.
 
 [![1605 vs 1610: Lead Screw Speed Test](https://img.youtube.com/vi/3H8zwHVQJGE/0.jpg)](https://www.youtube.com/watch?v=3H8zwHVQJGE)
 
