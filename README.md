@@ -51,7 +51,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item                         | Progress    | Remarks                                                                                                                                                                                                                                 |
 | ------------------------------------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 3D Printed Lightweight Tennis Version | Testing | Within the HW3D structure, a 50KG load cell and an SGX 1605 sliding platform will be used to perform a cyclic tension reliability test ranging from 55 to 65 LB. The tension cycles have reached 20,000+ (as of 2025/02/12).                |
+| 3D Printed Lightweight Tennis Version | Testing | Within the HW3D structure, a 50KG load cell and an SGX 1605 sliding platform will be used to perform a cyclic tension reliability test ranging from 55 to 65 LB. The tension cycles have reached 40,000+ (as of 2025/02/15).                |
 | Pico 2 Compatibility                 | Completed   | Due to a bug in the [RP2350-E9](https://hackaday.com/2024/09/20/raspberry-pi-rp2350-e9-erratum-redefined-as-input-mode-leakage-current/), it has been confirmed that Pico 2 cannot be used directly.                            |
 | Reliability Testing                  | Completed   | The HW1 tension test reached 1 million cycles with no hardware failures, marking the completion of the test.                                                                                                                           |
 | Tennis Racquet Compatibility         | Completed   | Within the HW2 structure, a 50KG load cell and a GX80 1605 sliding platform were used to conduct a cyclic tension reliability test at 75 to 85 LB. The test concluded after over 870,000 cycles when the load cell experienced metal fatigue fracture. |
@@ -61,11 +61,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 ## Background
 A year ago, due to company club activities, I started playing badminton. Although my badminton skills weren't great, I became fascinated with stringing. I purchased a drop-weight stringing machine and initially planned to buy an electronic tensioning head. However, I later thought about using my knowledge to create this project on the Raspberry Pico, incorporating a load sensor, several microswitches, and buttons.
 
-**Drop-weight stringing machine and modification parts**
-![img_parts](docs/img_parts.jpg)
-
-**Modification completed (Under Development)**
-![img_dev_machine](docs/img_dev_machine.jpg)
+**PicoBETH Family**
+![img_hw_family](docs/img_hw_family.jpg)
 
 **HW 1.5 machine** [How to make step by step](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
