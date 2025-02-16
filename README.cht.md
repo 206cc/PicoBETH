@@ -76,6 +76,7 @@
 ![img_HW2_GX80-3](docs/img_HW2_GX80-3.jpg)
 ![img_HW2_GX80-4](docs/img_HW2_GX80-4.jpg)
 ![img_HW2_GX80-5](docs/img_HW2_GX80-5.jpg)
+![img_HW2_GX80-6](docs/img_HW2_GX80-6.jpg)
 
 ---
 
