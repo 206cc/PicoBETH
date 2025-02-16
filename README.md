@@ -77,6 +77,7 @@ This version uses the GX80 series sliding table with a 1605 lead screw. The GX80
 ![img_HW2_GX80-3](docs/img_HW2_GX80-3.jpg)
 ![img_HW2_GX80-4](docs/img_HW2_GX80-4.jpg)
 ![img_HW2_GX80-5](docs/img_HW2_GX80-5.jpg)
+![img_HW2_GX80-5](docs/img_HW2_GX80-6.jpg)
 
 ---
 
