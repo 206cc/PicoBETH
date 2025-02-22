@@ -32,7 +32,7 @@ To resolve this issue, I have implemented **hardware modifications** and **softw
 ## Test Results
 
 The following video compares Raspberry Pi **Pico** and **Pico 2** running PicoBETH:  
-[Watch the comparison video](https://youtu.be/p8Iu2A8doCQ)
+[![VIDEO](https://img.youtube.com/vi/p8Iu2A8doCQ/0.jpg)](https://www.youtube.com/watch?v=p8Iu2A8doCQ)
 
 ## Conclusion
 
