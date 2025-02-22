@@ -1,66 +1,43 @@
 [![cht](https://img.shields.io/badge/lang-cht-green.svg)](README.cht.md)
 [![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
 
-# Improved Bead Clip Head Activation Button by jpliew
+# PicoBETH on Pico2
 
-This improvement enhances the appearance of the bead clip head button while maintaining the same low cost.
+Some users have mistakenly purchased the Raspberry Pi Pico 2 (RP2350), while others have inquired about upgrading to Pico 2. This branch explains the current status of **PicoBETH** migration to **Pico 2** and the test results.
 
-> [!CAUTION]  
-> This is a feature branch based on PicoBETH. For more details on the entire project, please refer to the main branch: (https://github.com/206cc/PicoBETH/)
+## Issues and Challenges
 
-# Demo Video
+Pico 2 uses the **RP2350** microcontroller, which has a known **E9 Erratum**, causing **abnormal behavior in the built-in pull-down resistors**.  
+Since this project relies on internal pull-down resistors for all button detections, **Pico 2 is not directly compatible**. The solutions are as follows:
 
-[![DEMO VIDEO](https://img.youtube.com/vi/U8-CrL-Yr1A/0.jpg)](https://www.youtube.com/watch?v=U8-CrL-Yr1A)
+1. **Add external pull-down resistors** to ensure proper button detection.
+2. **Modify the circuit design to use pull-up buttons**, utilizing the built-in **pull-up resistors** instead.
 
-# Hardware
+For more details on the RP2350 E9 erratum, refer to the following articles:
 
-Uses the same **roller-style micro switch** as the original project but changes the NO (normally open) contact to NC (normally closed).
+- [Hardware Bug In Raspberry Pi’s RP2350 Causes Faulty Pull-Down Behavior](https://hackaday.com/2024/08/28/hardware-bug-in-raspberry-pis-rp2350-causes-faulty-pull-down-behavior/)
+- [RP2350: Internal pull down issue](https://forums.pimoroni.com/t/rp2350-internal-pull-down-issue/25360)
 
-![sw](docs/sw.jpg)
+## Modifications and Adjustments
 
-## 3D Printed Bracket
+To resolve this issue, I have implemented **hardware modifications** and **software adjustments**:
 
-Use the bracket file provided by jpliew for 3D printing:
+### Hardware Modifications
+- **Redesigned PCB**, converting all buttons and microswitches to a pull-up button circuit design.
 
-[Download Bracket File](https://github.com/user-attachments/files/17158580/BadmintonTensionClampSwitch.zip)
+### Software Adjustments
+- **Revised button and microswitch input logic**, switching to internal pull-up resistors.
+- **Adjusted stepper motor parameters** to allow operation near maximum speed.
 
-Below are images of the assembled product:
+## Test Results
 
-![final](docs/final1.jpg)
+The following video compares Raspberry Pi **Pico** and **Pico 2** running PicoBETH:  
+[Watch the comparison video](https://youtu.be/p8Iu2A8doCQ)
 
-![final](docs/final2.jpg)
+## Conclusion
 
-![final](docs/final3.jpg)
+1. **Pico 2 is only noticeably faster during startup**, but it shows no significant advantage in button operation, string tensioning, or carriage resetting.
+2. **Pico has proven stability and maturity in this project**, with over a million tensioning cycles tested and verified for reliability.
+3. **Pico is more cost-effective and widely available**, while **Pico 2 does not provide enough benefits to justify migration**.
 
-## Manual Bracket
-
-If you don’t have a 3D printer, you can also manually make a small L-shaped bracket, as shown below:
-
-![bracket](docs/bracket.jpg)
-
-# Main Program Modification
-
-In the `main.py` file, within the `def start_tensioning():` function, find the following code:
-
-```python
-if button_head_pressed or button_exit_pressed or rt_mode_pressed:
-```
-
-Add `not` before `button_head_pressed`, changing it to:
-
-```python
-if not button_head_pressed or button_exit_pressed or rt_mode_pressed:
-```
-
-This implements reverse button detection.
-
-> [!CAUTION]  
-> If this line is not modified, after tensioning is completed, it will immediately retract.
-
-# Issues
-
-After the modification, there is a minor issue: when pressing the bead clip head button, due to the non-blocking button detection, you need to hold the button down for up to 0.5 seconds to retract. You can see this in the 17th second of the video. It is recommended to press the EXIT button instead, which will retract faster and more immediately. Aside from this, no other issues have been found so far.
-
-# Acknowledgment
-
-Thanks to [jpliew](https://github.com/jpliew) for the contribution: https://github.com/206cc/PicoBETH/issues/5
+### **This project will not be migrated to Pico 2**. We recommend continuing to use **Raspberry Pi Pico** to ensure stability and compatibility.
