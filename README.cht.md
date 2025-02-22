@@ -1,66 +1,45 @@
 [![cht](https://img.shields.io/badge/lang-cht-green.svg)](README.cht.md)
 [![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
 
-# 改良珠夾頭啟動按鍵 by jpliew
+# PicoBETH on Pico2
 
-此次改良使珠夾頭按鍵外觀更美觀，且一樣的低成本。
+由於部分使用者錯誤購買了 Raspberry Pi Pico 2(RP2350)，或有人詢問是否能升級至 Pico 2，本分支說明 **PicoBETH** 移植至 **Pico 2** 的現況與測試結果。
 
-> [!CAUTION]
-> 此為基於 PicoBETH 的改良功能分支，如需瞭解整個專案，請參閱主分支：(https://github.com/206cc/PicoBETH/)
+## 影響與問題
 
-# 成果影片
+Pico 2 採用了 **RP2350** 微控制器，但其硬體存在 **E9 錯誤（Erratum）**，導致內建的 **下拉電阻（pull-down resistor）異常**。  
+本專案所有的按鍵偵測均依賴內建下拉電阻，因此 **無法直接相容** Pico 2，解決方案如下：
 
-[![DEMO VIDEO](https://img.youtube.com/vi/U8-CrL-Yr1A/0.jpg)](https://www.youtube.com/watch?v=U8-CrL-Yr1A)
+1. **外拉下拉電阻** 來確保按鍵偵測正常運作。
+2. **修改電路設計為上拉按鍵**，改用內建的 **上拉電阻（pull-up resistor）** 以繞過此問題。
 
-# 硬體
+有關 RP2350 E9 錯誤的詳細資訊，請參考以下文章：
 
-與原專案使用相同的**滾輪式微動開關**，但將原本的 NO（常開）接點改為 NC（常關）。
+- [Hardware Bug In Raspberry Pi’s RP2350 Causes Faulty Pull-Down Behavior](https://hackaday.com/2024/08/28/hardware-bug-in-raspberry-pis-rp2350-causes-faulty-pull-down-behavior/)
+- [RP2350: Internal pull down issue](https://forums.pimoroni.com/t/rp2350-internal-pull-down-issue/25360)
 
-![sw](docs/sw.jpg)
 
-## 3D 列印支架
+## 修正與調整
 
-使用 jpliew 提供的支架檔案進行 3D 列印：
+為解決此問題進行了 **硬體修正** 與 **軟體修正**：
 
-[下載支架檔案](https://github.com/user-attachments/files/17158580/BadmintonTensionClampSwitch.zip)
+### 硬體修正
+- **PCB 重新設計**，所有按鍵與微動開關改為上拉按鍵設計
 
-下圖為組裝完成品：
+### 軟體修正
+- **按鍵與微動開關驅動邏輯調整**，全面改用內建上拉電阻。
+- **步進馬達驅動參數微調**，使其可在接近極限轉速運轉。
 
-![final](docs/final1.jpg)
 
-![final](docs/final2.jpg)
+## 測試結果
 
-![final](docs/final3.jpg)
+以下為 Raspberry Pi **Pico** 與 **Pico 2** 在 PicoBETH 下運行的對比測試：  
+[觀看對比影片](https://youtu.be/p8Iu2A8doCQ)
 
-## 手動製作支架
+## 結論
 
-如果沒有 3D 列印機，也可以使用 L 型支架手動製作，如下圖所示：
+1. **Pico 2 主要在開機時略快**，但在按鍵操作、穿線張緊與滑台復位時，並無顯著優勢。
+2. **Pico 在本專案已具備穩定性與成熟度**，經過超過百萬次張緊測試，可靠性已獲驗證。
+3. **Pico 具備更低的價格與更廣泛的可用性**，相較之下，Pico 2 並無足夠優勢支撐移植。
 
-![bracket](docs/bracket.jpg)
-
-# 主程式修改
-
-在 `main.py` 中的 `def start_tensioning():` 函式內，找到以下程式碼：
-
-```python
-if button_head_pressed or button_exit_pressed or rt_mode_pressed:
-```
-
-需在 `button_head_pressed` 前加上 `not`，修改為：
-
-```python
-if not button_head_pressed or button_exit_pressed or rt_mode_pressed:
-```
-
-這表示反向按鍵偵測。
-
-> [!CAUTION]
-> 若未修改此行程式，張緊完成後將會立即退回。
-
-# 問題
-
-修改後會出現一個小問題，當按下珠夾頭的按鍵時，因為按鍵偵測為非阻塞，需要持續按住按鍵最多 0.5 秒才能退回。在影片的第17秒可以看到這個情況，建議改按 EXIT 鍵則會更快並且即時退回。除此之外，暫時未發現其他問題。
-
-# 致謝
-
-感謝 [jpliew](https://github.com/jpliew) 的貢獻：https://github.com/206cc/PicoBETH/issues/5
+### 本專案 **不會移植至 Pico 2**，建議使用者繼續使用 **Raspberry Pi Pico** 以確保穩定性與相容性。
