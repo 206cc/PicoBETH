@@ -34,7 +34,7 @@ Pico 2 採用了 **RP2350** 微控制器，但其硬體存在 **E9 錯誤（Erra
 ## 測試結果
 
 以下為 Raspberry Pi **Pico** 與 **Pico 2** 在 PicoBETH 下運行的對比測試：  
-[觀看對比影片](https://youtu.be/p8Iu2A8doCQ)
+[![VIDEO](https://img.youtube.com/vi/p8Iu2A8doCQ/0.jpg)](https://www.youtube.com/watch?v=p8Iu2A8doCQ)
 
 ## 結論
 
