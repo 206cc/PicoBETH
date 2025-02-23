@@ -52,7 +52,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 | Project Item                         | Progress    | Remarks                                                                                                                                                                                                                                 |
 | ------------------------------------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | HW2 Instructional Video           | Preparation | Planning to film a detailed instructional video for the HW2 version, including a complete bill of materials. |
-| 3D Printed Lightweight Tennis Version | Testing | Within the HW3D structure, a 50KG load cell and an SGX 1605 sliding platform will be used to perform a cyclic tension reliability test ranging from 55 to 65 LB. The tension cycles have reached 80,000+ (as of 2025/02/22).                |
+| 3D Printed Lightweight Tennis Version | Testing | Within the HW3D structure, a 50KG load cell and an SGX 1605 sliding platform will be used to perform a cyclic tension reliability test ranging from 55 to 65 LB. The tension cycles have reached 90,000+ (as of 2025/02/23).                |
 | Pico 2 Compatibility                 | Completed   | Due to the impact of the **RP2350-E9 bug**, it has been confirmed that direct usage is not possible. Please refer to [`branch/pico2-issue`](https://github.com/206cc/PicoBETH/tree/branch/pico2-issue) for more details. |
 | Reliability Testing                  | Completed   | The HW1 tension test reached 1 million cycles with no hardware failures, marking the completion of the test.                                                                                                                           |
 | Tennis Racquet Compatibility         | Completed   | Within the HW2 structure, a 50KG load cell and a GX80 1605 sliding platform were used to conduct a cyclic tension reliability test at 75 to 85 LB. The test concluded after over 870,000 cycles when the load cell experienced metal fatigue fracture. |
@@ -85,7 +85,7 @@ PicoBETH HW 3D-Printed Version branch [`branch/3d-printed`](https://github.com/2
 
 **Stringing demonstration video**
 
-[![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
+[![VIDEO](https://img.youtube.com/vi/mMpsa_LFCbM/0.jpg)](https://www.youtube.com/watch?v=mMpsa_LFCbM)
 
 > [!NOTE]
 > If you don't have a stringing machine, you can refer to this project to make one: [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer)

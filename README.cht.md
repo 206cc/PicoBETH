@@ -47,7 +47,7 @@
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
 | HW2 教學影片  | 準備中   | 計劃拍攝 HW2 版本的詳細教學影片，包含完整的物料清單。 |
-| 3D 列印輕量網球版本  | 測試中   | 在 HW3D 架構，使用 50KG Load Cell 與 SGX 1605 滑台，進行 55 至 65 LB 循環張緊可靠性測試。 張緊次數已達 80,000+ (截至 2025/02/22)|
+| 3D 列印輕量網球版本  | 測試中   | 在 HW3D 架構，使用 50KG Load Cell 與 SGX 1605 滑台，進行 55 至 65 LB 循環張緊可靠性測試。 張緊次數已達 90,000+ (截至 2025/02/23)|
 | 相容 Pico 2        | 結束 | 受到 RP2350-E9 BUG 的影響，已確認無法直接使用，請參閱 [`branch/pico2-issue`](https://github.com/206cc/PicoBETH/tree/branch/pico2-issue) |
 | 可靠度測試         | 結束   | HW1 測試張緊次數已達 100 萬次，期間無任何硬體故障，測試結束。 |
 | 適用網球拍         | 結束   | 在 HW2 架構，使用 50KG Load Cell 與 GX80 1605 滑台進行了 75~85LB 循環張緊可靠度測試，張緊次數達 870,000+ 次後測試結束（Load Cell 金屬疲勞斷裂）。|
@@ -79,7 +79,7 @@ PicoBETH HW 3D 列印分支 [`branch/3d-printed`](https://github.com/206cc/PicoB
 
 **穿線展示影片**
 
-[![VIDEO](https://img.youtube.com/vi/ygbpYtNiPa4/0.jpg)](https://www.youtube.com/watch?v=ygbpYtNiPa4)
+[![VIDEO](https://img.youtube.com/vi/mMpsa_LFCbM/0.jpg)](https://www.youtube.com/watch?v=mMpsa_LFCbM)
 
 > [!NOTE]
 > 如果你沒有穿線機，請參考 [Pico-Badminton-Stringer](https://github.com/HsuKaoPang/Pico-Badminton-Stringer) 項目。
