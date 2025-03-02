@@ -38,7 +38,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 - **Real-time UPS Redundancy (Uninterruptible Power Supply)**
   - Uses 5 x 18650 batteries to ensure at least one complete racquet stringing.
 - **Compact and Space-Saving**
-  - Dimensions are approximately 38(L) x 15(W) x 9(H) CM.(excluding clamp head)
+  - Dimensions: approximately 38(L) × 15(W) × 15(H) cm, Weight: 3.5 kg 
 - **Simple structure, low cost, and easy maintenance**
   - All components are easy to source and inexpensive
 - **High durability**
@@ -51,7 +51,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 | Project Item                         | Progress    | Remarks                                                                                                                                                                                                                                 |
 | ------------------------------------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 3D Printed Lightweight Tennis Version | Testing | Within the HW3D structure, a 50KG load cell and an SGX 1605 sliding platform will be used to perform a cyclic tension reliability test ranging from 55 to 65 LB. The tension cycles have reached 130,000+ (as of 2025/03/01).                |
+| 3D Printed Lightweight Tennis Version | Testing | Within the HW3D structure, a 50KG load cell and an SGX 1605 sliding platform will be used to perform a cyclic tension reliability test ranging from 55 to 65 LB. The tension cycles have reached 135,000+ (as of 2025/03/02).                |
 | Pico 2 Compatibility                 | Completed   | Due to the impact of the **RP2350-E9 bug**, it has been confirmed that direct usage is not possible. Please refer to [`branch/pico2-issue`](https://github.com/206cc/PicoBETH/tree/branch/pico2-issue) for more details. |
 | Reliability Testing                  | Completed   | The HW1 tension test reached 1 million cycles with no hardware failures, marking the completion of the test.                                                                                                                           |
 | Tennis Racquet Compatibility         | Completed   | Within the HW2 structure, a 50KG load cell and a GX80 1605 sliding platform were used to conduct a cyclic tension reliability test at 75 to 85 LB. The test concluded after over 870,000 cycles when the load cell experienced metal fatigue fracture. |
@@ -64,13 +64,13 @@ A year ago, due to company club activities, I started playing badminton. Althoug
 **PicoBETH Family**
 ![img_hw_family](docs/img_hw_family.jpg)
 
-**HW 1.5 machine** [How to make step by step](https://youtu.be/uJVE3YFJtJA)
+**HW 1.5 machine** (Old version, no longer updated) [How to make step by step](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
 
 ![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)  
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/5FHNO85KUK4-picobeth-hw-15-for-badminton-stringing?sharecode=hBukCj4giq4Q9J8Fq-s8H5lIKzbYCcOiwuyQ-TE8oRA)
 
-**HW 2.0 machine** (Some parts are made using 3D printing)
+**HW 2.0 machine** 
 ![img_final_machine](docs/img_final_machine_hw2.jpg)
 
 ![PicoBETH HW 2.0](docs/img_HW2.0_3D.jpg)  

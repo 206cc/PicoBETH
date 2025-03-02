@@ -33,7 +33,7 @@
 - **UPS 不斷電**
   - 使用 18650 x 5 電池可支持至少完成一次穿線
 - **緊湊設計**
-  - 大小約 38(L) x 15(W) x 9(H) CM (不含珠夾頭)
+  - 尺寸約 38(L) × 15(W) × 15(H) cm，重量約 3.5 kg
 - **結構簡單、成本低且易於維修**
   - 所有元件皆易於取得且價格低廉
 - **高耐用性**
@@ -46,7 +46,7 @@
 
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
-| 3D 列印輕量網球版本  | 測試中   | 在 HW3D 架構，使用 50KG Load Cell 與 SGX 1605 滑台，進行 55 至 65 LB 循環張緊可靠性測試。 張緊次數已達 130,000+ (截至 2025/03/01)|
+| 3D 列印輕量網球版本  | 測試中   | 在 HW3D 架構，使用 50KG Load Cell 與 SGX 1605 滑台，進行 55 至 65 LB 循環張緊可靠性測試。 張緊次數已達 135,000+ (截至 2025/03/02)|
 | 相容 Pico 2        | 結束 | 受到 RP2350-E9 BUG 的影響，已確認無法直接使用，請參閱 [`branch/pico2-issue`](https://github.com/206cc/PicoBETH/tree/branch/pico2-issue) |
 | 可靠度測試         | 結束   | HW1 測試張緊次數已達 100 萬次，期間無任何硬體故障，測試結束。 |
 | 適用網球拍         | 結束   | 在 HW2 架構，使用 50KG Load Cell 與 GX80 1605 滑台進行了 75~85LB 循環張緊可靠度測試，張緊次數達 870,000+ 次後測試結束（Load Cell 金屬疲勞斷裂）。|
@@ -58,13 +58,13 @@
 **PicoBETH 全系列**
 ![img_hw_family](docs/img_hw_family.jpg)
 
-**HW 1.5 完成品** [製作合集](https://youtu.be/uJVE3YFJtJA)
+**HW 1.5 完成品** (舊版本，停止更新) [製作合集](https://youtu.be/uJVE3YFJtJA)
 ![img_final_machine](docs/img_final_machine.jpg)
 
 ![PicoBETH HW 1.5](docs/img_HW1.5_3D.jpg)  
 [View 3D Model on Tinkercad](https://www.tinkercad.com/things/5FHNO85KUK4-picobeth-hw-15-for-badminton-stringing?sharecode=hBukCj4giq4Q9J8Fq-s8H5lIKzbYCcOiwuyQ-TE8oRA)
 
-**HW 2.0 完成品** (部份組件採用 3D 列印)
+**HW 2.0 完成品** 
 ![img_final_machine](docs/img_final_machine_hw2.jpg)
 
 ![PicoBETH HW 2.0](docs/img_HW2.0_3D.jpg)  
