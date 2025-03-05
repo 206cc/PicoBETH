@@ -60,7 +60,7 @@ This version uses the GX80 series sliding table with a 1605 lead screw. The GX80
 
 ### Assembly Instructions
 
-- Refer to [HW2 for GX80](docs/HW2.0_GX80.pdf) layout diagram.
+- Refer to [HW2 for GX80](docs/HW2.2_GX80.pdf) layout diagram.
 - Main component specifications are as follows:
 
   | Component | Material | Dimensions | Length/Thickness |
