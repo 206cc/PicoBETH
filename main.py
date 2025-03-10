@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.80A"
-VERDATE = "2025-02-01"
+VERSION = "2.80B"
+VERDATE = "2025-02-23"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -50,7 +50,11 @@ TENNIS = [40, 90, 0]            # Tennis Mode [Min LB, Max LB , 0=Disable/1=Enad
                                 # 網球模式[最小LB, 最大LB , 0=關閉/1=啟用]
 LOAD_CELL_KG = 20               # 使用的荷重元公斤數(20KG or 50KG)
                                 # The load cell capacity in KG.(20KG or 50KG)
-                    
+EXTRA_CONFIG = {
+    "USE_PULLDOWN": True,       # True = PULL_DOWN, False = PULL_UP
+    "jpliew": False             # Improved Bead Clip Head Activation Button.(https://github.com/206cc/PicoBETH/tree/imp/beadclip-btn%40jpliew)
+}
+
 import time, _thread, machine, os, random, gc, sys
 from machine import I2C, Pin
 from src.hx711 import hx711          # from https://github.com/endail/hx711-pico-mpy
@@ -83,9 +87,11 @@ DEFAULT_LB = 20.0
 PRE_STRECH = 10
 CP_SW = 1
 BZ_SW = 1
-MOTOR_SPEED_V1 = [80, 40, 30] # Stepper motor high speed 步進馬達高速
+MOTOR_SPEED_V1 = [80, 80, 80] # Stepper motor high speed 步進馬達高速 80 40 30
 MOTOR_SPEED_V2 = 1000   # Stepper motor low speed 步進馬達低速
 MOTOR_SPEED_LV = 8 # Default stepper motor speed level 預設的步進馬達速度等級
+EXTRA_CONFIG["PULL_TYPE"] = Pin.PULL_DOWN if EXTRA_CONFIG["USE_PULLDOWN"] else Pin.PULL_UP
+EXTRA_CONFIG["PRESSED_STATE"] = 1 if EXTRA_CONFIG["USE_PULLDOWN"] else 0
 
 # Initialize all GPIO pins to low 初始化所有 GPIO
 for pin in range(28):
@@ -98,26 +104,27 @@ IN3 = machine.Pin(2, machine.Pin.OUT) # DIR-
 IN4 = machine.Pin(3, machine.Pin.OUT) # DIR+
 
 # Limit switches for slider front and rear limits 滑台限位前後限位感應開關
-MOTOR_SW_FRONT = Pin(6, Pin.IN, Pin.PULL_DOWN)  # Front limit 滑軌前限位感應開關
-MOTOR_SW_REAR = Pin(7, Pin.IN, Pin.PULL_DOWN)   # Rear limit 滑軌後限位感應開關
+MOTOR_SW_FRONT = Pin(6, Pin.IN, EXTRA_CONFIG["PULL_TYPE"])  # Front limit 滑軌前限位感應開關
+MOTOR_SW_REAR = Pin(7, Pin.IN, EXTRA_CONFIG["PULL_TYPE"])   # Rear limit 滑軌後限位感應開關
 
 # Function keys 功能按鍵
-BUTTON_HEAD = Pin(8, Pin.IN, Pin.PULL_DOWN)     # Bead clamp head activation button 珠夾頭啟動按鍵
-BUTTON_UP = Pin(13, Pin.IN, Pin.PULL_DOWN)      # Up button 上按鍵
-BUTTON_DOWN = Pin(12, Pin.IN, Pin.PULL_DOWN)    # Down button 下按鍵
-BUTTON_LEFT = Pin(11, Pin.IN, Pin.PULL_DOWN)    # Left button 左按鍵
-BUTTON_RIGHT = Pin(10, Pin.IN, Pin.PULL_DOWN)   # Right button 右按鍵
-BUTTON_SETTING = Pin(14, Pin.IN, Pin.PULL_DOWN) # Setting button 設定按鍵
-BUTTON_EXIT = Pin(15, Pin.IN, Pin.PULL_DOWN)    # Exit button 取消按鍵
-BUTTON_LIST = {"BUTTON_HEAD":0,
-               "BUTTON_SETTING":0,
-               "BUTTON_EXIT":0,
-               "BUTTON_UP":0,
-               "BUTTON_DOWN":0,
-               "BUTTON_LEFT":0,
-               "BUTTON_RIGHT":0,
-               "MOTOR_SW_FRONT":0,
-               "MOTOR_SW_REAR":0}               # Button list 按鈕列表
+BUTTON_HEAD = Pin(8, Pin.IN, EXTRA_CONFIG["PULL_TYPE"])     # Bead clamp head activation button 珠夾頭啟動按鍵
+BUTTON_UP = Pin(13, Pin.IN, EXTRA_CONFIG["PULL_TYPE"])      # Up button 上按鍵
+BUTTON_DOWN = Pin(12, Pin.IN, EXTRA_CONFIG["PULL_TYPE"])    # Down button 下按鍵
+BUTTON_LEFT = Pin(11, Pin.IN, EXTRA_CONFIG["PULL_TYPE"])    # Left button 左按鍵
+BUTTON_RIGHT = Pin(10, Pin.IN, EXTRA_CONFIG["PULL_TYPE"])   # Right button 右按鍵
+BUTTON_SETTING = Pin(14, Pin.IN, EXTRA_CONFIG["PULL_TYPE"]) # Setting button 設定按鍵
+BUTTON_EXIT = Pin(15, Pin.IN, EXTRA_CONFIG["PULL_TYPE"])    # Exit button 取消按鍵
+BUTTON_LIST = {
+    "BUTTON_HEAD":0,
+    "BUTTON_SETTING":0,
+    "BUTTON_EXIT":0,
+    "BUTTON_UP":0,
+    "BUTTON_DOWN":0,
+    "BUTTON_LEFT":0,
+    "BUTTON_RIGHT":0,
+    "MOTOR_SW_FRONT":0,
+    "MOTOR_SW_REAR":0}                          # Button list 按鈕列表          
 BUTTON_CLICK_MS = 500                           # Button click milliseconds 按鈕點擊毫秒
 
 # LED
@@ -311,7 +318,7 @@ def forward(delay, steps, check, init):
                 return "YZC-133 Reversed?"
         
         # Exceeding the rear limit switch 超過後限位SW
-        if MOTOR_SW_REAR.value():
+        if MOTOR_SW_REAR.value() == EXTRA_CONFIG["PRESSED_STATE"]:
             head_reset(None)
             if init:
                 return i
@@ -350,7 +357,7 @@ def backward(delay, steps, check):
     for i in range(0, steps):
         start_time = time.ticks_us()
         if check == 1:
-            if MOTOR_SW_FRONT.value():
+            if MOTOR_SW_FRONT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                 time.sleep(0.2)
                 forward((MOTOR_SPEED_V1[0] + (9 - MOTOR_SPEED_LV) * MOTOR_SPEED_V1[1]), MOTOR_RS_STEPS, 0, 0)
                 return 0 
@@ -444,7 +451,7 @@ def tension_monitoring():
             
             # Button detection 按鍵偵測
             for key in BUTTON_LIST:
-                if globals()[key].value() == 1:
+                if globals()[key].value() == EXTRA_CONFIG["PRESSED_STATE"]:
                     BUTTON_LIST[key] = time.ticks_ms()
                 elif BUTTON_LIST[key]:
                     if (time.ticks_ms() - BUTTON_LIST[key]) > BUTTON_CLICK_MS:
@@ -483,18 +490,18 @@ def sys_logs_show():
             lcd_putstr(str_list[2], 0, 2, I2C_NUM_COLS)
             beepbeep(0.3)
             while True:
-                if BUTTON_LEFT.value():
+                if BUTTON_LEFT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                     i = max(i - 1, 0)
                     break
                 
-                if BUTTON_RIGHT.value():
+                if BUTTON_RIGHT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                     i = min(i + 1, lens)
                     break
     else:
         lcd_putstr("No log file found.", 0, 0, I2C_NUM_COLS)
         lcd_putstr("Press EXIT Restart.", 0, 1, I2C_NUM_COLS)
         while True:
-            if BUTTON_EXIT.value():
+            if BUTTON_EXIT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                 machine.reset()
 
 # Boot initialization 開機初始化
@@ -503,40 +510,40 @@ def init():
         global LB_CONV_G, TS_ARR, ERR_MSG, ABORT_LM, MOTOR_RS_STEPS, MOTOR_MAX_STEPS, BOOT_COUNT, ABORT_GRAM, BZ_SW, RT_MODE, MOTOR_SPEED_RATIO, MOTOR_SPEED_LV, LB_RANGE, DEFAULT_LB, TENNIS, HX711_CAL, HX711_V0, LOAD_CELL_KG
         boot_mode = 0
         # Update mode
-        if BUTTON_DOWN.value():
+        if BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
             lcd_putstr("UPDATE MODE", 0, 0, I2C_NUM_COLS)
             while True:
                 time.sleep(1)
         
         # Tennis Mode(Beta)
-        if BUTTON_LEFT.value() or TENNIS[2] == 1:
+        if BUTTON_LEFT.value() == EXTRA_CONFIG["PRESSED_STATE"] or TENNIS[2] == 1:
             LB_RANGE[1] = TENNIS[1]
             TENNIS[2] = 1
             lcd_putstr("Tennis MODE", 0, 0, I2C_NUM_COLS)
             time.sleep(2)
             
         # HW Test Mode
-        if BUTTON_SETTING.value():
+        if BUTTON_SETTING.value() == EXTRA_CONFIG["PRESSED_STATE"]:
             boot_mode = 1
             lcd_putstr("HW Testing MODE", 0, 0, I2C_NUM_COLS)
             time.sleep(2)
             
         # Factory Settings Mode
-        if BUTTON_EXIT.value():
+        if BUTTON_EXIT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
             boot_mode = 2
             lcd_putstr("Factory Settings", 0, 0, I2C_NUM_COLS)
             lcd_putstr("MODE", 0, 1, I2C_NUM_COLS)
             time.sleep(2)
             
         # RT Mode
-        if BUTTON_UP.value():
+        if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
             boot_mode = 3
             lcd_putstr("Reliability Testing", 0, 0, I2C_NUM_COLS)
             lcd_putstr("MODE", 0, 1, I2C_NUM_COLS)
             time.sleep(2)
             
         # Sys Logs Mode
-        if BUTTON_RIGHT.value():
+        if BUTTON_RIGHT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
             boot_mode = 3
             lcd_putstr("Display System Logs", 0, 0, I2C_NUM_COLS)
             lcd_putstr("MODE", 0, 1, I2C_NUM_COLS)
@@ -899,7 +906,7 @@ def start_tensioning():
                 return 0
             
             # Exit & head button 取消與珠夾頭按鈕
-            button_head_pressed = button_list('BUTTON_HEAD')
+            button_head_pressed = int(not button_list('BUTTON_HEAD')) if EXTRA_CONFIG["jpliew"] else button_list('BUTTON_HEAD')
             button_exit_pressed = button_list('BUTTON_EXIT')
             rt_mode_time = time.time() - t0
             rt_mode_pressed = (ts_phase == 2 and rt_mode_time >= 3 and RT_MODE != 0)
@@ -992,75 +999,75 @@ def setting_ts():
         beepbeep(0.04)
         while True:
             # Action of pressing the up or down button 按下上下鍵動作
-            if BUTTON_UP.value() or BUTTON_DOWN.value():
+            if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"] or BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                 LCD.show_cursor()
                 LCD.blink_cursor_on()
                 kg = round(DEFAULT_LB * 0.45359237, 1)
                 # LB 10-digit setting 設定 LB十位數
                 if cursor_xy == (4, 0):
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         DEFAULT_LB = DEFAULT_LB + 10
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         DEFAULT_LB = DEFAULT_LB - 10
                 
                 # LB single-digit setting 設定 LB個位數
                 elif cursor_xy == (5, 0):
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         DEFAULT_LB = DEFAULT_LB + 1
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         DEFAULT_LB = DEFAULT_LB - 1
                 
                 # LB decimal setting 設定 LB小數
                 elif cursor_xy == (7, 0):
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         DEFAULT_LB = DEFAULT_LB + 0.1
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         DEFAULT_LB = DEFAULT_LB - 0.1
                         
                 # KG 10-digit setting 設定 KG十位數
                 elif cursor_xy == (4, 1):
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         kg = kg + 10
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         kg = kg - 10
                         
                     DEFAULT_LB = round(kg * 2.20462262, 1)
 
                 # KG single-digit setting 設定 KG個位數
                 elif cursor_xy == (5, 1):
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         kg = kg + 1
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         kg = kg - 1
                         
                     DEFAULT_LB = round(kg * 2.20462262, 1)
                 
                 # KG decimal setting 設定 KG小數
                 elif cursor_xy == (7, 1):
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         kg = kg + 0.1
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         kg = kg - 0.1
                         
                     DEFAULT_LB = round(kg * 2.20462262, 1)
                 
                 # Pre-Stretch or knot 10-digit setting 設定預拉或打結十位數
                 elif cursor_xy == (17, 0):
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         ps_kt_tmp = ps_kt_tmp + 10
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         ps_kt_tmp = ps_kt_tmp - 10
                     
                 # Pre-Stretch or knot single-digit setting 設定預拉或打結個位數
                 elif cursor_xy == (18, 0):
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         ps_kt_tmp = ps_kt_tmp + 5
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         ps_kt_tmp = ps_kt_tmp - 5
                 
                 # Pre-Stretch or knot tying switch 預拉或打結切換
                 elif cursor_xy == (14, 0):
-                    if BUTTON_UP.value() or BUTTON_DOWN.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"] or BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         if KNOT_FLAG == 1:
                             KNOT_FLAG = 0
                             ps_kt_tmp = PRE_STRECH
@@ -1100,15 +1107,15 @@ def setting_ts():
                 time.sleep(0.1)
 
             # Action of pressing the left or right button 按下左右鍵動作
-            if BUTTON_RIGHT.value() or BUTTON_LEFT.value():
+            if BUTTON_RIGHT.value() == EXTRA_CONFIG["PRESSED_STATE"] or BUTTON_LEFT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                 LCD.hide_cursor()
                 LCD.blink_cursor_on()
-                if BUTTON_RIGHT.value():
+                if BUTTON_RIGHT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                     if (i+1) < set_count:
                         i = i + 1
                     else:
                         i = 0
-                elif BUTTON_LEFT.value():
+                elif BUTTON_LEFT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                     if (i-1) >= 0:
                         i = i - 1
                     else:
@@ -1153,13 +1160,13 @@ def setting():
         beepbeep(0.1)    
         while True:
             # Action of pressing the up or down button 按下上下鍵動作
-            if BUTTON_UP.value() or BUTTON_DOWN.value() or button_list('BUTTON_SETTING'):
+            if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"] or BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"] or button_list('BUTTON_SETTING'):
                 LCD.hide_cursor()
                 LCD.blink_cursor_off()
                 flag = 0
                 # System information 系統資訊
                 if cursor_xy == (8, 3):
-                    if BUTTON_SETTING.value():
+                    if BUTTON_SETTING.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         LCD.blink_cursor_off()
                         beepbeep(0.1)
                         lcd_putstr(f"SW:V{VERSION}_{VERDATE}", 0, 0, I2C_NUM_COLS)
@@ -1170,7 +1177,7 @@ def setting():
                         LCD.blink_cursor_on()
                         beepbeep(0.1)
                         while True:
-                            if BUTTON_EXIT.value():
+                            if BUTTON_EXIT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                                 beepbeep(0.1)
                                 setting_interface()
                                 LCD.blink_cursor_on()
@@ -1178,7 +1185,7 @@ def setting():
                 
                 # LB or KG setting selection 磅、公斤設定選擇
                 elif cursor_xy == (14, 0):
-                    if BUTTON_UP.value() or BUTTON_DOWN.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"] or BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         CURSOR_XY_TS_TEMP = 1
                         LB_KG_SELECT = (LB_KG_SELECT + 1) % 3
                         lcd_putstr(OPTIONS_DICT['UNIT_ARR'][LB_KG_SELECT], 14, 0, 5)
@@ -1186,7 +1193,7 @@ def setting():
                         
                 # Constant-pull switch 恆拉開關
                 elif cursor_xy == (4, 1):
-                    if BUTTON_UP.value() or BUTTON_DOWN.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"] or BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         if CP_SW == 1:
                             CP_SW = 0
                         else:
@@ -1196,7 +1203,7 @@ def setting():
                         
                 # Buzzer switch 蜂鳴器開關
                 elif cursor_xy == (4, 2):
-                    if BUTTON_UP.value() or BUTTON_DOWN.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"] or BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         if BZ_SW == 1:
                             BZ_SW = 0
                         else:
@@ -1206,46 +1213,46 @@ def setting():
                         
                 # Bead clip head movement speed 珠夾頭速度
                 elif cursor_xy == (5, 0):
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         MOTOR_SPEED_LV = MOTOR_SPEED_LV + 1
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         MOTOR_SPEED_LV = MOTOR_SPEED_LV - 1
 
                 # HX711 calibration coefficient ten-digit 校正系數十位數HX711
                 elif cursor_xy == (14, 1):
                     flag = 1
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         HX711_CAL = HX711_CAL + 10
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         HX711_CAL = HX711_CAL - 10
                         
                 # HX711 calibration coefficient single-digit 校正系數個位數HX711
                 elif cursor_xy == (15, 1):
                     flag = 1
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         HX711_CAL = HX711_CAL + 1
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         HX711_CAL = HX711_CAL - 1
                 
                 # HX711 calibration coefficient first decimal 校正系數第一位小數HX711
                 elif cursor_xy == (17, 1):
                     flag = 1
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         HX711_CAL = HX711_CAL + 0.1
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         HX711_CAL = HX711_CAL - 0.1
                         
                 # HX711 calibration coefficient second decimal 校正系數第二位小數HX711
                 elif cursor_xy == (18, 1):
                     flag = 1
-                    if BUTTON_UP.value():
+                    if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         HX711_CAL = HX711_CAL + 0.01
-                    elif BUTTON_DOWN.value():
+                    elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         HX711_CAL = HX711_CAL - 0.01
                         
                 # HX711 tension calibration save 張力校正儲存HX711
                 elif cursor_xy == (19, 1):
-                    if BUTTON_SETTING.value():
+                    if BUTTON_SETTING.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         beepbeep(0.1)
                         HX711_V0 = HX711["HX711_V0"]
                         config_save(1)
@@ -1257,7 +1264,7 @@ def setting():
 
                 # Display LOG 顯示LOG
                 elif cursor_xy == (19, 3):
-                    if BUTTON_SETTING.value():
+                    if BUTTON_SETTING.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         LCD.blink_cursor_off()
                         beepbeep(0.1)
                         if len(LOGS) != 0:
@@ -1269,15 +1276,15 @@ def setting():
                             log_flag = 0
                             beepbeep(0.1)
                             while True:
-                                if BUTTON_RIGHT.value():
+                                if BUTTON_RIGHT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                                     logs_idx = (logs_idx + 1) % len(LOGS)
                                     beepbeep(0.1)
-                                elif BUTTON_LEFT.value():
+                                elif BUTTON_LEFT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                                     logs_idx = logs_idx - 1
                                     if logs_idx < 0:
                                         logs_idx = len(LOGS) - 1
                                     beepbeep(0.1)
-                                elif BUTTON_EXIT.value():
+                                elif BUTTON_EXIT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                                     beepbeep(0.1)
                                     break
                                 
@@ -1313,15 +1320,15 @@ def setting():
                 time.sleep(0.1)
 
             # Action of pressing the left or right button 按下左右鍵動作
-            if BUTTON_RIGHT.value() or BUTTON_LEFT.value():
-                if BUTTON_RIGHT.value():
+            if BUTTON_RIGHT.value() == EXTRA_CONFIG["PRESSED_STATE"] or BUTTON_LEFT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
+                if BUTTON_RIGHT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                     if (i+1) < set_count:
                         i = i + 1
                         if save_flag == 0 and (MENU_ARR[i][0], MENU_ARR[i][1]) == (19, 1):
                             i = i + 1
                     else:
                         i = 0
-                elif BUTTON_LEFT.value():
+                elif BUTTON_LEFT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                     if (i-1) >= 0:
                         i = i - 1
                         if save_flag == 0 and (MENU_ARR[i][0], MENU_ARR[i][1]) == (19, 1):
@@ -1471,14 +1478,14 @@ def hw_test(flag, ori_BZ_SW):
         elif i == 8:
             lcd_putstr(f"T{i}: MOTO_LM_REAR Pre", 0, 2, I2C_NUM_COLS)
             lcd_putstr("    ss", 0, 3, 14)
-            if MOTOR_SW_REAR.value():
+            if MOTOR_SW_REAR.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
         elif i == 9:
             lcd_putstr(f"T{i}: MOTO_LM_FRONT Pr", 0, 2, I2C_NUM_COLS)
             lcd_putstr("    ess", 0, 3, 14)
-            if MOTOR_SW_FRONT.value():
+            if MOTOR_SW_FRONT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
@@ -1658,7 +1665,7 @@ try:
             # Timer switch & Head reset 計時器開關 & 珠夾復位
             if button_list('BUTTON_EXIT'):
                 press_time = time.ticks_ms()
-                while BUTTON_EXIT.value():
+                while BUTTON_EXIT.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                     if time.ticks_diff(time.ticks_ms(), press_time) > 1000:
                         head_reset(None)
                         break
@@ -1707,3 +1714,4 @@ try:
     
 except Exception as e:
     handle_error(e, "main_loop()")
+
