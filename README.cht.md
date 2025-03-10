@@ -40,6 +40,24 @@
 
 # 主程式修改
 
+## v2.80B 版本及之後
+
+在 `EXTRA_CONFIG` 設定中，`jpliew` 參數的值調整為：
+
+- `True` = 開啟  
+- `False` = 關閉  
+
+範例設定：
+
+```python
+EXTRA_CONFIG = {
+    ...
+    "jpliew": True
+}
+```
+
+## v2.80B 版本之前
+
 在 `main.py` 中的 `def start_tensioning():` 函式內，找到以下程式碼：
 
 ```python
