@@ -40,6 +40,24 @@ If you don’t have a 3D printer, you can also manually make a small L-shaped br
 
 # Main Program Modification
 
+## v2.80B Version and Later
+
+In the `EXTRA_CONFIG` settings, the value of the `jpliew` parameter is adjusted to:
+
+- `True` = On  
+- `False` = Off  
+
+Example configuration:
+
+```python
+EXTRA_CONFIG = {
+    ...
+    "jpliew": True
+}
+```
+
+## v2.80B Version Before
+
 In the `main.py` file, within the `def start_tensioning():` function, find the following code:
 
 ```python
