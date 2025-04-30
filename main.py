@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.80C"
-VERDATE = "2025-04-26"
+VERSION = "2.80D"
+VERDATE = "2025-05-01"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -717,7 +717,7 @@ def init():
                     MOTOR_SPEED_LV = ori_MOTOR_SPEED_LV
                     LED_RED.off()
                     main_interface()
-                    check_hx_calibration()
+                    check_hx_calibration(1)
                         
                     beepbeep(0.3)
                     BOOT_COUNT = BOOT_COUNT + 1
@@ -1664,7 +1664,7 @@ def check_sw():
     
     return False
 
-def check_hx_calibration():
+def check_hx_calibration(flag):
     hx_diff_g = int((HX711["HX711_V0"] - HX711_V0) / 100 * (HX711_CAL / 20))
     if abs(hx_diff_g) > 45:
         if HX711_V0 == 0:
@@ -1672,7 +1672,9 @@ def check_hx_calibration():
         else:
             hx_str = "HX Need Calibration?"
         lcd_putstr(f"{hx_str}", 0, 2, I2C_NUM_COLS)
-        logs_save(f"{hx_str} {hx_diff_g}g", "init()")
+        
+        if flag == 1:
+            logs_save(f"{hx_str} {hx_diff_g}g", "init()")
     else:
         lcd_putstr("Ready", 0, 2, I2C_NUM_COLS)
 
@@ -1746,9 +1748,8 @@ try:
         if len(v0_arr) > 600:
             v0_arr = sorted(v0_arr)
             HX711["HX711_V0"] = v0_arr[int(len(v0_arr) / 2)]
-            hx_diff_g = int((HX711["HX711_V0"] - HX711_V0) / 100 * (HX711_CAL / 20))
             v0_arr = []
-            check_hx_calibration()
+            check_hx_calibration(0)
         
         if ERR_MSG[0]:
             LED_RED.on()
