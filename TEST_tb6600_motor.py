@@ -1,4 +1,4 @@
-# TB6600&MOTOR TEST v1.3 https://github.com/206cc/PicoBETH
+# TB6600&MOTOR TEST v1.4 https://github.com/206cc/PicoBETH
 # YouTube Example https://youtu.be/7eG5W6a95h0
 
 # This program is a standalone test to check if the TB6600 stepper motor driver and the 57 stepper motor are functioning properly.
@@ -45,36 +45,39 @@ from machine import Pin
 
 MOTOR_SPEED = 100    # microsecond 微秒
 
-IN1 = machine.Pin(4, machine.Pin.OUT) # 接 PUL-
-IN2 = machine.Pin(5, machine.Pin.OUT) # 接 PUL+
-IN3 = machine.Pin(2, machine.Pin.OUT) # 接 DIR-
-IN4 = machine.Pin(3, machine.Pin.OUT) # 接 DIR+
+DIR_POS = machine.Pin(3, machine.Pin.OUT)  # DIR+
+DIR_NEG = machine.Pin(2, machine.Pin.OUT)  # DIR-
+PUL_POS = machine.Pin(5, machine.Pin.OUT)  # PUL+
+PUL_NEG = machine.Pin(4, machine.Pin.OUT)  # PUL-
 
-def setStep(w1, w2, w3, w4):
-    IN1.value(w1)
-    IN2.value(w2)
-    IN3.value(w3)
-    IN4.value(w4)
+def set_direction(forward=True):
+    if forward:
+        DIR_POS.value(1)
+        DIR_NEG.value(0)
+    else:
+        DIR_POS.value(0)
+        DIR_NEG.value(1)
+
+def step_once(delay_us):
+    PUL_POS.value(1)
+    PUL_NEG.value(0)
+    time.sleep_us(delay_us)
+    PUL_POS.value(0)
+    PUL_NEG.value(1)
+    time.sleep_us(delay_us)
 
 def forward(delay, steps):
-    print("forward")
-    for i in range(0, steps):
-        
-        setStep(1, 0, 1, 0)
-        setStep(0, 1, 0, 0)
-        setStep(0, 1, 1, 1)
-        setStep(1, 0, 1, 0)
-        time.sleep_us(delay)
+    print("Forward")
+    set_direction(False)
+    for _ in range(steps):
+        step_once(delay)
 
 def backward(delay, steps):
-    print("backward")
-    for i in range(0, steps):
-        setStep(0, 1, 0, 1)
-        setStep(1, 0, 0, 1)
-        setStep(1, 0, 1, 0)
-        setStep(0, 1, 1, 0)
-        time.sleep_us(delay)
+    print("Backward")
+    set_direction(True)
+    for _ in range(steps):
+        step_once(delay)
 
-backward(MOTOR_SPEED, 1600)
-time.sleep(1)
 forward(MOTOR_SPEED, 1600)
+time.sleep(1)
+backward(MOTOR_SPEED, 1600)
