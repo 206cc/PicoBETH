@@ -28,6 +28,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 - **Tension counter and boot counter**
 - **Detailed recording of tensioning logs**
 - **Pull speed with 9-speed selection**
+- **OTA (Over-the-Air) firmware updates**
 
 ### Features
 - **0.05LB High Precision**
