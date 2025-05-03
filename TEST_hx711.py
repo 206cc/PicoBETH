@@ -1,3 +1,17 @@
+# Copyright 2024 Kuokuo <500119.cpc@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # HX711 TEST v1.3 https://github.com/206cc/PicoBETH
 # YouTube Example https://youtu.be/pZT4ccE3bZk
 
