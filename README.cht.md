@@ -38,39 +38,11 @@
 
 ![bracket](docs/bracket.jpg)
 
-# 主程式修改
+# 設定
 
-## v2.80B 版本及之後
+請在「工程模式」選單中進行以下設定（適用於軟體版本 v2.80E 及之後）：
 
-在 `EXTRA_CONFIG` 設定中，`jpliew` 參數的值調整為：
-
-- `True` = 開啟  
-- `False` = 關閉  
-
-範例設定：
-
-```python
-EXTRA_CONFIG = {
-    ...
-    "jpliew": True
-}
-```
-
-## v2.80B 版本之前
-
-在 `main.py` 中的 `def start_tensioning():` 函式內，找到以下程式碼：
-
-```python
-if button_head_pressed or button_exit_pressed or rt_mode_pressed:
-```
-
-需在 `button_head_pressed` 前加上 `not`，修改為：
-
-```python
-if not button_head_pressed or button_exit_pressed or rt_mode_pressed:
-```
-
-這表示反向按鍵偵測。
+1. 將 Start Mode 設定為 **Enhanced**  
 
 > [!CAUTION]
 > 若未修改此行程式，張緊完成後將會立即退回。
