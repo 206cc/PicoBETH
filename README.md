@@ -22,10 +22,10 @@ Two configurations are provided for the tennis version: **Lightweight** and **St
 
 |               | **Badminton Version** | **Tennis – Lightweight** | **Tennis – Standard** |
 |---------------|----------------------|-------------------------|----------------------|
-| **Sliding Table** | SGX 1610 | SGX 1605 | GX80 1605 |
+| **Sliding Table** | SGX 1610 | SGX 1610 | GX80 1605 |
 | **Load Cell** | NJ5 YZC-133 20kg | NJ5 YZC-133 50kg | NJ5 YZC-133 50kg |
 | **Maximum Tension** | 35 lb | 70 lb | 90 lb |
-| **Speed** | Fast | Slow | Slow |
+| **Speed** | Fast | Fast | Slow |
 
 > [!WARNING]
 > Do not use the GPP series sliding table. Reliability tests indicate that after approximately 70,000 tensioning cycles, the optical shaft will develop noticeable gaps.
@@ -50,7 +50,7 @@ This version continues using the SGX series sliding table, replacing only the le
 ### Assembly Instructions
 
 - Refer to [PicoBETH HW 3D-Printed Version](https://youtu.be/gtyGDhp-Uqk) for assembly guidance.
-- Replace the sliding table with **SGX 1605** and upgrade the Load Cell to **50 kg**.
+- Only the Load Cell needs to be upgraded to 50kg.
 
 ---
 
@@ -87,17 +87,13 @@ Ensure that you are using **V2.80A** or later, as this version includes calibrat
 
 ### Parameter Settings
 
-Modify the following parameters in `main.py`:
+Please configure the following settings in the **Engineering Menu**  
+(*applicable to firmware version v2.80E and later*):
 
-```python
-TENNIS = [40, 90, 1]            # Tennis Mode [Min LB, Max LB , 0=Disable/1=Enadble](BETA)
-                                # 網球模式[最小LB, 最大LB , 0=關閉/1=啟用](BETA)
-LOAD_CELL_KG = 50               # The load cell capacity in KG.(20KG or 50KG)
-                                # 使用的荷重元公斤數(20KG or 50KG)
-```
-
-- **TENNIS array**: Set the third value to `1` to enable Tennis Mode. If using the lightweight version, set the second value to `70` to limit the maximum tension to 70 lb.
-- **LOAD_CELL_KG variable**: Set to `50` to indicate the use of a 50 kg Load Cell.
+1. Set the **Load Cell** to **50kg**  
+2. Set the **Maximum Tension** as follows:  
+   - **70LB** (for SGX 1610 sliding platform)  
+   - **90LB** (for GX 80 1605 sliding platform)
 
 When Tennis Mode is enabled, a T symbol will appear on the bottom status bar of the standby screen.
 ![img_tennis_mode](docs/img_tennis_mode.jpg)
