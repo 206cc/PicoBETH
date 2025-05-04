@@ -38,39 +38,12 @@ If you don’t have a 3D printer, you can also manually make a small L-shaped br
 
 ![bracket](docs/bracket.jpg)
 
-# Main Program Modification
+# Parameter Settings
 
-## v2.80B Version and Later
+Please configure the following setting in the **Engineering Menu**  
+(*applicable to firmware version v2.80E and later*):
 
-In the `EXTRA_CONFIG` settings, the value of the `jpliew` parameter is adjusted to:
-
-- `True` = On  
-- `False` = Off  
-
-Example configuration:
-
-```python
-EXTRA_CONFIG = {
-    ...
-    "jpliew": True
-}
-```
-
-## v2.80B Version Before
-
-In the `main.py` file, within the `def start_tensioning():` function, find the following code:
-
-```python
-if button_head_pressed or button_exit_pressed or rt_mode_pressed:
-```
-
-Add `not` before `button_head_pressed`, changing it to:
-
-```python
-if not button_head_pressed or button_exit_pressed or rt_mode_pressed:
-```
-
-This implements reverse button detection.
+1. Set **Start Mode** to **Enhanced**
 
 > [!CAUTION]  
 > If this line is not modified, after tensioning is completed, it will immediately retract.
