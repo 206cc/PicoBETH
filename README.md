@@ -24,7 +24,7 @@ Two configurations are provided for the tennis version: **Lightweight** and **St
 |---------------|----------------------|-------------------------|----------------------|
 | **Sliding Table** | SGX 1610 | SGX 1610 | GX80 1605 |
 | **Load Cell** | NJ5 YZC-133 20kg | NJ5 YZC-133 50kg | NJ5 YZC-133 50kg |
-| **Maximum Tension** | 35 lb | 70 lb | 90 lb |
+| **Maximum Tension** | 40 lb | 70 lb | 90 lb |
 | **Speed** | Fast | Fast | Slow |
 
 > [!WARNING]
