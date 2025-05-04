@@ -22,9 +22,9 @@
 
 |               | **羽毛球版**         | **網球版 – 輕型**      | **網球版 – 一般**      |
 |---------------|----------------------|-----------------------|------------------------|
-| **滑台**      | SGX 1610             | SGX 1605              | GX80 1605              |
+| **滑台**      | SGX 1610             | SGX 1610              | GX80 1605              |
 | **Load Cell** | NJ5 YZC-133 20kg     | NJ5 YZC-133 50kg      | NJ5 YZC-133 50kg       |
-| **最大張力**  | 35 lb                | 70 lb                 | 90 lb                  |
+| **最大張力**  | 35 lb                | 70 lb                  | 90 lb                  |
 | **速度**      | 快                   | 慢                    | 慢                     |
 
 > [!WARNING]
@@ -49,7 +49,7 @@
 ### 製作方法
 
 - 參考 [PicoBETH HW 3D-Printed Version](https://youtu.be/gtyGDhp-Uqk) 製作說明。
-- 更換滑台為 **SGX 1605**，並將 Load Cell 更換為 **50 kg** 版本。
+- 只需將 Load Cell 更換為 **50 kg** 版本。
 
 ---
 
@@ -86,20 +86,12 @@
 
 ### 參數設定
 
-請在 `main.py` 中修改以下參數：
+請在「工程模式」選單中進行以下設定（適用於軟體版本 v2.80E 及之後）：
 
-```python
-TENNIS = [40, 90, 1]            # Tennis Mode [Min LB, Max LB , 0=Disable/1=Enadble](BETA)
-                                # 網球模式[最小LB, 最大LB , 0=關閉/1=啟用](BETA)
-LOAD_CELL_KG = 50               # The load cell capacity in KG.(20KG or 50KG)
-                                # 使用的荷重元公斤數(20KG or 50KG)
-```
-
-- **TENNIS 陣列**：第三個值設為 `1` 以啟用網球模式。如果是網球輕型版本請將第二個值設為 `70` 把最大張力值鎖定在 70 lb。
-- **LOAD_CELL_KG 變數**：設為 `50` 以表示使用 50 kg Load Cell。
-
-啟用網球模式後，待機畫面底部的狀態列會顯示一個 T 標誌。 
-![img_tennis_mode](docs/img_tennis_mode.jpg)
+1. 將 Load Cell 設定為 **50kg**  
+2. 設定最大張力為：  
+   - **70LB**（適用於 SGX 1610 滑動平台）  
+   - **90LB**（適用於 GX 80 1605 滑動平台）
 
 ---
 
