@@ -95,9 +95,6 @@ Please configure the following settings in the **Engineering Menu**
    - **70LB** (for SGX 1610 sliding platform)  
    - **90LB** (for GX 80 1605 sliding platform)
 
-When Tennis Mode is enabled, a T symbol will appear on the bottom status bar of the standby screen.
-![img_tennis_mode](docs/img_tennis_mode.jpg)
-
 ---
 
 ## Tension Calibration
