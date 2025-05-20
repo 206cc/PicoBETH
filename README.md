@@ -5,6 +5,15 @@
 
 This version requires minimal hardware modifications based on the original badminton version to support the higher tension demands of tennis rackets. Before proceeding with this branch, be sure to thoroughly read the [main version](https://github.com/206cc/PicoBETH) documentation to understand the relevant knowledge and important considerations.
 
+> **Extended Recommendation: ZeroBETH Project**
+>
+> You can refer to this extended version, ZeroBETH, which replaces the main controller from Raspberry Pi Pico with **Raspberry Pi Zero 2 W**.  
+> The faster processing speed enables quicker constant pull adjustments, **making it especially suitable for high-tension tennis stringing**.
+>
+> [Watch the ZeroBETH Badminton/Tennis Stringing Head Comparison Demo](https://www.youtube.com/watch?v=osMxNlAMeeI)  
+> [View the ZeroBETH Project Page](https://github.com/206cc/ZeroBETH/)
+
+
 ## Hardware Changes
 
 1. **Sliding Table Lead Screw**: Upgraded to 1605 specification
