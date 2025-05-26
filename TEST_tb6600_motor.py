@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TB6600&MOTOR TEST v1.4 https://github.com/206cc/PicoBETH
+# TB6600&MOTOR TEST v1.5 https://github.com/206cc/PicoBETH
 # YouTube Example https://youtu.be/7eG5W6a95h0
 
 # This program is a standalone test to check if the TB6600 stepper motor driver and the 57 stepper motor are functioning properly.
@@ -92,6 +92,6 @@ def backward(delay, steps):
     for _ in range(steps):
         step_once(delay)
 
-forward(MOTOR_SPEED, 1600)
-time.sleep(1)
 backward(MOTOR_SPEED, 1600)
+time.sleep(1)
+forward(MOTOR_SPEED, 1600)
