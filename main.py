@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.90"
-VERDATE = "2025-05-28"
+VERSION = "2.90A"
+VERDATE = "2025-05-30"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -48,7 +48,7 @@ EXTRA_CONFIG = {
     "CORR_COEF_AUTO": 1,        # Self-learning tension parameter 0=Off 1=On 自我學習張力參數 0=off 1=on
     "CP_FAST": 40,              # Gram value for triggering the fast constant-pull mechanism 觸發快速恆拉微調公克值
     "CP_SLOW": 30,              # Gram value for triggering constant tension adjustment 觸發恆拉微調公克值
-    "MOTOR_SPEED_V1": 60,       # Stepper motor at high speed 步進馬達高速
+    "MOTOR_SPEED_V1": 40,       # Stepper motor at high speed 步進馬達高速
     "MOTOR_SPEED_V2": 500,      # Stepper motor at medium speed 步進馬達中速
     "MOTOR_SPEED_V3": 1000,     # Stepper motor at low speed 步進馬達低速
     "MOTOR_DELAY_US": 0,        # Stepper motor delay us 步進馬達延遲
@@ -74,7 +74,7 @@ from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2
 FIRST_TEST = 1
 SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','MOTOR_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','KNOT','FIRST_TEST','BZ_SW','HX711_V0','MOTOR_SPEED_LV','LOAD_CELL_KG','LB_MAX','JPLIEW'] # Saved variables 存檔變數
 MENU_ARR = [[5,0],[4,1],[4,2],[14,0],[14,1],[15,1],[17,1],[18,1],[19,1],[8,3],[19,3]] # Array for LB setting menu 設定選單陣列
-OPTIONS_DICT = {"UNIT_ARR":['LB&KG', 'LB', 'KG'],
+OPTIONS_DICT = {"UNIT_ARR":['LB', 'KG', ' '],
                 "ONOFF_ARR":['Off', 'On '],
                 "MA_ARR":['M', 'C'],
                 "PSKT_ARR":['PS', 'KT'],
@@ -270,24 +270,29 @@ def tension_info(tension, flag):
         tension = TENSION_MON
 
     if flag == 1:
-        lcd_putstr("{: >4.1f}".format(round(tension[0] * 0.00220462, 1)), 9, 0, 4)
-        lcd_putstr("{: >4.1f}".format(round(tension[0] / 1000, 1)), 9, 1, 4)
-        tension_diff = tension[0] - tension[1]
-        if tension_diff <= -100:
-            ts_str = '---'
-        elif tension_diff >= 100:
-            ts_str = '+++'
-        else:
-            ts_str = "{:+03d}".format(tension_diff)
+        if LB_KG_SELECT == 0:
+            lcd_putstr("{: >4.1f}".format(round(tension[0] * 0.00220462, 1)), 9, 0, 4)
+        elif LB_KG_SELECT == 1:
+            lcd_putstr("{: >4.1f}".format(round(tension[0] / 1000, 1)), 9, 1, 4)
         
-        lcd_putstr(ts_str, 16, 3, 3)
+        tension_diff = tension[0] - tension[1]
+        if tension_diff < 0:
+            ts_str = '-'
+        else:
+            ts_str = '+'
+        
+        lcd_putstr(ts_str, 19, 3, 1)
+    elif flag == 3:
+        lcd_putstr("      ", 14, 3, 6)
+        if LB_KG_SELECT == 0:
+            lcd_putstr("{: >4.1f}".format(tension * 0.0022), 9, 0, 4)
+        elif LB_KG_SELECT == 1:
+            lcd_putstr("{: >4.1f}".format(tension / 1000), 9, 1, 4)
     else:
         lcd_putstr("{: >4.1f}".format(tension * 0.0022), 9, 0, 4)
         lcd_putstr("{: >4.1f}".format(tension / 1000), 9, 1, 4)
         if flag == 0:
             lcd_putstr("{: >5d}G".format(tension), 14, 3, 6)
-        elif flag == 3:
-            lcd_putstr("     G", 14, 3, 6)
         elif flag == 2:
             lcd_putstr("{: >5d}R".format(RT_MODE), 14, 3, 6)
 
@@ -489,12 +494,10 @@ def tension_monitoring():
 
 def lb_kg_select():
     global TS_ARR
-    if LB_KG_SELECT == 1:
+    if LB_KG_SELECT == 0:
         TS_ARR = TS_LB_ARR + TS_KT + TS_PS_ARR
-    elif LB_KG_SELECT == 2:
-        TS_ARR = TS_KG_ARR + TS_KT + TS_PS_ARR
     else:
-        TS_ARR = TS_LB_ARR + TS_KG_ARR + TS_KT + TS_PS_ARR
+        TS_ARR = TS_KG_ARR + TS_KT + TS_PS_ARR
 
 def sys_logs_show():
     lcd_putstr("=PicoBETH= SYSLOG", 0, 3, I2C_NUM_COLS)
@@ -778,6 +781,11 @@ def start_tensioning():
             lcd_putstr(f"{rel}", 0, 2, I2C_NUM_COLS)
             logs_save(f"ts_err#0/{rel}", "start_tensioning()")
             return 0       
+
+        if LB_KG_SELECT == 0:
+            lcd_putstr("--.-", 9, 1, 4)
+        else:
+            lcd_putstr("--.-", 9, 0, 4)
         
         MOTOR_ON = 0
         abort_flag = 0
@@ -790,7 +798,7 @@ def start_tensioning():
         manual_flag = 1
         mt_ts = 0
         temp_LB_CONV_G = LB_CONV_G
-        LED_YELLOW.on()
+        LED_YELLOW.off ()
         t0 = time.time()
         # Reached specified tension 到達指定張力
         while True:
@@ -811,6 +819,7 @@ def start_tensioning():
                     t0 = time.time()
                     if PRE_STRECH == 0:
                         ts_phase = 2
+                        LED_YELLOW.on()
                         if CP_SW == 1:
                             manual_flag = 1
                         else:
@@ -823,6 +832,7 @@ def start_tensioning():
                     beepbeep(0.1)
                     t0 = time.time()
                     ts_phase = 2
+                    LED_YELLOW.on()
                     if CP_SW == 1:
                         manual_flag = 1
                     else:
@@ -835,21 +845,7 @@ def start_tensioning():
                     cp_phase = 2
                     if cc_add_flag == 0:
                         cc_count_add = cc_count_add + 1000
-                # for Tennis
-                elif diff_g < (EXTRA_CONFIG["CP_FAST"] * 2.5) and ts_phase == 2 and DEFAULT_LB >= EXTRA_CONFIG['TENNIS']:
-                    cp_phase = 0
-                    cc_add_flag = 1
-                    if diff_g > 10:
-                        if PRE_STRECH == 0 and diff_g > 50:
-                            cp_phase = 1
-                        elif diff_g >= (EXTRA_CONFIG["CP_FAST"] * 1.0):
-                            cp_phase = 1
-                        elif diff_g < (EXTRA_CONFIG["CP_FAST"] * 1.0):
-                            cp_phase = 0
-                        else:
-                            ft = 2
-                # for Badminton
-                elif diff_g < (EXTRA_CONFIG["CP_FAST"] * 2) and ts_phase == 2 and DEFAULT_LB < EXTRA_CONFIG['TENNIS']:
+                elif diff_g < (EXTRA_CONFIG["CP_FAST"] * 2) and ts_phase == 2:
                     cp_phase = 0
                     cc_add_flag = 1
                     if diff_g > 10:
@@ -872,18 +868,10 @@ def start_tensioning():
             # Constant-pull decrease 恆拉減少張力
             if (temp_LB_CONV_G + (EXTRA_CONFIG["CP_SLOW"] * 2)) < tension and (manual_flag == 1 or ts_phase == 0):
                 diff_g =  tension - temp_LB_CONV_G
-                # for badminton
-                if DEFAULT_LB < EXTRA_CONFIG['TENNIS']:
-                    if diff_g < EXTRA_CONFIG["CP_FAST"] * (5 - (PRE_STRECH / 10)) and ts_phase == 2:
-                        cp_phase = 0
-                    else:
-                        cp_phase = 1
-                # for Tennis
+                if diff_g < EXTRA_CONFIG["CP_FAST"] * (5 - (PRE_STRECH / 10)) and ts_phase == 2:
+                    cp_phase = 0
                 else:
-                    if diff_g < EXTRA_CONFIG["CP_FAST"] * (8 - (PRE_STRECH / 10)) and ts_phase == 2:
-                        cp_phase = 0
-                    else:
-                        cp_phase = 1
+                    cp_phase = 1
                 
                 if ts_phase == 0:
                     count_sub = count_sub + 1
@@ -894,7 +882,7 @@ def start_tensioning():
             # Manually increase tension 手動增加張力
             if button_list('BUTTON_UP') and RT_MODE == 0 and (time.ticks_ms() - mt_ts) > 250:
                 mt_ts = time.ticks_ms()
-                if LB_KG_SELECT == 2:
+                if LB_KG_SELECT == 1:
                     temp_lb = (int(temp_LB_CONV_G / 499) + 1) / 2
                     temp_LB_CONV_G = min(int(temp_lb * 1000), int(LB_MAX * 453.59237))
                 else:
@@ -910,7 +898,7 @@ def start_tensioning():
             # Manually decrease tension 手動減少張力
             if button_list('BUTTON_DOWN') and RT_MODE == 0 and (time.ticks_ms() - mt_ts) > 250:
                 mt_ts = time.ticks_ms()
-                if LB_KG_SELECT == 2: 
+                if LB_KG_SELECT == 1: 
                     temp_lb = (int(temp_LB_CONV_G / 499) - 1) / 2
                     temp_LB_CONV_G = min(int(temp_lb * 1000), int(LB_MAX * 453.59237))
                 else:
@@ -1003,9 +991,8 @@ def start_tensioning():
                 return 0  
             
             # Slow Constant-Pull 慢速恆拉
-            if cp_phase == 0:
+            if cp_phase == 0: 
                 tension_info([tension, temp_LB_CONV_G], 1)
-                    
                 if ts_phase == 2:
                     s_time = time.time()-t0
                     if s_time > 99:
@@ -1109,10 +1096,17 @@ def setting_ts():
                     
                 # Pre-Stretch or knot single-digit setting 設定預拉或打結個位數
                 elif cursor_xy == (18, 0):
+                    ps_tmp = 5                        
                     if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
-                        ps_kt_tmp = ps_kt_tmp + 5
+                        if ps_kt_tmp < 5:
+                            ps_tmp = 1
+                            
+                        ps_kt_tmp = ps_kt_tmp + ps_tmp
                     elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
-                        ps_kt_tmp = ps_kt_tmp - 5
+                        if ps_kt_tmp <= 5:
+                            ps_tmp = 1
+                            
+                        ps_kt_tmp = ps_kt_tmp - ps_tmp
                 
                 # Pre-Stretch or knot tying switch 預拉或打結切換
                 elif cursor_xy == (14, 0):
@@ -1245,7 +1239,7 @@ def setting():
                 elif cursor_xy == (14, 0):
                     if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"] or BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
                         CURSOR_XY_TS_TEMP = 1
-                        LB_KG_SELECT = (LB_KG_SELECT + 1) % 3
+                        LB_KG_SELECT = (LB_KG_SELECT + 1) % 2
                         lcd_putstr(OPTIONS_DICT['UNIT_ARR'][LB_KG_SELECT], 14, 0, 5)
                         lb_kg_select()
                         
