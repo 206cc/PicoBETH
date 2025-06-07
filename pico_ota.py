@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-VERSION = "1.0.12"
-VERDATE = "2025-04-24"
+VERSION = "1.1.12"
+VERDATE = "2025-06-07"
 
 import network
 import time
@@ -26,7 +26,6 @@ import gc
 import ujson
 
 from machine import I2C, Pin
-from src.pico_i2c_lcd import I2cLcd  # from https://github.com/T-622/RPI-PICO-I2C-LCD
 
 OTA = {
     "ssid"     : "",
@@ -49,6 +48,12 @@ BUTTON_SETTING = Pin(14, Pin.IN, Pin.PULL_DOWN) # Setting button 設定按鍵
 BUTTON_EXIT = Pin(15, Pin.IN, Pin.PULL_DOWN)    # Exit button 取消按鍵
 
 # 2004 i2c LCD
+# from https://github.com/T-622/RPI-PICO-I2C-LCD
+if "pico_i2c_lcd2.py" in os.listdir("src"):
+    from src.pico_i2c_lcd2 import I2cLcd
+else:
+    from src.pico_i2c_lcd import I2cLcd
+
 I2C_ADDR     = 0x27
 I2C_NUM_COLS = 20
 I2C = I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
@@ -67,6 +72,7 @@ def lcd_putstr(text, x, y, length):
     text = f'{text :{" "}<{length}}'
     LCD.move_to(x, y)
     LCD.putstr(text)
+    gc.collect()
 
 # errno check
 def handle_error(e, func):
