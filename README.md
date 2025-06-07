@@ -46,7 +46,9 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
   - Over 1 million tension reliability test cycles have been completed with no hardware failures detected. [1 Million Cycles Video](https://youtube.com/shorts/kR_JLVGHwB8)
 
 > [!CAUTION]
-> In the **fast mode** after version 2.70, when the speed is set to **L7 or higher** and the **tension exceeds 30LB**, the original 12V3A power supply may be insufficient, potentially causing the motor to slip. Therefore, this version has been upgraded to a 19V4A power supply. If you also plan to switch to a 19V power supply, please ensure that your 5V power converter can handle a 19V input voltage. Additionally, if you are using an external UPS, it should also be upgraded to a version that can accept 19V input and output.
+> Starting from version v2.90B, it is required to manually upload the updated LCD library `pico_i2c_lcd2.py` to the `src` folder; otherwise, the program will not run properly (OTA updates alone will not complete the upgrade—manual file upload is necessary).  
+This version also incorporates optimization experience from the ZeroBETH project, significantly enhancing PicoBETH’s constant-pull algorithm and tensioning start-up response, bringing overall performance to the same level as ZeroBETH and greatly improving the user experience.
+
 
 ## Development Project Plan
 
