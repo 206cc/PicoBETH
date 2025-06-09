@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.90B"
-VERDATE = "2025-06-07"
+VERSION = "2.91"
+VERDATE = "2025-06-09"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -144,7 +144,7 @@ BUTTON_LIST = {
     "BUTTON_RIGHT":0,
     "MOTOR_SW_FRONT":0,
     "MOTOR_SW_REAR":0}                          # Button list 按鈕列表          
-BUTTON_CLICK_MS = 200                           # Button click milliseconds 按鈕點擊毫秒
+BUTTON_CLICK_MS = 100                           # Button click milliseconds 按鈕點擊毫秒
 
 # LED
 LED_GREEN = Pin(19, machine.Pin.OUT)  # Green 綠
