@@ -47,7 +47,8 @@
 
 | 計劃項目           | 進度     | 備註                           |
 | ------------------ | -------- | ------------------------------ |
-| 移植至 Raspberry Pi Zero | 進行中 | 將原本使用的 Raspberry Pi Pico 更換為 Raspberry Pi Zero，並進行程式碼移植。詳情請參閱專案頁面 [https://github.com/206cc/ZeroBETH/](https://github.com/206cc/ZeroBETH/blob/main/README.cht.md)。 |
+| 新步進馬達控制器測試   | 進行中 | 正在測試將 TB6600 更換為 DM542、DM542C、DM542S，以改善噪音表現並評估其是否適用於本專案。        |
+| 移植至 Raspberry Pi Zero | 暫停   | 將原先使用的 Raspberry Pi Pico 更換為 Raspberry Pi Zero，並進行程式碼移植。詳情請參閱專案頁面：[https://github.com/206cc/ZeroBETH/](https://github.com/206cc/ZeroBETH/blob/main/README.cht.md)。 |
 | 3D 列印輕量網球版本  | 結束   | 在 HW3D 架構，使用 50KG Load Cell 與 SGX 1605 滑台，進行 55 至 65 LB 循環張緊可靠性測試。 張緊次數達 430,000+ 次後測試結束（Load Cell 張力感應異常）。 |
 | 相容 Pico 2        | 結束 | 受到 RP2350-E9 BUG 的影響，已確認無法直接使用，請參閱 [`branch/pico2-issue`](https://github.com/206cc/PicoBETH/tree/branch/pico2-issue) |
 | 可靠度測試         | 結束   | HW1 測試張緊次數已達 100 萬次，期間無任何硬體故障，測試結束。 |
