@@ -32,6 +32,7 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 ### Features
 - **0.05LB High Precision**
+  - Lifetime calibration-free under stable conditions. 
   - Achieved with the Sparkfun HX711 at 94Hz and software version V2.2 and later.
   - [DEMO Vides](https://youtu.be/Hk7eMABAxT0)
 - **Low Power Consumption**
