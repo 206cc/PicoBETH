@@ -14,6 +14,8 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 
 ## Current Main Functions and Features
 
+The following is a demonstration of the features in version v2.7 (legacy version):  
+
 [![DEMO VIDEO](https://img.youtube.com/vi/pWgD_OSyc1g/0.jpg)](https://www.youtube.com/watch?v=pWgD_OSyc1g)
 
 ### Functions
@@ -22,12 +24,16 @@ PicoBETH (Raspberry Pico Badminton Electronic Tension Head) is an open-source pr
 - **Constant-Pull system**
 - **Knot function**
 - **Tension adjustment manually during tensioning**
+  - Fine-tuned in **0.5 lb** increments  
 - **Tension calibration**
 - **Stringing timer**
 - **Tension timer**
 - **Tension counter and boot counter**
 - **Pull speed with 9-speed selection**
-- **OTA (Over-the-Air) firmware updates** (Requires Pico W and firmware version v2.90 or later)
+- Supports a **15 ~ 90 lb tension range** (suitable for tennis stringing)  
+  - Actual range depends on the specifications of the **Ball Screw Slide Table** and **load cell**  
+- **OTA firmware update support**  
+  - Requires Raspberry Pi Pico W and firmware version **v2.90 or later**
 
 ### Features
 - **0.05LB High Precision**
