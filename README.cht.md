@@ -5,14 +5,6 @@
 
 此分支是在原羽毛球版的基礎上進行最少的硬體修改，即可支援網球拍更高張力的需求。在開始進行此分支的製作前，請務必詳閱 [主版本](https://github.com/206cc/PicoBETH) 的說明文件，了解相關知識和注意事項。
 
-> **延伸推薦：ZeroBETH 專案**
->
-> 您可以參考這個 ZeroBETH 延伸版本，將主控器從 Raspberry Pi Pico 更換為 **Raspberry Pi Zero 2 W**，  
-> 更快的處理速度提供更快速的恆拉微調，**特別適合高張力的網球穿線需求**。
->
-> [觀看 ZeroBETH 羽網穿線機頭 Comparison Demo](https://www.youtube.com/watch?v=osMxNlAMeeI)  
-> [查看 ZeroBETH 專案頁面](https://github.com/206cc/ZeroBETH/blob/main/README.cht.md)
-
 ## 硬體變更
 
 1. **滑台螺杆**：改用 1605 規格
