@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.91"
-VERDATE = "2025-06-09"
+VERSION = "2.92"
+VERDATE = "2025-06-20"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -71,7 +71,7 @@ from src.hx711 import hx711          # from https://github.com/endail/hx711-pico
 
 # Other parameters 其它參數
 FIRST_TEST = 1
-SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','MOTOR_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','KNOT','FIRST_TEST','BZ_SW','HX711_V0','MOTOR_SPEED_LV','LOAD_CELL_KG','LB_MAX','JPLIEW'] # Saved variables 存檔變數
+SAVE_CFG_ARRAY = ['DEFAULT_LB','PRE_STRECH','MOTOR_STEPS','HX711_CAL','TENSION_COUNT','BOOT_COUNT', 'LB_KG_SELECT','CP_SW','KNOT','FIRST_TEST','BZ_SW','HX711_V0','MOTOR_SPEED_LV','LOAD_CELL_KG','LB_MAX','JPLIEW','PS_LB'] # Saved variables 存檔變數
 MENU_ARR = [[5,0],[4,1],[4,2],[14,0],[14,1],[15,1],[17,1],[18,1],[19,1],[8,3]] # Array for LB setting menu 設定選單陣列
 OPTIONS_DICT = {"UNIT_ARR":['LB&KG', 'LB', 'KG'],
                 "ONOFF_ARR":['Off', 'On '],
@@ -97,15 +97,16 @@ DEFAULT_LB = 20.0
 PRE_STRECH = 10
 CP_SW = 1
 BZ_SW = 1
+PS_LB = 0
 MENU_TEMP = 0
 MENU_LIST_ARR = {
     "9-1":["Load Cell:"          ,"Set Load Cell Rating",[16],'LOAD_CELL_KG'],
     "9-2":["Max Tension:"        ,"35LB to 70LB",[16],'LB_MAX'],
     "9-3":["Start Mode: "        ,"Tension Start Select",[12],'JPLIEW'],
-    "9-6":["Boot Count:"         ,"Power On Counter",[None],'BOOT_COUNT'],
     "9-4":["Rate:"               ,"HX711 Rate (Hz)",[None],'HX711'],
-    "9-5":["Drift:"              ,"HX711 Drift (g/s)",[None],'HX711']
-#    "9-6":["Stability:"          ,"HX711 Stability",[None],'HX711']
+    "9-5":["Drift:"              ,"HX711 Drift (g/s)",[None],'HX711'],
+    "9-6":["Boot Count:"         ,"Power On Counter",[None],'BOOT_COUNT'],
+    "9-7":["PS Relax Value:"     ,"0 to 9LB (Def:0)",[17],'PS_LB']
 ,
 }
 
@@ -144,7 +145,7 @@ BUTTON_LIST = {
     "BUTTON_RIGHT":0,
     "MOTOR_SW_FRONT":0,
     "MOTOR_SW_REAR":0}                          # Button list 按鈕列表          
-BUTTON_CLICK_MS = 100                           # Button click milliseconds 按鈕點擊毫秒
+BUTTON_CLICK_MS = 150                           # Button click milliseconds 按鈕點擊毫秒
 
 # LED
 LED_GREEN = Pin(19, machine.Pin.OUT)  # Green 綠
@@ -811,6 +812,8 @@ def start_tensioning():
         log_lb_max = 0
         manual_flag = 1
         mt_ts = 0
+        target_flag = False
+        forward_flag = False
         temp_LB_CONV_G = LB_CONV_G
         LED_YELLOW.off ()
         t0 = time.time()
@@ -826,13 +829,15 @@ def start_tensioning():
                     log_lb_max = temp_LB_CONV_G
                     tension_info(log_lb_max, 3)
                     lcd_putstr("Target Tension", 0, 2, I2C_NUM_COLS)
-                    lcd_putstr("S:   ", 15, 1, 5)
+                    lcd_putstr("S:---", 15, 1, 5)
                     if KNOT_FLAG == 0:
-                        temp_LB_CONV_G = int(DEFAULT_LB * 453.59237)
+                        temp_LB_CONV_G = int((DEFAULT_LB - PS_LB) * 453.59237)
                         
-                    t0 = time.time()
-                    if PRE_STRECH == 0:
+                    if PRE_STRECH == 0 and KNOT_FLAG == 0:
+                        t0 = time.time()
                         ts_phase = 2
+                        temp_LB_CONV_G = int(DEFAULT_LB * 453.59237)
+                        target_flag = True
                         LED_YELLOW.on()
                         if CP_SW == 1:
                             manual_flag = 1
@@ -843,14 +848,21 @@ def start_tensioning():
                         
             elif ts_phase == 1:
                 if (abs(temp_LB_CONV_G - tension) < (EXTRA_CONFIG["CP_SLOW"] * 2)) and (time.time() - t0) >= 1:
-                    beepbeep(0.1)
-                    t0 = time.time()
+                    tension_info([tension, temp_LB_CONV_G], 1)
                     ts_phase = 2
-                    LED_YELLOW.on()
+                    if KNOT_FLAG == 0:
+                        temp_LB_CONV_G = int(DEFAULT_LB * 453.59237)
+                    
                     if CP_SW == 1:
                         manual_flag = 1
                     else:
                         manual_flag = 0
+                        
+            elif target_flag == False and ts_phase == 2 and (temp_LB_CONV_G < (tension + EXTRA_CONFIG["CP_SLOW"])):
+                t0 = time.time()
+                LED_YELLOW.on()
+                beepbeep(0.1)
+                target_flag = True
             
             # Constant-pull increase 恆拉增加張力
             if (temp_LB_CONV_G + 5) > tension and (manual_flag == 1 or ts_phase == 0):
@@ -878,11 +890,12 @@ def start_tensioning():
                 
                 abort_flag = forward(EXTRA_CONFIG["MOTOR_SPEED_V2"], ft, 0 ,0)
                 head_pos = head_pos + ft
+                forward_flag = True
                 
             # Constant-pull decrease 恆拉減少張力
             if (temp_LB_CONV_G + (EXTRA_CONFIG["CP_SLOW"])) < tension and (manual_flag == 1 or ts_phase == 0):
                 diff_g =  tension - temp_LB_CONV_G
-                if diff_g < EXTRA_CONFIG["CP_FAST"] * (5 - (PRE_STRECH / 10)) and ts_phase == 2:
+                if diff_g < EXTRA_CONFIG["CP_FAST"] * (10 - (PRE_STRECH / 10)) and ts_phase == 2:
                     cp_phase = 0
                 else:
                     cp_phase = 1
@@ -892,6 +905,7 @@ def start_tensioning():
                     
                 abort_flag = backward(EXTRA_CONFIG["MOTOR_SPEED_V2"], ft, 0)
                 head_pos = head_pos - ft
+                forward_flag = False
                 
             # Manually increase tension 手動增加張力
             if button_list('BUTTON_UP') and RT_MODE == 0 and (time.ticks_ms() - mt_ts) > 250:
@@ -906,6 +920,7 @@ def start_tensioning():
                 lcd_putstr("{: >4.1f}".format(temp_LB_CONV_G / 453.592), 4, 0, 4)
                 lcd_putstr("{: >4.1f}".format(temp_LB_CONV_G / 1000), 4, 1, 4)
                 mt_ts = time.ticks_ms()
+                forward_flag = True
                 time.sleep(0.2)
                 beepbeep(0.1)
                     
@@ -921,6 +936,7 @@ def start_tensioning():
                 
                 lcd_putstr("{: >4.1f}".format(temp_LB_CONV_G / 453.592), 4, 0, 4)
                 lcd_putstr("{: >4.1f}".format(temp_LB_CONV_G / 1000), 4, 1, 4)
+                forward_flag = False
                 time.sleep(0.2)
                 beepbeep(0.1)
                     
@@ -954,7 +970,7 @@ def start_tensioning():
                 button_head_pressed = button_list('BUTTON_HEAD')
             button_exit_pressed = button_list('BUTTON_EXIT')
             rt_mode_time = time.time() - t0
-            rt_mode_pressed = (ts_phase == 2 and rt_mode_time >= 3 and RT_MODE != 0)
+            rt_mode_pressed = (ts_phase == 2 and rt_mode_time >= 3 and RT_MODE != 0 and target_flag == True)
             if button_head_pressed or button_exit_pressed or rt_mode_pressed:
                 #CC參數自動調整
                 cc_add_sub = 0
@@ -1002,8 +1018,8 @@ def start_tensioning():
             if cp_phase == 0: 
                 tension_info([tension, temp_LB_CONV_G], 1)
                 if ts_phase == 2:
-                    s_time = time.time()-t0
-                    if s_time > 999:
+                    s_time = time.time() - t0
+                    if s_time > 999 or target_flag == False:
                         s_time = "---"
                     else:
                         s_time = "{:>3d}".format(s_time)
@@ -1012,7 +1028,10 @@ def start_tensioning():
                     lcd_putstr("   ", 17, 1, 3)
             # Fast Constant-Pull 快速恆拉
             elif cp_phase == 1:
-                time.sleep(HX711["CP_HZ"])
+                if forward_flag == True:
+                    time.sleep(HX711["CP_HZ"])
+                else:
+                    time.sleep_us(EXTRA_CONFIG["MOTOR_SPEED_V1"])
 
     except Exception as e:
         handle_error(e, "start_tensioning()")
@@ -1098,9 +1117,15 @@ def setting_ts():
                 # Pre-Stretch or knot 10-digit setting 設定預拉或打結十位數
                 elif cursor_xy == (17, 0):
                     if BUTTON_UP.value() == EXTRA_CONFIG["PRESSED_STATE"]:
-                        ps_kt_tmp = ps_kt_tmp + 10
+                        if ps_kt_tmp < 5:
+                            ps_kt_tmp = 10
+                        else:
+                            ps_kt_tmp = ps_kt_tmp + 10
                     elif BUTTON_DOWN.value() == EXTRA_CONFIG["PRESSED_STATE"]:
-                        ps_kt_tmp = ps_kt_tmp - 10
+                        if ps_kt_tmp < 5:
+                            ps_kt_tmp = 0
+                        else:
+                            ps_kt_tmp = ps_kt_tmp - 10
                     
                 # Pre-Stretch or knot single-digit setting 設定預拉或打結個位數
                 elif cursor_xy == (18, 0):
@@ -1646,7 +1671,7 @@ def check_hx_calibration(flag):
         lcd_putstr("Ready", 0, 2, I2C_NUM_COLS)
 
 def process_setting_item(item):
-    global LB_MAX, LOAD_CELL_KG, WIFI_IP, ABORT_GRAM, HX711_CAL, JPLIEW, HX711_V0
+    global LB_MAX, LOAD_CELL_KG, WIFI_IP, ABORT_GRAM, HX711_CAL, JPLIEW, HX711_V0, PS_LB
 
     try:
         LCD.move_to(MENU_LIST_ARR[item][2][0], 1)
@@ -1717,6 +1742,16 @@ def process_setting_item(item):
                     val_item = OPTIONS_DICT['HEAD'][JPLIEW]
                     change_flag = True
             
+            elif item == "9-7":
+                if BUTTON_UP.value() or BUTTON_DOWN.value():
+                    if BUTTON_UP.value():
+                        PS_LB = min(PS_LB + 1, 9)
+                    elif BUTTON_DOWN.value():
+                        PS_LB = max(PS_LB - 1, 0)
+                    
+                    val_item = f"{PS_LB}LB"
+                    change_flag = True
+            
             if button_list('BUTTON_EXIT'):
                 LCD.blink_cursor_off()
                 config_save(0)
@@ -1734,7 +1769,7 @@ def process_setting_item(item):
                 beepbeep(0.1)
                 move_flag = False
                 
-            time.sleep(0.1)
+            time.sleep(0.15)
         
     except Exception as e:
         handle_error(e, "process_setting_item()") 
@@ -1775,14 +1810,14 @@ def engineering_mode(flag):
                 val_item = f"{str(globals()[MENU_LIST_ARR[key][3]])}LB"
             elif key == '9-3':
                 val_item = f"{OPTIONS_DICT['HEAD'][globals()[MENU_LIST_ARR[key][3]]]}"
-            elif key == '9-6':
-                val_item = f"{globals()[MENU_LIST_ARR[key][3]]}"
             elif key == '9-4':
                 val_item = f"{HX711['RATE']}Hz"
             elif key == '9-5':
                 val_item = f"{str(HX711['DIFF'] / 1000)[:3]}G"
-        #    elif key == '9-6':
-        #        val_item = f"{str(round(1 - ((HX711['ANOM_COUNT'] / HX711['SAMPLE_COUNT']) / 2), 4) * 100)[:5]}%"
+            elif key == '9-6':
+                val_item = f"{globals()[MENU_LIST_ARR[key][3]]}"
+            elif key == '9-7':
+                val_item = f"{globals()[MENU_LIST_ARR[key][3]]}LB"
             elif key == '3-3':
                 val_item = f"v{VERSION}"
                 lcd_putstr(f"          {VERDATE}", 0, 2, I2C_NUM_COLS)
@@ -1813,7 +1848,7 @@ def engineering_mode(flag):
                     
                 time.sleep(0.1)
             
-            beepbeep(0.1)
+            beepbeep(0.15)
     
     except Exception as e:
         handle_error(e, "engineering_mode()")
