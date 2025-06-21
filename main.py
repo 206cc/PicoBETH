@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.92"
-VERDATE = "2025-06-20"
+VERSION = "2.92A"
+VERDATE = "2025-06-22"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -852,17 +852,16 @@ def start_tensioning():
                     ts_phase = 2
                     if KNOT_FLAG == 0:
                         temp_LB_CONV_G = int(DEFAULT_LB * 453.59237)
-                    
-                    if CP_SW == 1:
-                        manual_flag = 1
-                    else:
-                        manual_flag = 0
                         
             elif target_flag == False and ts_phase == 2 and (temp_LB_CONV_G < (tension + EXTRA_CONFIG["CP_SLOW"])):
                 t0 = time.time()
                 LED_YELLOW.on()
                 beepbeep(0.1)
                 target_flag = True
+                if CP_SW == 1:
+                    manual_flag = 1
+                else:
+                    manual_flag = 0
             
             # Constant-pull increase 恆拉增加張力
             if (temp_LB_CONV_G + 5) > tension and (manual_flag == 1 or ts_phase == 0):
