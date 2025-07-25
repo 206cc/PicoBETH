@@ -34,7 +34,7 @@
 - **0.05 LB 高精度**
   - 張力經校正後，在特定條件下可終身免再校正
   - 在 Sparkfun HX711 94Hz 及 V2.2 版本後
-  - [參考影片](https://youtu.be/Hk7eMABAxT0)
+  - [參考影片](https://youtu.be/VatD7uEJkGc)
 - **低功耗**
   - 僅需 DC19V 4A 電源*
 - **UPS 不斷電**
