@@ -39,7 +39,7 @@ The following is a demonstration of the features in version v2.7 (legacy version
 - **0.05LB High Precision**
   - Lifetime calibration-free under stable conditions. 
   - Achieved with the Sparkfun HX711 at 94Hz and software version V2.2 and later.
-  - [DEMO Vides](https://youtu.be/Hk7eMABAxT0)
+  - [DEMO Vides](https://youtu.be/VatD7uEJkGc)
 - **Low Power Consumption**
   - Uses a DC19V4A power supply. *
 - **Real-time UPS Redundancy (Uninterruptible Power Supply)**
