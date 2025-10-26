@@ -51,6 +51,12 @@ The following is a demonstration of the features in version v2.7 (legacy version
 - **High durability**
   - Over 1 million tension reliability test cycles have been completed with no hardware failures detected. [1 Million Cycles Video](https://youtube.com/shorts/kR_JLVGHwB8)
 
+> [!CAUTION]  
+> **Recommended mpython version: 1.25.0**  
+> Tests have shown that in **mpython version 1.26.1 and later**, stepper motor performance is approximately **30% slower** compared to version **1.25.0**.  
+> If the **MR value** displayed in the **INFO interface** is between **1.10 and 1.25**, it indicates normal operation (mpython 1.25.0).  
+> If the MR value is around **0.8x**, it means you are using an **incorrect mpython version (1.26.1 or newer)**.
+
 > [!CAUTION]
 > Starting from version v2.90B, it is required to manually upload the updated LCD library `pico_i2c_lcd2.py` to the `src` folder; otherwise, the program will not run properly (OTA updates alone will not complete the upgrade—manual file upload is necessary).  
 This version also incorporates optimization experience from the ZeroBETH project, significantly enhancing PicoBETH’s constant-pull algorithm and tensioning start-up response, bringing overall performance to the same level as ZeroBETH and greatly improving the user experience.
