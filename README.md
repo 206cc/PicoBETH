@@ -18,6 +18,9 @@ The following is a demonstration of the features in version v2.7 (legacy version
 
 [![DEMO VIDEO](https://img.youtube.com/vi/pWgD_OSyc1g/0.jpg)](https://www.youtube.com/watch?v=pWgD_OSyc1g)
 
+Stringing My Badminton Racket (DIY Time-lapse)
+[![DEMO VIDEO2](https://img.youtube.com/vi/RFc14mfGkBw/0.jpg)](https://www.youtube.com/watch?v=RFc14mfGkBw)
+
 ### Functions
 - **LB/KG display and setting**
 - **Pre-Stretch function**
