@@ -14,6 +14,10 @@
 
 [![DEMO VIDEO](https://img.youtube.com/vi/pWgD_OSyc1g/0.jpg)](https://www.youtube.com/watch?v=pWgD_OSyc1g)
 
+羽球拍穿線 DIY 縮時紀錄
+
+[![DEMO VIDEO2](https://img.youtube.com/vi/RFc14mfGkBw/0.jpg)](https://www.youtube.com/watch?v=RFc14mfGkBw)
+
 ### 功能
 - **磅/公斤顯示及設定**
 - **預拉 (Pre-Stretch)**
