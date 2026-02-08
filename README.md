@@ -45,7 +45,7 @@ Reference video: [PicoBETH HW3D Lightweight Tennis – Tension Calibration & Acc
 
 ## Lightweight Tennis Version
 
-This version continues using the SGX series sliding table, replacing only the lead screw with 1605 for increased pulling force. Since SGX is equipped with only one MGN12H linear rail, it is recommended to keep the maximum tension below 70 lb to ensure the longevity of the sliding table.
+This version continues using the SGX 1610 series sliding table, with only the load cell changed to the 50 kg version. Since the SGX is equipped with just a single MGN12H linear rail, it is recommended to keep the maximum tension below 70 lb to ensure the longevity of the sliding table.
 
 ### Assembly Instructions
 
