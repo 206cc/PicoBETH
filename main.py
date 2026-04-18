@@ -13,8 +13,8 @@
 # limitations under the License.
 
 # VERSION INFORMATION
-VERSION = "2.92A"
-VERDATE = "2025-06-22"
+VERSION = "2.93"
+VERDATE = "2026-04-18"
 
 # GitHub  https://github.com/206cc/PicoBETH
 # YouTube https://www.youtube.com/@kuokuo702
@@ -504,7 +504,7 @@ def tension_monitoring():
                 if globals()[key].value() == EXTRA_CONFIG["PRESSED_STATE"]:
                     BUTTON_LIST[key] = time.ticks_ms()
                 elif BUTTON_LIST[key]:
-                    if (time.ticks_ms() - BUTTON_LIST[key]) > BUTTON_CLICK_MS:
+                    if time.ticks_diff(time.ticks_ms(), BUTTON_LIST[key]) > BUTTON_CLICK_MS:
                         BUTTON_LIST[key] = 0
     
     except Exception as e:
@@ -907,7 +907,7 @@ def start_tensioning():
                 forward_flag = False
                 
             # Manually increase tension 手動增加張力
-            if button_list('BUTTON_UP') and RT_MODE == 0 and (time.ticks_ms() - mt_ts) > 250:
+            if button_list('BUTTON_UP') and RT_MODE == 0 and time.ticks_diff(time.ticks_ms(), mt_ts) > 250:
                 mt_ts = time.ticks_ms()
                 if LB_KG_SELECT == 2:
                     temp_lb = (int(temp_LB_CONV_G / 499) + 1) / 2
@@ -1204,7 +1204,7 @@ def setting_ts():
                 time.sleep(0.1)
 
             # Action of pressing the exit button 按下離開鍵動作
-            if button_list('BUTTON_EXIT') or ((time.ticks_ms() - last_set_time) > (1.8 * 1000)):
+            if button_list('BUTTON_EXIT') or (time.ticks_diff(time.ticks_ms(), last_set_time) > (1.8 * 1000)):
                 config_save(0)
                 LCD.blink_cursor_off()
                 LCD.hide_cursor()
@@ -1448,12 +1448,14 @@ def hw_test(flag, ori_BZ_SW):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 2:
             lcd_putstr(f"T{i}: BUTTON_UP Press", 0, 2, I2C_NUM_COLS)
             if button_list('BUTTON_UP'):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 3:
             lcd_putstr(f"T{i}: BUTTON_DOWN Pres", 0, 2, I2C_NUM_COLS)
             lcd_putstr("    s", 0, 3, 14)
@@ -1461,6 +1463,7 @@ def hw_test(flag, ori_BZ_SW):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 4:
             lcd_putstr(f"T{i}: BUTTON_LEFT Pre", 0, 2, I2C_NUM_COLS)
             lcd_putstr("    ss", 0, 3, 14)
@@ -1468,6 +1471,7 @@ def hw_test(flag, ori_BZ_SW):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 5:
             lcd_putstr(f"T{i}: BUTTON_RIGHT Pre", 0, 2, I2C_NUM_COLS)
             lcd_putstr("    ss", 0, 3, 14)
@@ -1475,6 +1479,7 @@ def hw_test(flag, ori_BZ_SW):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 6:
             lcd_putstr(f"T{i}: BUTTON_EXIT Pres", 0, 2, I2C_NUM_COLS)
             lcd_putstr("    s", 0, 3, 14)
@@ -1482,6 +1487,7 @@ def hw_test(flag, ori_BZ_SW):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 7:
             lcd_putstr(f"T{i}: BUTTON_HEAD Pres", 0, 2, I2C_NUM_COLS)
             lcd_putstr("    s", 0, 3, 14)
@@ -1489,6 +1495,7 @@ def hw_test(flag, ori_BZ_SW):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 8:
             lcd_putstr(f"T{i}: MOTO_LM_REAR Pre", 0, 2, I2C_NUM_COLS)
             lcd_putstr("    ss", 0, 3, 14)
@@ -1496,6 +1503,7 @@ def hw_test(flag, ori_BZ_SW):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 9:
             lcd_putstr(f"T{i}: MOTO_LM_FRONT Pr", 0, 2, I2C_NUM_COLS)
             lcd_putstr("    ess", 0, 3, 14)
@@ -1503,6 +1511,7 @@ def hw_test(flag, ori_BZ_SW):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 lcd_putstr("", 0, 3, 14)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 10:
             lcd_putstr(f"T{i}: LED GREEN ON?", 0, 2, I2C_NUM_COLS)
             lcd_putstr("[Pres SET KEY]", 0, 3, 14)
@@ -1511,6 +1520,7 @@ def hw_test(flag, ori_BZ_SW):
                 LED_GREEN.off()
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 11:
             lcd_putstr(f"T{i}: LED YELLOW ON?", 0, 2, I2C_NUM_COLS)
             LED_YELLOW.on()
@@ -1518,6 +1528,7 @@ def hw_test(flag, ori_BZ_SW):
                 LED_YELLOW.off()
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 12:
             lcd_putstr(f"T{i}: LED RED ON?", 0, 2, I2C_NUM_COLS)
             LED_RED.on()
@@ -1525,12 +1536,14 @@ def hw_test(flag, ori_BZ_SW):
                 LED_RED.off()
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 13:
             lcd_putstr(f"T{i}: BEEP ON?", 0, 2, I2C_NUM_COLS)
             beepbeep(0.2)
             if button_list('BUTTON_SETTING'):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 14:
             lcd_putstr(f"T{i}: Right KEY FWD?", 0, 2, I2C_NUM_COLS)
             if button_list('BUTTON_RIGHT'):
@@ -1538,6 +1551,7 @@ def hw_test(flag, ori_BZ_SW):
             if button_list('BUTTON_SETTING'):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 15:
             lcd_putstr(f"T{i}: Left KEY BWD?", 0, 2, I2C_NUM_COLS)
             if button_list('BUTTON_LEFT'):
@@ -1545,6 +1559,7 @@ def hw_test(flag, ori_BZ_SW):
             if button_list('BUTTON_SETTING'):
                 lcd_putstr(f"T{i}: PASS", 0, 2, I2C_NUM_COLS)
                 i = i + 1
+                time.sleep(0.1)
         elif i == 16:
             lcd_putstr(f"T{i}: Head Over 1000G", 0, 2, I2C_NUM_COLS)
             lcd_putstr(" ", 0, 3, 14)
@@ -1900,7 +1915,7 @@ try:
                 setting_ts()
             
             # Tension display update 張力顯示更新
-            if (time.ticks_ms() - ts_info_time) > 100:
+            if time.ticks_diff(time.ticks_ms(), ts_info_time) > 100:
                 LCD.hide_cursor()
                 tension_info(None, 0)
                 if TIMER:
