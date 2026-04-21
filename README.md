@@ -56,10 +56,12 @@ Stringing My Badminton Racket (DIY Time-lapse)
   - Over 1 million tension reliability test cycles have been completed with no hardware failures detected. [1 Million Cycles Video](https://youtube.com/shorts/kR_JLVGHwB8)
 
 > [!CAUTION]  
-> **Recommended mpython version: 1.25.0**  
-> Tests have shown that in **mpython version 1.26.1 and later**, stepper motor performance is approximately **30% slower** compared to version **1.25.0**.  
+> **Required mpython version: 1.25.0**
+> Tests have shown that in **mpython version 1.26.0 and later**, stepper motor performance is approximately **30% slower** compared to version **1.25.0**.  
 > If the **MR value** displayed in the **INFO interface** is between **1.10 and 1.25**, it indicates normal operation (mpython 1.25.0).  
-> If the MR value is around **0.8x**, it means you are using an **incorrect mpython version (1.26.1 or newer)**.
+> If the MR value is around **0.8x**, it usually indicates that you are using a newer mpython version (1.26.0 or later); for the best and most stable performance, please use mpython 1.25.0.
+>
+> **See detailed explanation and downgrade guide:** [MicroPython 1.25 Guide](docs/2.Hardware_Setup.md#micropython-125-requirement)
 
 > [!CAUTION]
 > Starting from version v2.90B, it is required to manually upload the updated LCD library `pico_i2c_lcd2.py` to the `src` folder; otherwise, the program will not run properly (OTA updates alone will not complete the upgrade—manual file upload is necessary).  
